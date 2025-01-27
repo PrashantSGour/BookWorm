@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "ProdBenMaster")
-public class ProdBenMaster {
+public class ProdBen_Master {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,9 +23,9 @@ public class ProdBenMaster {
     @Column(name = "ProdBen-percentage")
     private BigDecimal prodBenPercentage;
 
-    public ProdBenMaster() {}
+    public ProdBen_Master() {}
 
-    public ProdBenMaster(int prodBenId, Beneficiary beneficiary, Product product, BigDecimal prodBenPercentage) {
+    public ProdBen_Master(int prodBenId, Beneficiary beneficiary, Product product, BigDecimal prodBenPercentage) {
         this.prodBenId = prodBenId;
         this.beneficiary = beneficiary;
         this.product = product;
