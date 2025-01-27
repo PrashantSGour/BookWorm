@@ -3,7 +3,7 @@ package com.Project.BookWorm.Models;
 import jakarta.persistence.*;
 
 @Entity
-public class GenreMaster {
+public class Genre_Master {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment primary key
@@ -13,7 +13,7 @@ public class GenreMaster {
     private int languageId;   // Foreign key for LanguageMaster
 
     // Default Constructor
-    public GenreMaster() {}
+    public Genre_Master() {}
 
     // Getters and Setters
     public int getGenreId() {
