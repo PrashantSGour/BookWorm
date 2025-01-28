@@ -12,7 +12,6 @@ export default function Footer()
     return (
         <Box
             sx={{
-                backgroundColor: 'rgba(218,31,38,255)', // Apply the red background
                 py: 6,
                 position: 'relative',
                 width: '100%',
