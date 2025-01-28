@@ -1,137 +1,44 @@
 package com.Project.BookWorm.Models;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import lombok.Data;
 
 @Entity
-@Table(name = "BeneficiaryMaster")
+@Data
 public class Beneficiary_Master {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Ben-Id")
     private int benId;
 
-    @Column(name = "Ben-name")
+    @Column(nullable=false)
     private String benName;
 
-    @Column(name = "Ben-email_id")
-    private String benEmailId;
+    @Column(nullable=false)
+    private Email benEmailId;
 
-    @Column(name = "Ben-contact-no")
+    @Column(nullable=false)
+    @Pattern(regexp="^[0-9]{10}$")
     private String benContactNo;
 
-    @Column(name = "Ben-bank-name")
+    @Column(nullable=false)
     private String benBankName;
 
-    @Column(name = "Ben-bank-Branch")
+    @Column(nullable=false)
     private String benBankBranch;
 
-    @Column(name = "Ben-IFSC")
+    @Column(nullable=false)
     private String benIFSC;
 
-    @Column(name = "Ben-AccNo")
+    @Column(nullable=false)
     private String benAccNo;
 
-    @Column(name = "Ben-Acc-Type")
+    @Column(nullable=false)
     private String benAccType;
 
-    @Column(name = "Ben-PAN")
+    @Column(nullable=false)
     private String benPAN;
 
-    // Getter and Setter methods
-    public int getBenId() {
-        return benId;
-    }
-
-    public void setBenId(int benId) {
-        this.benId = benId;
-    }
-
-    public String getBenName() {
-        return benName;
-    }
-
-    public void setBenName(String benName) {
-        this.benName = benName;
-    }
-
-    public String getBenEmailId() {
-        return benEmailId;
-    }
-
-    public void setBenEmailId(String benEmailId) {
-        this.benEmailId = benEmailId;
-    }
-
-    public String getBenContactNo() {
-        return benContactNo;
-    }
-
-    public void setBenContactNo(String benContactNo) {
-        this.benContactNo = benContactNo;
-    }
-
-    public String getBenBankName() {
-        return benBankName;
-    }
-
-    public void setBenBankName(String benBankName) {
-        this.benBankName = benBankName;
-    }
-
-    public String getBenBankBranch() {
-        return benBankBranch;
-    }
-
-    public void setBenBankBranch(String benBankBranch) {
-        this.benBankBranch = benBankBranch;
-    }
-
-    public String getBenIFSC() {
-        return benIFSC;
-    }
-
-    public void setBenIFSC(String benIFSC) {
-        this.benIFSC = benIFSC;
-    }
-
-    public String getBenAccNo() {
-        return benAccNo;
-    }
-
-    public void setBenAccNo(String benAccNo) {
-        this.benAccNo = benAccNo;
-    }
-
-    public String getBenAccType() {
-        return benAccType;
-    }
-
-    public void setBenAccType(String benAccType) {
-        this.benAccType = benAccType;
-    }
-
-    public String getBenPAN() {
-        return benPAN;
-    }
-
-    public void setBenPAN(String benPAN) {
-        this.benPAN = benPAN;
-    }
-
-    @Override
-    public String toString() {
-        return "BeneficiaryMaster{" +
-                "benId=" + benId +
-                ", benName='" + benName + '\'' +
-                ", benEmailId='" + benEmailId + '\'' +
-                ", benContactNo='" + benContactNo + '\'' +
-                ", benBankName='" + benBankName + '\'' +
-                ", benBankBranch='" + benBankBranch + '\'' +
-                ", benIFSC='" + benIFSC + '\'' +
-                ", benAccNo='" + benAccNo + '\'' +
-                ", benAccType='" + benAccType + '\'' +
-                ", benPAN='" + benPAN + '\'' +
-                '}';
-    }
 }
