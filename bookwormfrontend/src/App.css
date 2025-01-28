@@ -24,6 +24,19 @@
   color: white;
 }
 
+/* Global background style */
+body {
+  background-color: rgb(255, 204, 102);
+  margin: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+
 .App-link {
   color: #61dafb;
 }
