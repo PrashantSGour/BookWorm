@@ -1,18 +1,27 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './Pages/Home';
 import logo from './logo.svg';
 import './App.css';
-import NavBar from './Common/Header'
-import Footer from './Common/Footer'
-import ResponsiveCarousel from './Carousel'
-import Check from './Check'
+import LoginPage from './Pages/Login_page';
+import RegistrationPage from './Pages/customer_registration';
+import Layout from './Common/Layout';
 
-function App() {
+
+function App()
+{
   return (
-    <>
-    <NavBar/>
-    <ResponsiveCarousel/> 
-    <Check/>
-    <Footer/>
-    </>
+    <div className="App">
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegistrationPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </div>
   );
 }
 
