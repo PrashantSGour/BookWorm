@@ -7,6 +7,7 @@ import LoginPage from './Pages/Login_page';
 import RegistrationPage from './Pages/customer_registration';
 import Layout from './Common/Layout';
 
+
 function App()
 {
   return (
