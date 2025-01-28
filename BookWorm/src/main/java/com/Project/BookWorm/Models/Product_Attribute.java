@@ -1,56 +1,26 @@
 package com.Project.BookWorm.Models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "ProductAttribute")
 public class Product_Attribute {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ProdAttId")
     private Long prodAttId;
 
-    @ManyToOne
-    @JoinColumn(name = "AttributeId", nullable = false, referencedColumnName = "AttributeId")
-    private AttributeMaster attribute;
+    @ManyToOne(targetEntity=Attribute_Master.class)
+    @Column(nullable = false)
+    private Attribute_Master attribute;
 
-    @ManyToOne
-    @JoinColumn(name = "ProductId", nullable = false, referencedColumnName = "ProductId")
-    private ProductMaster product;
+    @ManyToOne(targetEntity=Product_Master.class)
+    private Product_Master product;
 
-    @Column(name = "AttributeValue", nullable = false)
+    @Column(nullable = false)
     private String attributeValue;
 
-    public Long getProdAttId() {
-        return prodAttId;
-    }
-
-    public void setProdAttId(Long prodAttId) {
-        this.prodAttId = prodAttId;
-    }
-
-    public AttributeMaster getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(AttributeMaster attribute) {
-        this.attribute = attribute;
-    }
-
-    public ProductMaster getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductMaster product) {
-        this.product = product;
-    }
-
-    public String getAttributeValue() {
-        return attributeValue;
-    }
-
-    public void setAttributeValue(String attributeValue) {
-        this.attributeValue = attributeValue;
-    }
+   
 }
