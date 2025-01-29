@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Customer_Master {
+public class CustomerMaster {
     @Id
     @GeneratedValue
     @Column(name = "customer_id")
@@ -37,9 +37,9 @@ public class Customer_Master {
     @Pattern(regexp = "^[0-9]{10}$")
     private String phoneNumber;
 
-    @OneToOne(targetEntity = Cart_Master.class)
+    @OneToOne(targetEntity = CartMaster.class)
     @JoinColumn(name = "cart_id", nullable = true)
-    private Cart_Master cartId;
+    private CartMaster cartId;
 
     @OneToOne(targetEntity = MyShelf.class)
     @JoinColumn(name = "shelf_id", nullable = true)

@@ -15,15 +15,15 @@ public class CustomerMasterService {
     @Autowired
     private CustomerMasterRepository customerMasterRepository;
 
-    public List<Customer_Master> getAllCustomers(){
+    public List<CustomerMaster> getAllCustomers(){
         return customerMasterRepository.findAll();
     }
 
-    public Optional<Customer_Master> getCustomerById(Long id){
+    public Optional<CustomerMaster> getCustomerById(Long id){
         return customerMasterRepository.findById(id);
     }
 
-    public Customer_Master saveCustomer(Customer_Master customer) {
+    public CustomerMaster saveCustomer(CustomerMaster customer) {
        
     	return customerMasterRepository.save(customer);
     }
@@ -57,7 +57,7 @@ public class CustomerMasterService {
     private JwtUtil jwtUtil;
 
     public Optional<String> authenticateUser(String email, String password) {
-        Optional<Customer_Master> customer = customerMasterRepository.getCustomerByEmailAndPassword(email, password);
+        Optional<CustomerMaster> customer = customerMasterRepository.getCustomerByEmailAndPassword(email, password);
         
         if (customer.isPresent()) {
             // ✅ If user is valid, generate a JWT token

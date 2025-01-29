@@ -35,10 +35,4 @@ public class LoginController {
          return response;
      }
 
-//    @PostMapping("/login")
-//public void login(@RequestBody Map<String, String> credentials) {
-//    System.out.println("Login attempt with email: " + credentials.get("email"));
-//    // Rest of the code...
-//}
-
 }

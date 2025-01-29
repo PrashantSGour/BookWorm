@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Beneficiary_Master {
+public class BeneficiaryMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int benId;

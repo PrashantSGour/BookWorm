@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Attribute_Master {
+public class AttributeMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attribute_id")

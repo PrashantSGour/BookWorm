@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Language_Master {
+public class LanguageMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
@@ -17,5 +17,5 @@ public class Language_Master {
 
     @ManyToOne
     @JoinColumn(name = "type_id",nullable = true)
-    private Product_Type_Master typeId;
+    private ProductTypeMaster typeId;
 }

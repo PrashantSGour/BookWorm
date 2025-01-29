@@ -5,11 +5,12 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Cart_Master {
+public class ProductTypeMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
-    private int cartId;
-
-    private double cost;
+    @Column(name = "type_id")
+    private int TypeId;
+    
+    @Column(nullable = true)
+    private String TypeDesc;
 }

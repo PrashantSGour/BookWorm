@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Product_Master {
+public class ProductMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -22,7 +22,7 @@ public class Product_Master {
 
     @ManyToOne
     @JoinColumn(name = "type_id",nullable = true,referencedColumnName = "type_id")
-    private Product_Type_Master productType; 
+    private ProductTypeMaster productType; 
 
     @Column(nullable = true)
     private double productBasePrice;
@@ -50,11 +50,11 @@ public class Product_Master {
 
     @ManyToOne
     @JoinColumn(name = "language_id",nullable = true)
-    private Language_Master productLang; 
+    private LanguageMaster productLang; 
 
     @ManyToOne
     @JoinColumn(name = "genre_id",nullable = true)
-    private Genre_Master productGenre;
+    private GenreMaster productGenre;
 
     @Column(nullable = true)
     private boolean isRentable; // Y/N
