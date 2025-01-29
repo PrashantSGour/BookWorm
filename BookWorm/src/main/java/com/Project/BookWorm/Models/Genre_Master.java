@@ -6,17 +6,15 @@ import lombok.Data;
 @Entity
 @Data
 public class Genre_Master {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "genre_id")
     private int genreId;
-    
-	@Column(nullable=false)
-    private String genreDesc; // Genre description
-	
-	@ManyToOne(targetEntity=Language_Master.class)
-	@Column(nullable=false)
-    private int languageId;   // Foreign key for LanguageMaster
 
-    // Default Constructor
+    @Column(nullable = true)
+    private String genreDesc;
+
+    @ManyToOne
+    @JoinColumn(name = "language_id",nullable = true)
+    private Language_Master languageId;
 }

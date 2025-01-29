@@ -1,65 +1,67 @@
+package com.Project.BookWorm.Models;
+
+
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
 public class Product_Master {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId;
+    private int productId;
 
-    @Column(name = "product_name", nullable = false, length = 255)
+    @Column(nullable = true)
     private String productName;
 
-    @Column(name = "product_english_name", nullable = false, length = 255)
+    @Column(nullable = true)
     private String productEnglishName;
 
     @ManyToOne
-    @JoinColumn(name = "product_type", nullable = false)
-    private Product_TypeMaster productType;
+    @JoinColumn(name = "type_id",nullable = true,referencedColumnName = "type_id")
+    private Product_Type_Master productType; 
 
-    @Column(name = "product_baseprice", nullable = false)
-    private Double productBasePrice;
+    @Column(nullable = true)
+    private double productBasePrice;
 
-    @Column(name = "product_sp_cost")
-    private Double productSpCost;
+    @Column(nullable = true)
+    private double productSpCost;
 
-    @Column(name = "product_offerprice")
-    private Double productOfferPrice;
-
-    @Column(name = "product_off_price_expirydate")
-    private String productOffPriceExpiryDate;
-
-    @Column(name = "product_description_short")
+    @Column(nullable = true)
+    private double productOfferPrice;
+    
+    @Column(nullable = true)
+    private LocalDate productOffPriceExpiryDate;
+    
+    @Column(nullable = true)
     private String productDescriptionShort;
 
-    @Column(name = "product_description_long")
+    @Column(nullable = true)
     private String productDescriptionLong;
 
-    @Column(name = "product_isbn")
+    @Column(nullable = true)
     private String productIsbn;
 
-    @Column(name = "product_author")
+    @Column(nullable = true)
     private String productAuthor;
 
     @ManyToOne
-    @JoinColumn(name = "product_publisher")
-    private Publisher_Master publisher;
+    @JoinColumn(name = "language_id",nullable = true)
+    private Language_Master productLang; 
 
     @ManyToOne
-    @JoinColumn(name = "product_lang")
-    private Language_Master productLanguage;
-
-    @ManyToOne
-    @JoinColumn(name = "product_genre")
+    @JoinColumn(name = "genre_id",nullable = true)
     private Genre_Master productGenre;
 
-    @Column(name = "is_rentable")
-    private Boolean isRentable;
+    @Column(nullable = true)
+    private boolean isRentable; // Y/N
+    
+    @Column(nullable = true )
+    private double rentPerDay;
 
-    @Column(name = "is_library")
-    private Boolean isLibrary;
-
-    @Column(name = "rent_per_day")
-    private Double rentPerDay;
-
-    @Column(name = "min_rent_days")
-    private Integer minRentDays;
+    @Column(nullable = true , columnDefinition = "int default 3") 
+    private int minRentDays;
 }
-
