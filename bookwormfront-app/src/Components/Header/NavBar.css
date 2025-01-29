@@ -1,0 +1,84 @@
+.navbar {
+    background-color: #e2e3f8 !important; /* Background color */
+    padding: 10px 0;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #7d6df8 !important; /* Updated text color for the title */
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 400px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+.search-container input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.search-container button {
+    background-color: rgba(108, 93, 210, 255) !important;
+    color: white !important;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+    background-color: rgba(108, 93, 210, 0.8) !important;
+}
+
+/* Navigation Options */
+.nav-options {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-links .nav-link {
+    color: #7d6df8 !important; /* Updated text color for links */
+    transition: color 0.3s ease;
+}
+
+.nav-links .nav-link:hover {
+    color: rgba(108, 93, 210, 0.8) !important;
+}
+
+/* User Dropdown */
+.user-dropdown .dropdown-toggle {
+    color: #7d6df8 !important; /* Updated text color for user dropdown */
+}
+
+.navbar .dropdown-menu {
+    background-color: #333;
+}
+
+.navbar .dropdown-item {
+    color: white !important;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: rgba(108, 93, 210, 255) !important;
+}
