@@ -1,44 +1,42 @@
 package com.Project.BookWorm.Models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
 @Data
 public class Beneficiary_Master {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int benId;
-
-    @Column(nullable=false)
+    
+    @Column(nullable = true,name = "ben_name")
     private String benName;
 
-    @Column(nullable=false)
-    private Email benEmailId;
+    @Column(nullable = true)
+    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
+    private String benEmail;
 
-    @Column(nullable=false)
-    @Pattern(regexp="^[0-9]{10}$")
-    private String benContactNo;
+    @Column(nullable = true)
+    @Pattern(regexp = "^[0-9]{10}$")
+    private String benPhone;
 
-    @Column(nullable=false)
+    @Column(nullable = true)
     private String benBankName;
 
-    @Column(nullable=false)
+    @Column(nullable = true)
     private String benBankBranch;
 
-    @Column(nullable=false)
-    private String benIFSC;
+    @Column(nullable = true)
+    private String benBankAccNo;
 
-    @Column(nullable=false)
-    private String benAccNo;
+    @Column(nullable = true)
+    private String benIfsc;
 
-    @Column(nullable=false)
+    @Column(nullable = true)
     private String benAccType;
 
-    @Column(nullable=false)
-    private String benPAN;
-
+    @Column(nullable = true)
+    private String benPan;
 }

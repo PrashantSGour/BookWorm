@@ -1,20 +1,21 @@
+package com.Project.BookWorm.Models;
+
+import jakarta.persistence.*;
+
+import lombok.Data;
+
 @Entity
-@Table(name = "language_master")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data
 public class Language_Master {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
-    private Long languageId;
+    private int languageId;
 
-    @Column(name = "language_desc", nullable = false, length = 255)
+    @Column(nullable = true)
     private String languageDesc;
 
     @ManyToOne
-    @JoinColumn(name = "type_id", nullable = false)
-    private Product_TypeMaster productType;
+    @JoinColumn(name = "type_id",nullable = true)
+    private Product_Type_Master typeId;
 }
