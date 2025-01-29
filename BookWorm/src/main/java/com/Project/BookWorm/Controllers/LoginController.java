@@ -16,29 +16,29 @@ public class LoginController {
     private CustomerMasterService customerMasterService;
     
 
-    // @PostMapping("/login")
-    // public Map<String, Object> login(@RequestBody Map<String, String> credentials) {
-    //     String email = credentials.get("email");
-    //     String password = credentials.get("password");
+     @PostMapping("/login")
+     public Map<String, Object> login(@RequestBody Map<String, String> credentials) {
+         String email = credentials.get("email");
+         String password = credentials.get("password");
 
-    //     Map<String, Object> response = new HashMap<>();
+         Map<String, Object> response = new HashMap<>();
 
-    //     customerMasterService.authenticateUser(email, password).ifPresentOrElse(token -> {
-    //         response.put("status", "success");
-    //         response.put("message", "Login successful");
-    //         response.put("token", token);
-    //     }, () -> {
-    //         response.put("status", "error");
-    //         response.put("message", "Invalid credentials");
-    //     });
+         customerMasterService.authenticateUser(email, password).ifPresentOrElse(token -> {
+             response.put("status", "success");
+             response.put("message", "Login successful");
+             response.put("token", token);
+         }, () -> {
+             response.put("status", "error");
+             response.put("message", "Invalid credentials");
+         });
 
-    //     return response;
-    // }
+         return response;
+     }
 
-    @PostMapping("/login")
-public void login(@RequestBody Map<String, String> credentials) {
-    System.out.println("Login attempt with email: " + credentials.get("email"));
-    // Rest of the code...
-}
+//    @PostMapping("/login")
+//public void login(@RequestBody Map<String, String> credentials) {
+//    System.out.println("Login attempt with email: " + credentials.get("email"));
+//    // Rest of the code...
+//}
 
 }

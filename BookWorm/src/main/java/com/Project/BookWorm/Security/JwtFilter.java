@@ -2,34 +2,35 @@ package com.Project.BookWorm.Security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
-import java.security.Key;
-import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-    private static final String SECRET_KEY = "your_secret_key_your_secret_key_123"; // Same key as JwtUtil
 
-    private Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private final JwtUtil jwtUtil;
+
+    // Constructor Injection to use JwtUtil
+    @Autowired
+    public JwtFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
     private String extractEmail(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSignKey())
+                .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -39,12 +40,14 @@ public class JwtFilter extends OncePerRequestFilter {
     private boolean validateToken(String token) {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(getSignKey())
+                    .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getExpiration().after(new java.util.Date());
         } catch (Exception e) {
+            // Log exception and handle invalid token
+            System.out.print(e.getMessage());
             return false;
         }
     }
@@ -52,6 +55,13 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        if (path.equals("/api/login")) {
+            // Skip JWT filter for login endpoint
+            chain.doFilter(request, response);
+            return;
+        }
 
         String authorizationHeader = request.getHeader("Authorization");
 
@@ -62,7 +72,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String email = extractEmail(token);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        new User(email, "", Collections.emptyList()), null, Collections.emptyList());
+                        new User(email, "", java.util.Collections.emptyList()), null, java.util.Collections.emptyList());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
