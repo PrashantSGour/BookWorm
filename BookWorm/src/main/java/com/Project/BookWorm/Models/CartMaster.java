@@ -11,5 +11,21 @@ public class CartMaster {
     @Column(name = "cart_id")
     private int cartId;
 
-    private double cost;
+    public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
+
+	private double cost;
 }

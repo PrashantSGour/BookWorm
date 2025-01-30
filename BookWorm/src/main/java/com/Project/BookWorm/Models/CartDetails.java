@@ -14,7 +14,47 @@ public class CartDetails {
     @Column(name = "cart_details_id")
     private int cartDetailsId;
 
-    @OneToMany
+    public int getCartDetailsId() {
+		return cartDetailsId;
+	}
+
+	public void setCartDetailsId(int cartDetailsId) {
+		this.cartDetailsId = cartDetailsId;
+	}
+
+	public Set<CartMaster> getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(Set<CartMaster> cartId) {
+		this.cartId = cartId;
+	}
+
+	public ProductMaster getProductId() {
+		return productId;
+	}
+
+	public void setProductId(ProductMaster productId) {
+		this.productId = productId;
+	}
+
+	public boolean isPurchased() {
+		return isPurchased;
+	}
+
+	public void setPurchased(boolean isPurchased) {
+		this.isPurchased = isPurchased;
+	}
+
+	public int getRentNoOfDays() {
+		return rentNoOfDays;
+	}
+
+	public void setRentNoOfDays(int rentNoOfDays) {
+		this.rentNoOfDays = rentNoOfDays;
+	}
+
+	@OneToMany
     @JoinColumn(name = "cart_id", nullable = true)
     private Set<CartMaster> cartId;
 

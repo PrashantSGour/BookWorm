@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.Project.BookWorm.Repository.CustomerMasterRepository;
+//import com.Project.BookWorm.Security.JwtUtil;
 import com.Project.BookWorm.Security.JwtUtil;
 
 @Service
@@ -24,9 +25,11 @@ public class CustomerMasterService {
     }
 
     public CustomerMaster saveCustomer(CustomerMaster customer) {
-       
-    	return customerMasterRepository.save(customer);
+        // Check if the customer object is correctly received
+        System.out.println("Saving customer: " + customer);
+        return customerMasterRepository.save(customer);
     }
+
 
     public void deleteCustomer(long id) {
         customerMasterRepository.deleteById(id);

@@ -20,65 +20,65 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+   private final JwtUtil jwtUtil;
 
-    // Constructor Injection to use JwtUtil
-    @Autowired
-    public JwtFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+   // Constructor Injection to use JwtUtil
+   @Autowired
+   public JwtFilter(JwtUtil jwtUtil) {
+       this.jwtUtil = jwtUtil;
+   }
 
-    private String extractEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
+   private String extractEmail(String token) {
+       return Jwts.parserBuilder()
+               .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
+               .build()
+               .parseClaimsJws(token)
+               .getBody()
+               .getSubject();
+   }
 
-    private boolean validateToken(String token) {
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-            return claims.getExpiration().after(new java.util.Date());
-        } catch (Exception e) {
-            // Log exception and handle invalid token
-            System.out.print(e.getMessage());
-            return false;
-        }
-    }
+   private boolean validateToken(String token) {
+       try {
+           Claims claims = Jwts.parserBuilder()
+                   .setSigningKey(jwtUtil.getSigningKey())  // Use the key from JwtUtil
+                   .build()
+                   .parseClaimsJws(token)
+                   .getBody();
+           return claims.getExpiration().after(new java.util.Date());
+       } catch (Exception e) {
+           // Log exception and handle invalid token
+           System.out.print(e.getMessage());
+           return false;
+       }
+   }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+   @Override
+   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+           throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-        if (path.equals("/api/login")) {
-            // Skip JWT filter for login endpoint
-            chain.doFilter(request, response);
-            return;
-        }
+       String path = request.getRequestURI();
+       if (path.equals("/api/login")) {
+           // Skip JWT filter for login endpoint
+           chain.doFilter(request, response);
+           return;
+       }
 
-        String authorizationHeader = request.getHeader("Authorization");
+       String authorizationHeader = request.getHeader("Authorization");
 
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
+       if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+           String token = authorizationHeader.substring(7); // Remove "Bearer " prefix
 
-            if (validateToken(token)) {
-                String email = extractEmail(token);
+           if (validateToken(token)) {
+               String email = extractEmail(token);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        new User(email, "", java.util.Collections.emptyList()), null, java.util.Collections.emptyList());
+               UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                       new User(email, "", java.util.Collections.emptyList()), null, java.util.Collections.emptyList());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        }
+               authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+               SecurityContextHolder.getContext().setAuthentication(authentication);
+           }
+       }
 
-        chain.doFilter(request, response);
-    }
+       chain.doFilter(request, response);
+   }
 }

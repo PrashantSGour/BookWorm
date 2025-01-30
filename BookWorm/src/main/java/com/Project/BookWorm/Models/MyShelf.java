@@ -13,9 +13,20 @@ public class MyShelf {
 
     private int noOfBooks;
 
+	public int getShelfId() {
+		return shelfId;
+	}
 
-    @ManyToOne
-    @JoinColumn(name = "shelf_dtl_id", nullable = true)
-    private ShelfDetails shelfDetails;
-    //this a new comment
+	public void setShelfId(int shelfId) {
+		this.shelfId = shelfId;
+	}
+
+	public int getNoOfBooks() {
+		return noOfBooks;
+	}
+
+	public void setNoOfBooks(int noOfBooks) {
+		this.noOfBooks = noOfBooks;
+	}
+
 }

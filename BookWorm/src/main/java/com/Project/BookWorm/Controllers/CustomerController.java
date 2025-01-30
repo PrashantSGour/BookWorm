@@ -19,10 +19,14 @@ public class CustomerController {
 
     // Get all customers (JWT token required for this endpoint)
     @GetMapping
-    public ResponseEntity<List<CustomerMaster>> getAllCustomers() {
+    public List<CustomerMaster> getAllCustomers() {
         List<CustomerMaster> customers = customerMasterService.getAllCustomers();
-        return new ResponseEntity<>(customers, HttpStatus.OK);
+        for(CustomerMaster c:customers) {
+        	System.out.println(c);
+        }
+        return customers;
     }
+    
 
     // Get customer by ID (JWT token required)
     @GetMapping("/{id}")
@@ -32,12 +36,13 @@ public class CustomerController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Create a new customer (JWT token required)
     @PostMapping
     public ResponseEntity<CustomerMaster> saveCustomer(@RequestBody CustomerMaster customer) {
+        System.out.println("Received Customer: " + customer);
         CustomerMaster savedCustomer = customerMasterService.saveCustomer(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
+
 
     // Delete customer by ID (JWT token required)
     @DeleteMapping("/{id}")

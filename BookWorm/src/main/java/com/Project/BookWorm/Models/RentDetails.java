@@ -20,7 +20,55 @@ public class RentDetails {
     @JoinColumn(name = "customer_id",nullable = true)
     private CustomerMaster customerId; 
 
-    @Column(nullable = true)
+    public int getRentId() {
+		return rentId;
+	}
+
+	public void setRentId(int rentId) {
+		this.rentId = rentId;
+	}
+
+	public ProductMaster getProductId() {
+		return productId;
+	}
+
+	public void setProductId(ProductMaster productId) {
+		this.productId = productId;
+	}
+
+	public CustomerMaster getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(CustomerMaster customerId) {
+		this.customerId = customerId;
+	}
+
+	public LocalDate getRentStartDate() {
+		return rentStartDate;
+	}
+
+	public void setRentStartDate(LocalDate rentStartDate) {
+		this.rentStartDate = rentStartDate;
+	}
+
+	public LocalDate getRentEndDate() {
+		return rentEndDate;
+	}
+
+	public void setRentEndDate(LocalDate rentEndDate) {
+		this.rentEndDate = rentEndDate;
+	}
+
+	public String getRentStatus() {
+		return rentStatus;
+	}
+
+	public void setRentStatus(String rentStatus) {
+		this.rentStatus = rentStatus;
+	}
+
+	@Column(nullable = true)
     private LocalDate rentStartDate;
 
     @Column(nullable = true)
