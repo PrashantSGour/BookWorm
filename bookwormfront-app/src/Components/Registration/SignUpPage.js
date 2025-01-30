@@ -28,6 +28,7 @@ const SignUpPage = () => {
     };
 
     return (
+        <div className="page-content">
         <div className="signup-container">
             {/* Centering the box */}
             <div className="signup-box">
@@ -99,6 +100,7 @@ const SignUpPage = () => {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

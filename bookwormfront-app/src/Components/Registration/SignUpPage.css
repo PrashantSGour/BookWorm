@@ -1,10 +1,13 @@
 /* General styles for the page */
+/* Ensure it does not overlap with navbar */
 .signup-container {
     position: relative;
     height: 100vh;
     padding: 10px;
     box-sizing: border-box;
+    padding-top: 80px; /* Match the navbar height */
 }
+
 
 .signup-box {
     position: absolute;

@@ -1,84 +1,116 @@
-.navbar {
-    background-color: #e2e3f8 !important; /* Background color */
-    padding: 10px 0;
-}
-
-.navbar .container {
+/* Navbar container */
+.navbar-container {
     display: flex;
-    justify-content: space-between;
+    width: 100%;
+    height: 60px; /* Ensuring navbar has a fixed height */
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     align-items: center;
 }
 
+/* Navbar content aligned properly */
+.navbar-content {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Brand logo */
 .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 22px;
     font-weight: bold;
-    color: #7d6df8 !important; /* Updated text color for the title */
+    color: #7d6df8;
 }
 
 /* Search Bar */
 .search-container {
     display: flex;
     align-items: center;
-    flex-grow: 1;
-    max-width: 400px;
-    margin: 0 auto;
-    gap: 10px;
+    width: 40%;
+    margin-left: auto;
 }
 
-.search-container input {
-    padding: 6px 10px;
+.search-input {
+    width: 80%;
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
+    border-radius: 5px 0 0 5px;
+    outline: none;
 }
 
-.search-container button {
-    background-color: rgba(108, 93, 210, 255) !important;
-    color: white !important;
+.search-button {
+    padding: 8px 12px;
+    background-color: #7d6df8;
+    color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
 }
 
-.search-container button:hover {
-    background-color: rgba(108, 93, 210, 0.8) !important;
-}
-
-/* Navigation Options */
-.nav-options {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.nav-links {
-    display: flex;
-    gap: 15px;
-}
-
-.nav-links .nav-link {
-    color: #7d6df8 !important; /* Updated text color for links */
-    transition: color 0.3s ease;
-}
-
-.nav-links .nav-link:hover {
-    color: rgba(108, 93, 210, 0.8) !important;
+.search-button:hover {
+    background-color: #6456e2;
 }
 
 /* User Dropdown */
-.user-dropdown .dropdown-toggle {
-    color: #7d6df8 !important; /* Updated text color for user dropdown */
+.nav-options {
+    display: flex;
+    align-items: center;
 }
 
-.navbar .dropdown-menu {
-    background-color: #333;
+#user-dropdown {
+    color: #333;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
 }
 
-.navbar .dropdown-item {
-    color: white !important;
+#user-dropdown:hover {
+    color: #7d6df8;
 }
 
-.navbar .dropdown-item:hover {
-    background-color: rgba(108, 93, 210, 255) !important;
+/* Dropdown menu */
+.dropdown-menu-custom {
+    min-width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+}
+
+.dropdown-item-custom {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #333;
+    transition: background 0.3s ease-in-out;
+}
+
+.dropdown-item-custom:hover {
+    background: #f4f4f9;
+    color: #7d6df8;
+}
+
+/* Icon styling */
+.dropdown-icon {
+    margin-right: 10px;
+}
+
+.user-icon {
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.user-icon:hover {
+    color: #7d6df8;
+}
+
+.page-content {
+    padding-top: 80px; /* At least 20px extra space below navbar */
 }
