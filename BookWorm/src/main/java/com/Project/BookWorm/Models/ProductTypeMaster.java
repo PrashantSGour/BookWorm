@@ -11,6 +11,22 @@ public class ProductTypeMaster {
     @Column(name = "type_id")
     private int TypeId;
     
-    @Column(nullable = true)
+    public int getTypeId() {
+		return TypeId;
+	}
+
+	public void setTypeId(int typeId) {
+		TypeId = typeId;
+	}
+
+	public String getTypeDesc() {
+		return TypeDesc;
+	}
+
+	public void setTypeDesc(String typeDesc) {
+		TypeDesc = typeDesc;
+	}
+
+	@Column(nullable = true)
     private String TypeDesc;
 }

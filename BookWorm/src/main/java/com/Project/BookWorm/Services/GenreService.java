@@ -1,9 +1,9 @@
 package com.Project.BookWorm.Services;
 
+import org.springframework.stereotype.Service;
+
 import com.Project.BookWorm.Models.GenreMaster;
 
-public interface GenreService {
-	GenreMaster createGenre(String genereName, int languageId);
-	
-
+@Service
+public class GenreService {
 }

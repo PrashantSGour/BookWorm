@@ -13,7 +13,63 @@ public class InvoiceDetails {
     @Column(name = "inv_dtl_id")
     private int invDtlId;
 
-    @ManyToOne
+    public int getInvDtlId() {
+		return invDtlId;
+	}
+
+	public void setInvDtlId(int invDtlId) {
+		this.invDtlId = invDtlId;
+	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(Invoice invoice) {
+		this.invoice = invoice;
+	}
+
+	public ProductMaster getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductMaster product) {
+		this.product = product;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public Double getBasePrice() {
+		return basePrice;
+	}
+
+	public void setBasePrice(Double basePrice) {
+		this.basePrice = basePrice;
+	}
+
+	public String getTranType() {
+		return tranType;
+	}
+
+	public void setTranType(String tranType) {
+		this.tranType = tranType;
+	}
+
+	public int getRentNoOfDays() {
+		return rentNoOfDays;
+	}
+
+	public void setRentNoOfDays(int rentNoOfDays) {
+		this.rentNoOfDays = rentNoOfDays;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "invoice_id", nullable = true)
     private Invoice invoice;
 

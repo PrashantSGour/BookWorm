@@ -11,6 +11,22 @@ public class AttributeMaster {
     @Column(name = "attribute_id")
     private int attributeId;
 
-    @Column(nullable = true,name = "attribute_name")
-    private String attributeName;
+    public int getAttributeId() {
+		return attributeId;
+	}
+
+	public void setAttributeId(int attributeId) {
+		this.attributeId = attributeId;
+	}
+
+	public String getAttributename() {
+		return attributename;
+	}
+
+	public void setAttributename(String attributeName) {
+		this.attributename = attributeName;
+	}
+
+	@Column(nullable = true,name = "attribute_name")
+    private String attributename;
 }

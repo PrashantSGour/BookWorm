@@ -13,7 +13,47 @@ public class Invoice {
     @Column(name = "invoice_id")
     private int invoiceId;
 
-    @ManyToOne
+    public int getInvoiceId() {
+		return invoiceId;
+	}
+
+	public void setInvoiceId(int invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+
+	public CustomerMaster getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(CustomerMaster customerId) {
+		this.customerId = customerId;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public CartMaster getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(CartMaster cartId) {
+		this.cartId = cartId;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "customer_id", nullable = true)
     private CustomerMaster customerId;
     
