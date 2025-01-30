@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Shelf_Details {
+public class ShelfDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +20,11 @@ public class Shelf_Details {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = true)
-    private Product_Master product;
+    private ProductMaster product;
 
     @OneToOne
     @JoinColumn(name = "customer_id", nullable = true)
-    private Customer_Master customer;
+    private CustomerMaster customer;
 
     @Column(nullable = true)
     private Double basePrice;
@@ -34,5 +34,5 @@ public class Shelf_Details {
 
     @ManyToOne
     @JoinColumn(name = "rent_id", nullable = true)
-    private Rent_Details rentDetails;
+    private RentDetails rentDetails;
 }

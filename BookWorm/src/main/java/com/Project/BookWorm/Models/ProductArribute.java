@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Product_Arribute {
+public class ProductArribute {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_attribute_id")
@@ -13,11 +13,11 @@ public class Product_Arribute {
 
     @ManyToOne
     @JoinColumn(name = "attribute_id",nullable = true)
-    private Attribute_Master attributeId;
+    private AttributeMaster attributeId;
 
     @ManyToOne
     @JoinColumn(name = "product_id",nullable = true)
-    private Product_Master productId;
+    private ProductMaster productId;
 
     @Column(nullable = true,name = "attribute_value")
     private String attributeValue;

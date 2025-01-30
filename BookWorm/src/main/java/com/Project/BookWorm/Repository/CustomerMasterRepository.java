@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CustomerMasterRepository extends JpaRepository<Customer_Master, Long> {
+public interface CustomerMasterRepository extends JpaRepository<CustomerMaster, Long> {
     @Query(value = "SELECT * FROM customer_master WHERE Customer_email = ?1 AND Customer_password = ?2", nativeQuery = true)
-    Optional<Customer_Master> getCustomerByEmailAndPassword(String email, String password);
+    Optional<CustomerMaster> getCustomerByEmailAndPassword(String email, String password);
 }

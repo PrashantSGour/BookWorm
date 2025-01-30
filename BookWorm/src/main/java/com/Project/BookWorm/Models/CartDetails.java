@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Cart_Details {
+public class CartDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_details_id")
@@ -16,12 +16,12 @@ public class Cart_Details {
 
     @OneToMany
     @JoinColumn(name = "cart_id", nullable = true)
-    private Set<Cart_Master> cartId;
+    private Set<CartMaster> cartId;
 
     @ManyToOne
     
     @JoinColumn(name = "product_id", nullable = true)
-    private Product_Master productId;
+    private ProductMaster productId;
 
     @Column(nullable = true)
     private boolean isPurchased;

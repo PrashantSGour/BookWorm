@@ -16,6 +16,6 @@ public class MyShelf {
 
     @ManyToOne
     @JoinColumn(name = "shelf_dtl_id", nullable = true)
-    private Shelf_Details shelfDetails;
+    private ShelfDetails shelfDetails;
     //this a new comment
 }

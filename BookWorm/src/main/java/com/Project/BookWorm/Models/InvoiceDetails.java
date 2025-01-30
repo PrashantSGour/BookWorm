@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Invoice_Details {
+public class InvoiceDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class Invoice_Details {
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = true)
     
-    private Product_Master product;
+    private ProductMaster product;
 
     @Column(nullable = true)
     private int quantity;

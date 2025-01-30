@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Rent_Details {
+public class RentDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rent_id")
@@ -14,11 +14,11 @@ public class Rent_Details {
 
     @ManyToOne
     @JoinColumn(name = "product_id",nullable = true)
-    private Product_Master productId; 
+    private ProductMaster productId; 
 
     @ManyToOne
     @JoinColumn(name = "customer_id",nullable = true)
-    private Customer_Master customerId; 
+    private CustomerMaster customerId; 
 
     @Column(nullable = true)
     private LocalDate rentStartDate;

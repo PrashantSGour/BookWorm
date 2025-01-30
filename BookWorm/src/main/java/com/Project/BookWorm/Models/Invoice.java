@@ -15,7 +15,7 @@ public class Invoice {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = true)
-    private Customer_Master customerId;
+    private CustomerMaster customerId;
     
     @Column(nullable = true)
     private double amount;
@@ -25,7 +25,7 @@ public class Invoice {
 
     @ManyToOne
     @JoinColumn(name = "cart_id", nullable = true,referencedColumnName = "cart_id")
-    private Cart_Master cartId;
+    private CartMaster cartId;
 
 //     @OneToMany(mappedBy = "invoice") // 'invoice' refers to the field in InvoiceDetails
 //     private Set<InvoiceDetails> invoiceDetails;
