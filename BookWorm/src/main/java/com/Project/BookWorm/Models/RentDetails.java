@@ -1,5 +1,6 @@
 package com.Project.BookWorm.Models;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,73 +8,28 @@ import lombok.Data;
 @Entity
 @Data
 public class RentDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rent_id")
-    private int rentId;
+    private Integer rentId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id",nullable = true)
-    private ProductMaster productId; 
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerMaster customer; // Rent is tied to a customer
 
     @ManyToOne
-    @JoinColumn(name = "customer_id",nullable = true)
-    private CustomerMaster customerId; 
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductMaster product; // Rent is tied to a product
 
-    public int getRentId() {
-		return rentId;
-	}
+    @Column(nullable = false)
+    private Date rentStartDate; // Rent start date
 
-	public void setRentId(int rentId) {
-		this.rentId = rentId;
-	}
+    @Column(nullable = false)
+    private Date rentEndDate; // Rent end date
 
-	public ProductMaster getProductId() {
-		return productId;
-	}
+    @Column(nullable = false)
+    private double rentPrice; // Price of rent
 
-	public void setProductId(ProductMaster productId) {
-		this.productId = productId;
-	}
-
-	public CustomerMaster getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(CustomerMaster customerId) {
-		this.customerId = customerId;
-	}
-
-	public LocalDate getRentStartDate() {
-		return rentStartDate;
-	}
-
-	public void setRentStartDate(LocalDate rentStartDate) {
-		this.rentStartDate = rentStartDate;
-	}
-
-	public LocalDate getRentEndDate() {
-		return rentEndDate;
-	}
-
-	public void setRentEndDate(LocalDate rentEndDate) {
-		this.rentEndDate = rentEndDate;
-	}
-
-	public String getRentStatus() {
-		return rentStatus;
-	}
-
-	public void setRentStatus(String rentStatus) {
-		this.rentStatus = rentStatus;
-	}
-
-	@Column(nullable = true)
-    private LocalDate rentStartDate;
-
-    @Column(nullable = true)
-    private LocalDate rentEndDate;
-
-    @Column(nullable = true)
-    private String rentStatus; 
+    // Getters and setters
 }

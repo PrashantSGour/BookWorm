@@ -1,7 +1,7 @@
-package com.Project.BookWorm.Controllers;
+package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.ProductMaster;
-import com.Project.BookWorm.Services.ProductMasterService;
+import com.Project.BookWorm.Service.ProductMasterService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

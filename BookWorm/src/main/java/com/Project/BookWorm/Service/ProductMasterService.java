@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Services;
+package com.Project.BookWorm.Service;
 
 import com.Project.BookWorm.Models.ProductMaster;
 import com.Project.BookWorm.Repository.ProductMasterRepository;

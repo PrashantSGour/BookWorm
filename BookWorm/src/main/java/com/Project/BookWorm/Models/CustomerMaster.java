@@ -2,6 +2,7 @@ package com.Project.BookWorm.Models;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
@@ -16,16 +17,58 @@ import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerMaster {
-    @Id
+	  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
-    private Long customerid;
+    private long customerid;
 
-    public Long getCustomerid() {
+    @Column(nullable = true, unique = true)
+    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email format")
+    private String customeremail; 
+
+    @Column(nullable = true)
+    private String customername;
+
+    @Column(nullable = true)
+    private String customerpassword;
+
+    @Column(nullable = true)
+    private LocalDate dob; 
+
+    @Column(nullable = true)
+    private Integer age;
+
+    @Column(nullable = true)
+    private String pan;
+
+    @Column(nullable = true)
+    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number format")
+    private String phonenumber;
+    
+    @JsonBackReference
+    @OneToOne(mappedBy = "customer")
+    private MyShelf myShelf; // One shelf per customer (mandatory relationship)
+
+    public MyShelf getMyShelf() {
+		return myShelf;
+	}
+
+	public void setMyShelf(MyShelf myShelf) {
+		this.myShelf = myShelf;
+	}
+
+	@Override
+    public String toString() {
+        return "CustomerMaster [customerId=" + customerid + ", customerEmail=" + customeremail + ", customerName=" 
+                + customername + ", customerPassword=" + customerpassword + ", dob=" + dob + ", age=" + age + ", pan=" 
+                + pan + ", phoneNumber=" + phonenumber + "]";
+    }
+
+    public long getCustomerid() {
 		return customerid;
 	}
 
-	public void setCustomerid(Long customerid) {
+	public void setCustomerid(long customerid) {
 		this.customerid = customerid;
 	}
 
@@ -84,44 +127,5 @@ public class CustomerMaster {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
-
-	@Column(nullable = true, unique = true)
-    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$")
-    private String customeremail; 
-
-    @Column(nullable = true)
-    private String customername;
-
-    @Column(nullable = true)
-    private String customerpassword;
-
-    @Column(nullable = true)
-    private LocalDate dob; 
-
-    @Column(nullable = true)
-    private Integer age;
-
-    @Column(nullable = true)
-    private String pan;
-
-    @Column(nullable = true)
-    @Pattern(regexp = "^[0-9]{10}$")
-    private String phonenumber;
-
-    @OneToOne(targetEntity = CartMaster.class)
-    @JoinColumn(name = "cart_id", nullable = true)
-    private CartMaster cartid;
-
-    @OneToOne(targetEntity = MyShelf.class)
-    @JoinColumn(name = "shelf_id", nullable = true)
-    private MyShelf shelfid;
-
-	@Override
-	public String toString() {
-		return "CustomerMaster [customerId=" + customerid + ", customerEmail=" + customeremail + ", customerName="
-				+ customername + ", customerPassword=" + customerpassword + ", dob=" + dob + ", age=" + age + ", pan="
-				+ pan + ", phoneNumber=" + phonenumber + "]";
-	}
-    
     
 }
