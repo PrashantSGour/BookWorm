@@ -1,71 +1,79 @@
 package com.Project.BookWorm.Models;
 
-import java.util.Set;
-
 import jakarta.persistence.*;
-
 import lombok.Data;
 
 @Entity
 @Data
 public class CartDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_details_id")
-    private int cartDetailsId;
+    @Column(name = "cart_detail_id")
+    private int cartDetailId;
 
-    public int getCartDetailsId() {
-		return cartDetailsId;
+    // Many-to-One relationship back to CartMaster (CartDetails is child)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private CartMaster cartMaster;
+
+    // Many-to-One relationship with ProductMaster (Product ID)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductMaster product;  // ProductMaster reference
+
+    private int quantity;
+    private double price;
+    private TransactionType transtype;
+
+    // Getters and Setters
+
+    public TransactionType getTranstype() {
+		return transtype;
 	}
 
-	public void setCartDetailsId(int cartDetailsId) {
-		this.cartDetailsId = cartDetailsId;
+	public void setTranstype(TransactionType transtype) {
+		this.transtype = transtype;
 	}
 
-	public Set<CartMaster> getCartId() {
-		return cartId;
-	}
+	public int getCartDetailId() {
+        return cartDetailId;
+    }
 
-	public void setCartId(Set<CartMaster> cartId) {
-		this.cartId = cartId;
-	}
+    public void setCartDetailId(int cartDetailId) {
+        this.cartDetailId = cartDetailId;
+    }
 
-	public ProductMaster getProductId() {
-		return productId;
-	}
+    public CartMaster getCartMaster() {
+        return cartMaster;
+    }
 
-	public void setProductId(ProductMaster productId) {
-		this.productId = productId;
-	}
+    public void setCartMaster(CartMaster cartMaster) {
+        this.cartMaster = cartMaster;
+    }
 
-	public boolean isPurchased() {
-		return isPurchased;
-	}
+    public ProductMaster getProduct() {
+        return product;
+    }
 
-	public void setPurchased(boolean isPurchased) {
-		this.isPurchased = isPurchased;
-	}
+    public void setProduct(ProductMaster product) {
+        this.product = product;
+    }
 
-	public int getRentNoOfDays() {
-		return rentNoOfDays;
-	}
+    public int getQuantity() {
+        return quantity;
+    }
 
-	public void setRentNoOfDays(int rentNoOfDays) {
-		this.rentNoOfDays = rentNoOfDays;
-	}
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-	@OneToMany
-    @JoinColumn(name = "cart_id", nullable = true)
-    private Set<CartMaster> cartId;
+    public double getPrice() {
+        return price;
+    }
 
-    @ManyToOne
-    
-    @JoinColumn(name = "product_id", nullable = true)
-    private ProductMaster productId;
-
-    @Column(nullable = true)
-    private boolean isPurchased;
-
-    private int rentNoOfDays;
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
 }

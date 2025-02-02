@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Controllers;
+package com.Project.BookWorm.Controller;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Project.BookWorm.Models.CustomerMaster;
-import com.Project.BookWorm.Services.CustomerMasterService;
+import com.Project.BookWorm.Service.CustomerMasterService;
 
 //@RestController
 //public class DemoController {

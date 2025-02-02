@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Services;
+package com.Project.BookWorm.Service;
 
 import com.Project.BookWorm.Models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,6 @@ public class CustomerMasterService {
         System.out.println("Saving customer: " + customer);
         return customerMasterRepository.save(customer);
     }
-
 
     public void deleteCustomer(long id) {
         customerMasterRepository.deleteById(id);
