@@ -17,7 +17,7 @@ import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerMaster {
-	  @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private long customerid;

@@ -4,6 +4,9 @@ import com.Project.BookWorm.Models.ProductMaster;
 import com.Project.BookWorm.Repository.ProductMasterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
+import com.Project.BookWorm.DTO.ProductDTO;
 
 import java.util.Optional;
 
@@ -69,5 +72,27 @@ public class ProductMasterService {
     // Fetch all products (optional, for general CRUD)
     public Iterable<ProductMaster> getAllProducts() {
         return productMasterRepository.findAll();
+    }
+    //by language id
+    // public List<ProductMaster> getByLanguageId(int id) {
+    //     return List<productMasterRepository.findByLanguageId(id)>;
+    // }
+    // public List<ProductMaster> getFilteredProducts(int genreId, int languageId) {
+    //         return productRepository.findProductsByFilters(genreId, languageId);
+    // }
+    // public List<ProductMaster> getFilteredProducts(String genreDesc, String languageDesc) {
+    //     return productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
+    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc) {
+        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
+
+
+        return products.stream()
+                .map(product -> new ProductDTO(
+                        product.getProductName(),
+                        product.getProductBasePrice(),
+                        product.getProductLang().getLanguageDesc(),
+                        product.getProductGenre().getGenreDesc()
+                ))
+                .collect(Collectors.toList());
     }
 }
