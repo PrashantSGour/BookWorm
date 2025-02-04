@@ -1,5 +1,9 @@
 package com.Project.BookWorm.Models;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,13 +13,48 @@ public class MyShelf {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shelf_id")
-    private int shelfId;
+    private Integer shelfId;
 
-    private int noOfBooks;
+    @JsonManagedReference
+    @OneToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private CustomerMaster customer; // One shelf per customer
+    
+    private int noOfBooks; // Number of books on the shelf
 
+    @OneToMany(mappedBy = "shelfId")
+    private List<MyShelfDetails> shelfDetails; // List of books on the shelf
 
-    @ManyToOne
-    @JoinColumn(name = "shelf_dtl_id", nullable = true)
-    private ShelfDetails shelfDetails;
-    //this a new comment
+	public Integer getShelfId() {
+		return shelfId;
+	}
+
+	public void setShelfId(Integer shelfId) {
+		this.shelfId = shelfId;
+	}
+
+	public CustomerMaster getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(CustomerMaster customer) {
+		this.customer = customer;
+	}
+
+	public int getNoOfBooks() {
+		return noOfBooks;
+	}
+
+	public void setNoOfBooks(int noOfBooks) {
+		this.noOfBooks = noOfBooks;
+	}
+
+	public List<MyShelfDetails> getShelfDetails() {
+		return shelfDetails;
+	}
+
+	public void setShelfDetails(List<MyShelfDetails> shelfDetails) {
+		this.shelfDetails = shelfDetails;
+	}
 }
+

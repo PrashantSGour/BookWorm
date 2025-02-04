@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Controllers;
+package com.Project.BookWorm.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

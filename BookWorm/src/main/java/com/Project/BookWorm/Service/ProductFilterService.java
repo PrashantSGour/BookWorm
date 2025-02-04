@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Services;
+package com.Project.BookWorm.Service;
 
 import com.Project.BookWorm.Models.FilterData;
 import com.Project.BookWorm.Models.GenreMaster;

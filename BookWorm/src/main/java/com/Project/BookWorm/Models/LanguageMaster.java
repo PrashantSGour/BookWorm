@@ -15,7 +15,31 @@ public class LanguageMaster {
     @Column(nullable = true)
     private String languageDesc;
 
-    @ManyToOne
+    public int getLanguageId() {
+		return languageId;
+	}
+
+	public void setLanguageId(int languageId) {
+		this.languageId = languageId;
+	}
+
+	public String getLanguageDesc() {
+		return languageDesc;
+	}
+
+	public void setLanguageDesc(String languageDesc) {
+		this.languageDesc = languageDesc;
+	}
+
+	public ProductTypeMaster getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(ProductTypeMaster typeId) {
+		this.typeId = typeId;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "type_id",nullable = true)
     private ProductTypeMaster typeId;
 }

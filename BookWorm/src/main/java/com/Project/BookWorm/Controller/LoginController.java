@@ -1,8 +1,9 @@
-package com.Project.BookWorm.Controllers;
+package com.Project.BookWorm.Controller;
 
-import com.Project.BookWorm.Services.CustomerMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.Project.BookWorm.Service.CustomerMasterService;
 
 import java.util.HashMap;
 import java.util.Map;

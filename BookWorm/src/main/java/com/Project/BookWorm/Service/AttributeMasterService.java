@@ -1,13 +1,15 @@
-package com.Project.BookWorm.Services;
+package com.Project.BookWorm.Service;
 
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.Project.BookWorm.Models.AttributeMaster;
 import com.Project.BookWorm.Repository.AttributeMasterRepository;
 
+@Service
 public class AttributeMasterService {
 
      @Autowired

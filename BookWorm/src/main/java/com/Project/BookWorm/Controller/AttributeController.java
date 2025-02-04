@@ -1,4 +1,4 @@
-package com.Project.BookWorm.Controllers;
+package com.Project.BookWorm.Controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Project.BookWorm.Models.AttributeMaster;
-import com.Project.BookWorm.Services.AttributeMasterService;
+import com.Project.BookWorm.Service.AttributeMasterService;
 
 
 @RestController
