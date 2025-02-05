@@ -24,6 +24,10 @@ public class ProductMasterService {
     public ProductMaster createProduct(ProductMaster productMaster) {
         return productMasterRepository.save(productMaster);
     }
+    
+    public List<ProductMaster> createMultipleProducts(List<ProductMaster> products) {
+        return productMasterRepository.saveAll(products);
+    }
 
     // Read a single product by ID
     public Optional<ProductMaster> getProductById(int productId) {
@@ -74,20 +78,12 @@ public class ProductMasterService {
     }
 
     // Fetch all products (optional, for general CRUD)
-    public Iterable<ProductMaster> getAllProducts() {
+    public List<ProductMaster> getAllProducts() {
         return productMasterRepository.findAll();
     }
-    //by language id
-    // public List<ProductMaster> getByLanguageId(int id) {
-    //     return List<productMasterRepository.findByLanguageId(id)>;
-    // }
-    // public List<ProductMaster> getFilteredProducts(int genreId, int languageId) {
-    //         return productRepository.findProductsByFilters(genreId, languageId);
-    // }
-    // public List<ProductMaster> getFilteredProducts(String genreDesc, String languageDesc) {
-    //     return productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
-    public List<com.Project.BookWorm.dto.ProductDTO> getFilteredProducts(String genreDesc, String languageDesc) {
-        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
+
+    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc, String productAuthor) {
+        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc, productAuthor);
 
 
         return products.stream()
@@ -95,8 +91,9 @@ public class ProductMasterService {
                         product.getProductName(),
                         product.getProductBasePrice(),
                         product.getProductLang().getLanguageDesc(),
-                        product.getProductGenre().getGenreDesc()
-                ))
+                        product.getProductGenre().getGenreDesc(),
+                        product.getProductAuthor()                
+                        ))
                 .collect(Collectors.toList());
 //        return Optional.ofNullable(products)
 //        	    .orElse(Collections.emptyList()) // ✅ Ensures products list is never null

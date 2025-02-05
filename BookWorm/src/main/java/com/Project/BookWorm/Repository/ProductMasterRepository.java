@@ -37,7 +37,7 @@ public interface ProductMasterRepository extends JpaRepository<ProductMaster, In
 //     List<ProductMaster> findProductsByFilters(
 //             @Param("genreDesc") String genreDesc, 
 //             @Param("languageDesc") String languageDesc);
-@Query("SELECT p FROM ProductMaster p WHERE (:genreDesc IS NULL OR p.productGenre.genreDesc = :genreDesc) AND (:languageDesc IS NULL OR p.productLang.languageDesc = :languageDesc)")
-    List<ProductMaster> findProductsByFilters(@Param("genreDesc") String genreDesc, @Param("languageDesc") String languageDesc);
+@Query("SELECT p FROM ProductMaster p WHERE (:genreDesc IS NULL OR p.productGenre.genreDesc = :genreDesc) AND (:languageDesc IS NULL OR p.productLang.languageDesc = :languageDesc) AND (:productAuthor IS NULL OR p.productAuthor = :productAuthor)")
+    List<ProductMaster> findProductsByFilters(@Param("genreDesc") String genreDesc, @Param("languageDesc") String languageDesc, @Param("productAuthor") String productAuthor);
     
 }
