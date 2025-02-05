@@ -5,7 +5,7 @@ import com.Project.BookWorm.Service.ProductMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import java.util.List;
-import com.Project.BookWorm.DTO.ProductDTO;
+import com.Project.BookWorm.dto.ProductDTO;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,24 @@ public class ProductMasterController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    
+    @GetMapping
+    public List<ProductMaster> getAllProducts()
+    {
+    	return productMasterService.getAllProducts();
+    }
 
     // Endpoint to create a new product
     @PostMapping
     public ResponseEntity<ProductMaster> createProduct(@RequestBody ProductMaster productMaster) {
         ProductMaster createdProduct = productMasterService.createProduct(productMaster);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    }
+    
+    @PostMapping("/bulk")
+    public ResponseEntity<List<ProductMaster>> createMultipleProducts(@RequestBody List<ProductMaster> products) {
+        List<ProductMaster> createdProducts = productMasterService.createMultipleProducts(products);
+        return new ResponseEntity<>(createdProducts, HttpStatus.CREATED);
     }
 
     // Endpoint to update an existing product
@@ -50,6 +62,7 @@ public class ProductMasterController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+   
 
     // Endpoint to delete a product
     @DeleteMapping("/{id}")
@@ -62,26 +75,12 @@ public class ProductMasterController {
         }
     }
 
-    // Endpoint to fetch all products (optional)
-    // @GetMapping
-    // public ResponseEntity<Iterable<ProductMaster>> getAllProducts() {
-    //     return ResponseEntity.ok(productMasterService.getAllProducts());
-    // }
-    // @GetMapping("/fromlanguage/{id}")
-    // public List<ProductMaster>getBylangauge(@PathVariable int id){
-    //     return List<productMasterService.getByLanguageId(id)>;
-    // }
-    // @GetMapping("/filter")
-    // public List<ProductMaster> filterProducts(
-    //         @RequestParam(required = false) int genreId,
-    //         @RequestParam(required = false) int languageId) {
-    //     return productService.getFilteredProducts(genreId, languageId);
-    // }
     @GetMapping("/filter")
     public List<ProductDTO> filterProducts(
             @RequestParam(required = false) String genreDesc,
-            @RequestParam(required = false) String languageDesc) {
-        return productMasterService.getFilteredProducts(genreDesc, languageDesc);
+            @RequestParam(required = false) String languageDesc,
+            @RequestParam(required = false) String productAuthor) {
+        return productMasterService.getFilteredProducts(genreDesc, languageDesc, productAuthor);
     }
     
 }
