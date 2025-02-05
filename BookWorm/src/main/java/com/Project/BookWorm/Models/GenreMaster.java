@@ -30,15 +30,5 @@ public class GenreMaster {
 		this.genreDesc = genreDesc;
 	}
 
-	public LanguageMaster getLanguageId() {
-		return languageId;
-	}
 
-	public void setLanguageId(LanguageMaster languageId) {
-		this.languageId = languageId;
-	}
-
-	@ManyToOne
-    @JoinColumn(name = "language_id",nullable = true)
-    private LanguageMaster languageId;
 }
