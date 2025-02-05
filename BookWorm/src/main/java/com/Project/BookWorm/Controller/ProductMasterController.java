@@ -2,9 +2,13 @@ package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.ProductMaster;
 import com.Project.BookWorm.Service.ProductMasterService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import java.util.List;
+import com.Project.BookWorm.dto.ProductDTO;
+
+
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +62,25 @@ public class ProductMasterController {
     }
 
     // Endpoint to fetch all products (optional)
-    @GetMapping
-    public ResponseEntity<Iterable<ProductMaster>> getAllProducts() {
-        return ResponseEntity.ok(productMasterService.getAllProducts());
+    // @GetMapping
+    // public ResponseEntity<Iterable<ProductMaster>> getAllProducts() {
+    //     return ResponseEntity.ok(productMasterService.getAllProducts());
+    // }
+    // @GetMapping("/fromlanguage/{id}")
+    // public List<ProductMaster>getBylangauge(@PathVariable int id){
+    //     return List<productMasterService.getByLanguageId(id)>;
+    // }
+    // @GetMapping("/filter")
+    // public List<ProductMaster> filterProducts(
+    //         @RequestParam(required = false) int genreId,
+    //         @RequestParam(required = false) int languageId) {
+    //     return productService.getFilteredProducts(genreId, languageId);
+    // }
+    @GetMapping("/filter")
+    public List<ProductDTO> filterProducts(
+            @RequestParam(required = false) String genreDesc,
+            @RequestParam(required = false) String languageDesc) {
+        return productMasterService.getFilteredProducts(genreDesc, languageDesc);
     }
+    
 }
