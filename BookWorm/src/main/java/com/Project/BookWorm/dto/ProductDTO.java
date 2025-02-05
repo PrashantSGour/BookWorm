@@ -1,4 +1,4 @@
-package com.Project.BookWorm.DTO;
+package com.Project.BookWorm.dto;
 
 public class ProductDTO {
     private String productName;

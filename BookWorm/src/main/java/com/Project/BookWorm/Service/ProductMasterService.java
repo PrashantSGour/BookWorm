@@ -1,12 +1,16 @@
 package com.Project.BookWorm.Service;
 
 import com.Project.BookWorm.Models.ProductMaster;
+
 import com.Project.BookWorm.Repository.ProductMasterRepository;
+
+import io.jsonwebtoken.lang.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.Project.BookWorm.DTO.ProductDTO;
+import com.Project.BookWorm.dto.ProductDTO;
 
 import java.util.Optional;
 
@@ -82,7 +86,7 @@ public class ProductMasterService {
     // }
     // public List<ProductMaster> getFilteredProducts(String genreDesc, String languageDesc) {
     //     return productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
-    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc) {
+    public List<com.Project.BookWorm.dto.ProductDTO> getFilteredProducts(String genreDesc, String languageDesc) {
         List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc);
 
 
@@ -94,5 +98,17 @@ public class ProductMasterService {
                         product.getProductGenre().getGenreDesc()
                 ))
                 .collect(Collectors.toList());
+//        return Optional.ofNullable(products)
+//        	    .orElse(Collections.emptyList()) // ✅ Ensures products list is never null
+//        	    .stream()
+//        	    .map(product -> new ProductDTO(
+//        	        product.getProductName(),
+//        	        product.getProductBasePrice(),
+//        	        Optional.ofNullable(product.getProductLang()).map(LanguageMaster::getLanguageDesc).orElse("Unknown"),
+//        	        Optional.ofNullable(product.getProductGenre()).map(GenreMaster::getGenreDesc).orElse("Unknown")
+//        	    ))
+//        	    .collect(Collectors.toList());
+
+
     }
 }
