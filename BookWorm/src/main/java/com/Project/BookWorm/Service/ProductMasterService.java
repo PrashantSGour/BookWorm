@@ -3,6 +3,9 @@ package com.Project.BookWorm.Service;
 import com.Project.BookWorm.Models.ProductMaster;
 
 import com.Project.BookWorm.Repository.ProductMasterRepository;
+
+import io.jsonwebtoken.lang.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -92,5 +95,17 @@ public class ProductMasterService {
                         product.getProductAuthor()                
                         ))
                 .collect(Collectors.toList());
+//        return Optional.ofNullable(products)
+//        	    .orElse(Collections.emptyList()) // ✅ Ensures products list is never null
+//        	    .stream()
+//        	    .map(product -> new ProductDTO(
+//        	        product.getProductName(),
+//        	        product.getProductBasePrice(),
+//        	        Optional.ofNullable(product.getProductLang()).map(LanguageMaster::getLanguageDesc).orElse("Unknown"),
+//        	        Optional.ofNullable(product.getProductGenre()).map(GenreMaster::getGenreDesc).orElse("Unknown")
+//        	    ))
+//        	    .collect(Collectors.toList());
+
+
     }
 }
