@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/Header/NavBar';
-import SignUpPage from './Components/Registration/SignUpPage';
-import SignInPage from './Components/Login/SignIn';
+import SignUpPage from './Components/Registration/RegistrationForm';
+import SignInPage from './Components/Login/LoginComponent';
  // Similarly, import your SignUpPage
 
 function App() {
