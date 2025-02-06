@@ -23,7 +23,7 @@ public class CustomerMaster {
     private long customerid;
 
     @Column(nullable = true, unique = true)
-    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email format")
+//    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "Invalid email format")
     private String customeremail; 
 
     @Column(nullable = true)
@@ -42,7 +42,7 @@ public class CustomerMaster {
     private String pan;
 
     @Column(nullable = true)
-    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number format")
+//    @Pattern(regexp = "^[0-9]{10}$", message = "Invalid phone number format")
     private String phonenumber;
     
     @JsonBackReference

@@ -21,6 +21,7 @@ public class Invoice {
 		this.invoiceId = invoiceId;
 	}
 
+	
 	public CustomerMaster getCustomerId() {
 		return customerId;
 	}

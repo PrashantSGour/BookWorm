@@ -10,6 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -39,17 +41,9 @@ public class SecurityConfig {
 
        return http.build();
    }
-	
-	//  @Bean
-	//     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	//         http
-	//             .csrf(csrf -> csrf.disable())  // Disable CSRF for API calls
-	//             .authorizeHttpRequests(auth -> auth
-	//                 .requestMatchers(new AntPathRequestMatcher("/api/products/**")).permitAll() // Allow public access to products API
-	//                 .requestMatchers(new AntPathRequestMatcher("/api/products/filters")).permitAll() // Allow public access to filters
-	//                 .anyRequest().authenticated()
-	//             );
 
-	//         return http.build();
-	//     }
+   @Bean
+   public PasswordEncoder passwordEncoder() {
+       return new BCryptPasswordEncoder();
+   }
 }

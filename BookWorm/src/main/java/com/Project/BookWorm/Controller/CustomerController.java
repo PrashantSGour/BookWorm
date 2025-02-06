@@ -19,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
+@CrossOrigin("*")
 public class CustomerController {
 
     @Autowired
@@ -51,19 +52,20 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerMaster> registerCustomer(@RequestBody CustomerMaster customer) {
         // Register customer
+    	System.out.println(customer);
         CustomerMaster savedCustomer = customerRepository.save(customer);
 
-        // Create a cart for the registered customer
-        CartMaster cart = new CartMaster();
-        cart.setCustomer_id(savedCustomer);  // Link cart to customer
-        cart.setCost(0.0);  // Initialize cost to 0
-        cartMasterRepository.save(cart);
+        // // Create a cart for the registered customer
+        // CartMaster cart = new CartMaster();
+        // cart.setCustomer_id(savedCustomer);  // Link cart to customer
+        // cart.setCost(0.0);  // Initialize cost to 0
+        // cartMasterRepository.save(cart);
         
-        // Create a MyShelf for the registered customer
-        MyShelf myShelf = new MyShelf();
-        myShelf.setCustomer(savedCustomer);
-        myShelf.setNoOfBooks(0);  // Initial number of books
-        myShelfService.createMyShelf(myShelf); // Save the MyShelf instance
+        // // Create a MyShelf for the registered customer
+        // MyShelf myShelf = new MyShelf();
+        // myShelf.setCustomer(savedCustomer);
+        // myShelf.setNoOfBooks(0);  // Initial number of books
+        // myShelfService.createMyShelf(myShelf); // Save the MyShelf instance
 
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
