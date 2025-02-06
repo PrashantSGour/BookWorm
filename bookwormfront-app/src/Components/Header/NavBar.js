@@ -1,65 +1,106 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { Navbar, Nav, Container, Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaRegUser } from "react-icons/fa";
-import { IoLogInOutline } from "react-icons/io5"; // Login icon
-import { HiOutlineUserAdd } from "react-icons/hi"; // Signup icon
+import { Button, Drawer } from '@mui/material';
+import LoginComponent from '../Login/LoginComponent';
+import RegistrationComponent from '../Registration/RegistrationComponent';
 import './NavBar.css'; // Import CSS file
 
 function NavBar() {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const [loginOpen, setLoginOpen] = React.useState(false);
+  const [signupOpen, setSignupOpen] = React.useState(false);
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      User options
-    </Tooltip>
-  );
+  const handleLogout = () => {
+    localStorage.setItem('isLoggedIn', 'false');
+    navigate('/');
+  };
 
-  const handleSelect = () => {
-    setShowDropdown(false); // Close the dropdown after selecting an option
+  const handleLoginOpen = () => {
+    setLoginOpen(true);
+  };
+
+  const handleLoginClose = () => {
+    setLoginOpen(false);
+  };
+
+  const handleSignupOpen = () => {
+    setSignupOpen(true);
+    handleLoginClose();
+  };
+
+  const handleSignupClose = () => {
+    setSignupOpen(false);
+  };
+
+  const handleLoginFromSignup = () => {
+    setSignupOpen(false);
+    setLoginOpen(true);
+  };
+
+  const handleLoginSuccess = () => {
+    setLoginOpen(false);
+    navigate("/products");
   };
 
   return (
-    <Navbar expand="lg" className="navbar-container">
-      <Container className="navbar-content">
-        {/* Brand Name */}
-        <Navbar.Brand href="#home" className="navbar-brand">BookWorm</Navbar.Brand>
+    <>
+      <Navbar expand="lg" className="navbar-container" style={{ zIndex: 1200 }}>
+        <Container>
+          {/* Brand Name */}
+          <Navbar.Brand as={Link} to="/" className="navbar-brand" style={{ color: '#7d6df8' }}>
+            BookWorm
+          </Navbar.Brand>
 
-        {/* Search Bar */}
-        <div className="search-container">
-          <input type="text" placeholder="Search..." className="search-input" />
-          <button type="button" className="search-button">Search</button>
-        </div>
+          {/* Toggle Button for Small Screens */}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-        {/* User Dropdown with Tooltip */}
-        <Nav className="nav-options">
-          <OverlayTrigger
-            placement="bottom"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip}
-          >
-            <Dropdown
-              show={showDropdown}
-              onToggle={(isOpen) => setShowDropdown(isOpen)}
-            >
-              <Dropdown.Toggle variant="link" id="user-dropdown" className="dropdown-toggle">
-                <FaRegUser size={22} className="user-icon" /> {/* User icon */}
-              </Dropdown.Toggle>
+          <Navbar.Collapse id="basic-navbar-nav">
+            {/* Centered Search Bar */}
+            <div className="search-container mx-auto">
+              <input type="text" placeholder="Search..." className="search-input" />
+              <button type="button" className="search-button">Search</button>
+            </div>
 
-              <Dropdown.Menu className="dropdown-menu-custom">
-                <Dropdown.Item as={Link} to="/login" className="dropdown-item-custom" onClick={handleSelect}>
-                  <IoLogInOutline size={18} className="dropdown-icon" /> Login
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/signup" className="dropdown-item-custom" onClick={handleSelect}>
-                  <HiOutlineUserAdd size={18} className="dropdown-icon" /> Signup
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </OverlayTrigger>
-        </Nav>
-      </Container>
-    </Navbar>
+            {/* Conditional Button */}
+            <Nav className="ms-auto">
+              {isLoggedIn ? (
+                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
+                  Log Out
+                </Button>
+              ) : (
+                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
+                  Sign In
+                </Button>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+
+      {/* Login Component Drawer */}
+      <Drawer
+        anchor="right"
+        open={loginOpen}
+        onClose={handleLoginClose}
+        PaperProps={{ sx: { width: 500, zIndex: 1100 } }} // Set the width and z-index of the drawer
+      >
+        <LoginComponent onClose={handleLoginClose} onSignupOpen={handleSignupOpen} onLoginSuccess={handleLoginSuccess} />
+      </Drawer>
+
+      {/* Signup Component Drawer */}
+      <Drawer
+        anchor="right"
+        open={signupOpen}
+        onClose={handleSignupClose}
+        PaperProps={{ sx: { width: 600, zIndex: 1100 } }} // Set the width and z-index of the drawer
+      >
+        <RegistrationComponent onClose={handleSignupClose} onLoginOpen={handleLoginFromSignup} />
+      </Drawer>
+    </>
   );
 }
 
