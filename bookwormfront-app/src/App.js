@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/Header/NavBar';
 import SignUpPage from './Components/Registration/SignUpPage';
 import SignInPage from './Components/Login/SignIn';
-import ProductsPage from './Components/Products/ProductDisplay';
+import ProductsPage from './Components/Products/ProductdDisplay';
  // Similarly, import your SignUpPage
 
 function App() {

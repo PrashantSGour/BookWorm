@@ -12,7 +12,7 @@ const ProductsPage = () => {
 
   // Fetch products from the backend on component mount
   useEffect(() => {
-    fetch('/api/products') // Make sure this endpoint exists and returns the products
+    fetch('http://localhost:8080/api/products') // Make sure this endpoint exists and returns the products
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
