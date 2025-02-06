@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 
 const Product = () => {
     const [products, setProducts] = useState([]);
-    const [filters, setFilters] = useState({
-        authors: [],
-        genres: [],
-        languages: [],
-        types: []
-    });
-    const [selectedFilters, setSelectedFilters] = useState({
-        author: '',
-        genre: '',
-        language: '',
-        type: ''
-    });
     const [pagination, setPagination] = useState({
         page: 0,
         size: 10,
@@ -23,28 +12,15 @@ const Product = () => {
 
     const API_BASE_URL = "http://localhost:8080/api/products";
 
-    // Fetch filter data on component mount
-    useEffect(() => {
-        axios.get(`${API_BASE_URL}/filters`)
-            .then(response => setFilters(response.data))
-            .catch(error => console.error("Error fetching filters:", error));
-        
-        fetchProducts();
-    }, []);
-
-    // Fetch products when filters or pagination change
+    // Fetch products on component mount and when pagination changes
     useEffect(() => {
         fetchProducts();
-    }, [selectedFilters, pagination.page]);
+    }, [pagination.page]);
 
     const fetchProducts = () => {
         const { page, size } = pagination;
-        axios.get(API_BASE_URL, {
+        axios.get(`${API_BASE_URL}/getallproducts`, {
             params: {
-                author: selectedFilters.author,
-                genre: selectedFilters.genre,
-                language: selectedFilters.language,
-                typeId: selectedFilters.type,
                 page,
                 size
             }
@@ -56,83 +32,61 @@ const Product = () => {
         .catch(error => console.error("Error fetching products:", error));
     };
 
-    // Handle dropdown changes
-    const handleFilterChange = (e) => {
-        setSelectedFilters(prev => ({
-            ...prev,
-            [e.target.name]: e.target.value
-        }));
-    };
-
     return (
         <div>
             <h2>Products</h2>
 
-            {/* Filters */}
-            <div>
-                <label>Author:</label>
-                <select name="author" onChange={handleFilterChange} value={selectedFilters.author}>
-                    <option value="">All</option>
-                    {filters.authors.map(author => (
-                        <option key={author} value={author}>{author}</option>
-                    ))}
-                </select>
-
-                <label>Genre:</label>
-                <select name="genre" onChange={handleFilterChange} value={selectedFilters.genre}>
-                    <option value="">All</option>
-                    {filters.genres.map(genre => (
-                        <option key={genre.id} value={genre.genreDesc}>{genre.genreDesc}</option>
-                    ))}
-                </select>
-
-                <label>Language:</label>
-                <select name="language" onChange={handleFilterChange} value={selectedFilters.language}>
-                    <option value="">All</option>
-                    {filters.languages.map(language => (
-                        <option key={language.id} value={language.languageDesc}>{language.languageDesc}</option>
-                    ))}
-                </select>
-
-                <label>Type:</label>
-                <select name="type" onChange={handleFilterChange} value={selectedFilters.type}>
-                    <option value="">All</option>
-                    {filters.types.map(type => (
-                        <option key={type.id} value={type.id}>{type.typeDesc}</option>
-                    ))}
-                </select>
-            </div>
-
-            {/* Product List */}
-            <div>
-                {products.length > 0 ? (
-                    products.map(product => (
-                        <div key={product.productId}>
-                            <h4>{product.productName}</h4>
-                            <p>{product.productDescriptionShort}</p>
-                            <p>Price: ₹{product.productBasePrice}</p>
-                        </div>
-                    ))
-                ) : (
-                    <p>No products found.</p>
-                )}
-            </div>
+            {/* Product Table */}
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Product Name</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Author</TableCell>
+                            <TableCell>Genre</TableCell>
+                            <TableCell>Language</TableCell>
+                            <TableCell>Type</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {products.length > 0 ? (
+                            products.map(product => (
+                                <TableRow key={product.productId}>
+                                    <TableCell>{product.productName}</TableCell>
+                                    <TableCell>{product.productDescriptionShort}</TableCell>
+                                    <TableCell>₹{product.productBasePrice}</TableCell>
+                                    <TableCell>{product.author}</TableCell>
+                                    <TableCell>{product.genre}</TableCell>
+                                    <TableCell>{product.language}</TableCell>
+                                    <TableCell>{product.type}</TableCell>
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan="7">No products found.</TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
 
             {/* Pagination */}
             <div>
-                <button 
+                <Button 
                     disabled={pagination.page === 0} 
                     onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}>
                     Prev
-                </button>
+                </Button>
                 
                 <span> Page {pagination.page + 1} of {pagination.totalPages} </span>
 
-                <button 
+                <Button 
                     disabled={pagination.page === pagination.totalPages - 1} 
                     onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}>
                     Next
-                </button>
+                </Button>
             </div>
         </div>
     );
