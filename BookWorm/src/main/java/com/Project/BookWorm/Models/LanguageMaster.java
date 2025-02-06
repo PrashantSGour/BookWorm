@@ -31,15 +31,4 @@ public class LanguageMaster {
 		this.languageDesc = languageDesc;
 	}
 
-	public ProductTypeMaster getTypeId() {
-		return typeId;
-	}
-
-	public void setTypeId(ProductTypeMaster typeId) {
-		this.typeId = typeId;
-	}
-
-	@ManyToOne
-    @JoinColumn(name = "type_id",nullable = true)
-    private ProductTypeMaster typeId;
 }

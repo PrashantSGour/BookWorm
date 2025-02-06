@@ -1,33 +1,62 @@
 package com.Project.BookWorm.Controller;
+
 import com.Project.BookWorm.Models.LanguageMaster;
 import com.Project.BookWorm.Service.LanguageMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/languages")
-public class LanguageMasterController{
+public class LanguageMasterController {
+
     @Autowired
     private LanguageMasterService languageMasterService;
-    @GetMapping
-    public List<LanguageMaster> getAllLanguages(){
-        return languageMasterService.getAllLanguages();
-    }
+
+    // Create a new language
     @PostMapping
-    public LanguageMaster saveLanguage(@RequestBody LanguageMaster languageMaster){
-        return languageMasterService.saveLanguage(languageMaster);
+    public ResponseEntity<LanguageMaster> createLanguage(@RequestBody LanguageMaster languageMaster) {
+        LanguageMaster createdLanguage = languageMasterService.createLanguage(languageMaster);
+        return new ResponseEntity<>(createdLanguage, HttpStatus.CREATED);
     }
+
+    // Add multiple languages at once
+    @PostMapping("/bulk")
+    public ResponseEntity<List<LanguageMaster>> addMultipleLanguages(@RequestBody List<LanguageMaster> languages) {
+        List<LanguageMaster> savedLanguages = languageMasterService.addMultipleLanguages(languages);
+        return new ResponseEntity<>(savedLanguages, HttpStatus.CREATED);
+    }
+
+    // Retrieve all languages
+    @GetMapping
+    public ResponseEntity<List<LanguageMaster>> getAllLanguages() {
+        List<LanguageMaster> languages = languageMasterService.getAllLanguages();
+        return new ResponseEntity<>(languages, HttpStatus.OK);
+    }
+
+    // Retrieve a language by ID
     @GetMapping("/{id}")
-    public LanguageMaster getLanguageById(@PathVariable int id){
-        return languageMasterService.getLanguageById(id);
+    public ResponseEntity<LanguageMaster> getLanguageById(@PathVariable int id) {
+        LanguageMaster language = languageMasterService.getLanguageById(id);
+        return language != null ? new ResponseEntity<>(language, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable int id){
-        languageMasterService.deleteById(id);
-    }
+
+    // Update an existing language
     @PutMapping("/{id}")
-    public LanguageMaster updateLanguage(@PathVariable int id, @RequestBody LanguageMaster languageMaster){
-        return languageMasterService.updateLanguage(id, languageMaster);
+    public ResponseEntity<LanguageMaster> updateLanguage(@PathVariable int id, @RequestBody LanguageMaster languageMaster) {
+        LanguageMaster updatedLanguage = languageMasterService.updateLanguage(id, languageMaster);
+        return updatedLanguage != null ? new ResponseEntity<>(updatedLanguage, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Delete a language
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteLanguage(@PathVariable int id) {
+        languageMasterService.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -5,15 +5,28 @@ public class ProductDTO {
     private double productBasePrice;
     private String languageDesc;
     private String genreDesc;
+    private String productAuthor;
 
-    public ProductDTO(String productName, double productBasePrice, String languageDesc, String genreDesc) {
+    public ProductDTO(String productName, double productBasePrice, String languageDesc, String genreDesc, String productAuthor) {
         this.productName = productName;
         this.productBasePrice = productBasePrice;
         this.languageDesc = languageDesc;
         this.genreDesc = genreDesc;
+        this.productAuthor = productAuthor;
     }
 
-    // Getters & Setters
+
+	public String getProductAuthor() {
+		return productAuthor;
+	}
+
+
+	public void setProductAuthor(String productAuthor) {
+		this.productAuthor = productAuthor;
+	}
+
+
+	// Getters & Setters
     public String getProductName() {
         return productName;
     }
