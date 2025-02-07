@@ -78,4 +78,8 @@ public class CustomerMasterService {
         return customerMasterRepository.findByCustomeremail(email).isPresent();
     }
 
+    public Optional<CustomerMaster> getCustomerByEmail(String email) {
+        return customerMasterRepository.findByCustomeremail(email);
+    }
+
 }

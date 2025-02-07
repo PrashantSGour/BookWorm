@@ -14,9 +14,14 @@ function NavBar() {
   const [loginOpen, setLoginOpen] = React.useState(false);
   const [signupOpen, setSignupOpen] = React.useState(false);
 
-  const handleLogout = () => {
-    localStorage.setItem('isLoggedIn', 'false');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      localStorage.setItem('isLoggedIn', 'false');
+      localStorage.removeItem('customerEmail'); // Remove email from local storage
+      navigate('/');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleLoginOpen = () => {

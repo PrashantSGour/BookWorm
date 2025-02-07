@@ -160,7 +160,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
       setModalMessage("User registered successfully");
       setModalOpen(true);
       setTimeout(() => {
-        navigate("/login");
+        navigate("/");
       }, 2000);
     } catch (error) {
       console.error('Error:', error);

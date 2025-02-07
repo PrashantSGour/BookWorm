@@ -1,79 +1,87 @@
 package com.Project.BookWorm.Models;
 
-import jakarta.persistence.*;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Entity
 @Data
+@CrossOrigin("*")
 public class CartDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_detail_id")
-    private int cartDetailId;
+    @Column(name = "cart_details_id")
+    private Integer cartDetailsId;
 
-    // Many-to-One relationship back to CartMaster (CartDetails is child)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", nullable = false)
-    private CartMaster cartMaster;
+    @ManyToOne
+    @JoinColumn(name = "cart_id", nullable = true)
+    private CartMaster cartId;
 
-    // Many-to-One relationship with ProductMaster (Product ID)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
-    private ProductMaster product;  // ProductMaster reference
+    @ManyToOne    
+    @JoinColumn(name = "product_id", nullable = true)
+    private ProductMaster productId;
 
-    private int quantity;
-    private double price;
-    private TransactionType transtype;
+    @Column(nullable = false)
+    private Boolean isRented;
 
-    // Getters and Setters
+    private Integer rentNoOfDays;
+    
+    private double offerCost;
 
-    public TransactionType getTranstype() {
-		return transtype;
+	public double getOfferCost() {
+		return offerCost;
 	}
 
-	public void setTranstype(TransactionType transtype) {
-		this.transtype = transtype;
+	public void setOfferCost(double d) {
+		this.offerCost = d;
 	}
 
-	public int getCartDetailId() {
-        return cartDetailId;
-    }
+	public Integer getCartDetailsId() {
+		return cartDetailsId;
+	}
 
-    public void setCartDetailId(int cartDetailId) {
-        this.cartDetailId = cartDetailId;
-    }
+	public void setCartDetailsId(Integer cartDetailsId) {
+		this.cartDetailsId = cartDetailsId;
+	}
 
-    public CartMaster getCartMaster() {
-        return cartMaster;
-    }
+	public CartMaster getCartId() {
+		return cartId;
+	}
 
-    public void setCartMaster(CartMaster cartMaster) {
-        this.cartMaster = cartMaster;
-    }
+	public void setCartId(CartMaster cartId) {
+		this.cartId = cartId;
+	}
 
-    public ProductMaster getProduct() {
-        return product;
-    }
+	public ProductMaster getProductId() {
+		return productId;
+	}
 
-    public void setProduct(ProductMaster product) {
-        this.product = product;
-    }
+	public void setProductId(ProductMaster productId) {
+		this.productId = productId;
+	}
 
-    public int getQuantity() {
-        return quantity;
-    }
+	public Boolean getIsRented() {
+		return isRented;
+	}
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+	public void setIsRented(Boolean isRented) {
+		this.isRented = isRented;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public Integer getRentNoOfDays() {
+		return rentNoOfDays;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public void setRentNoOfDays(Integer rentNoOfDays) {
+		this.rentNoOfDays = rentNoOfDays;
+	}
 
 }
