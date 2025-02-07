@@ -6,17 +6,29 @@ public class ProductDTO {
     private String languageDesc;
     private String genreDesc;
     private String productAuthor;
+    private String productType;
 
-    public ProductDTO(String productName, double productBasePrice, String languageDesc, String genreDesc, String productAuthor) {
+    public ProductDTO(String productName, double productBasePrice, String languageDesc, String genreDesc, String productAuthor, String productType) {
         this.productName = productName;
         this.productBasePrice = productBasePrice;
         this.languageDesc = languageDesc;
         this.genreDesc = genreDesc;
+        this.productType = productType;
         this.productAuthor = productAuthor;
     }
 
 
-	public String getProductAuthor() {
+	public String getproductType() {
+        return productType;
+    }
+
+
+    public void setproductType(String productType) {
+        this.productType = productType;
+    }
+
+
+    public String getProductAuthor() {
 		return productAuthor;
 	}
 
