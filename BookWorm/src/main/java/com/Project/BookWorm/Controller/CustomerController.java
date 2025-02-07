@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,9 @@ public class CustomerController {
 
     @Autowired
     private CartMasterRepository cartMasterRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Get all customers (JWT token required for this endpoint)
     @GetMapping
@@ -63,6 +67,9 @@ public class CustomerController {
     public ResponseEntity<CustomerMaster> registerCustomer(@RequestBody CustomerMaster customer) {
         logger.info("Registering new customer: {}", customer.getCustomername());
         try {
+            // Encrypt the customer's password before saving
+            customer.setCustomerpassword(passwordEncoder.encode(customer.getCustomerpassword()));
+            
             CustomerMaster savedCustomer = customerRepository.save(customer);
             logger.debug("Saved customer: {}", savedCustomer);
 

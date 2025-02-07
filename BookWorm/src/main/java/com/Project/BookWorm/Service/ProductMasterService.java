@@ -82,8 +82,8 @@ public class ProductMasterService {
         return productMasterRepository.findAll();
     }
 
-    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc, String productAuthor) {
-        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc, productAuthor);
+    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc, String productType) {
+        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc, productType);
 
 
         return products.stream()
@@ -92,20 +92,10 @@ public class ProductMasterService {
                         product.getProductBasePrice(),
                         product.getProductLang().getLanguageDesc(),
                         product.getProductGenre().getGenreDesc(),
-                        product.getProductAuthor()                
+                        product.getProductType().getTypeDesc()   ,
+                        product.getProductAuthor()             
                         ))
                 .collect(Collectors.toList());
-//        return Optional.ofNullable(products)
-//        	    .orElse(Collections.emptyList()) // ✅ Ensures products list is never null
-//        	    .stream()
-//        	    .map(product -> new ProductDTO(
-//        	        product.getProductName(),
-//        	        product.getProductBasePrice(),
-//        	        Optional.ofNullable(product.getProductLang()).map(LanguageMaster::getLanguageDesc).orElse("Unknown"),
-//        	        Optional.ofNullable(product.getProductGenre()).map(GenreMaster::getGenreDesc).orElse("Unknown")
-//        	    ))
-//        	    .collect(Collectors.toList());
-
 
     }
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Card, CardContent, CardMedia } from '@mui/material';
-import ReactCardCarousel from 'react-card-carousel'; // Import the carousel component
+//import ReactCardCarousel from 'react-card-carousel'; // Import the carousel component
 
 import image1 from './Pictures/image1.jpg'; // Ensure your image is accessible
 
@@ -87,11 +87,11 @@ const PopularBooks = () => {
       </Typography>
       {/* Carousel Component */}
       <div style={styles.containerStyle}>
-        <ReactCardCarousel autoplay={true} autoplay_speed={2500}>
+        {/* <ReactCardCarousel autoplay={true} autoplay_speed={2500}>
           {books.map((book, index) => (
             <BookCard key={book.id || index} book={book} />
           ))}
-        </ReactCardCarousel>
+        </ReactCardCarousel> */}
       </div>
     </Box>
   );

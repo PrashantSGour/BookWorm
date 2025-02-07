@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin("http://localhost:3000")
 @RequestMapping("/api/products")
+@CrossOrigin("*")
 public class ProductMasterController {
 
     @Autowired
@@ -78,8 +78,8 @@ public class ProductMasterController {
     public List<ProductDTO> filterProducts(
             @RequestParam(required = false) String genreDesc,
             @RequestParam(required = false) String languageDesc,
-            @RequestParam(required = false) String productAuthor) {
-        return productMasterService.getFilteredProducts(genreDesc, languageDesc, productAuthor);
+            @RequestParam(required = false) String productType) {
+        return productMasterService.getFilteredProducts(genreDesc, languageDesc, productType);
     }
     
 }

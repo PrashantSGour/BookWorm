@@ -6,7 +6,7 @@ const ProductDisplay = () => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [languageDesc, setLanguageDesc] = useState('');
-    const [typeDesc, setTypeDesc] = useState('');
+    const [productType, setproductType] = useState('');
     const [genreDesc, setGenreDesc] = useState('');
 
     const fetchAllProducts = () => {
@@ -21,10 +21,10 @@ const ProductDisplay = () => {
     }, []);
 
     useEffect(() => {
-        if (languageDesc || typeDesc || genreDesc) {
+        if (languageDesc || productType || genreDesc) {
             const query = new URLSearchParams({
                 ...(languageDesc && { languageDesc }),
-                ...(typeDesc && { typeDesc }),
+                ...(productType && { productType }),
                 ...(genreDesc && { genreDesc }),
             }).toString();
 
@@ -35,7 +35,7 @@ const ProductDisplay = () => {
         } else {
             fetchAllProducts();
         }
-    }, [languageDesc, typeDesc, genreDesc]);
+    }, [languageDesc, productType, genreDesc]);
 
     if (error) return <div>Error: {error.message}</div>;
 
@@ -49,21 +49,25 @@ const ProductDisplay = () => {
                 {/* <h3><FaFilter /> Filters</h3> */}
                 <select onChange={(e) => setLanguageDesc(e.target.value)}>
                     <option value="">Language</option>
-                    <option value="english">English</option>
-                    <option value="spanish">Spanish</option>
-                    <option value="french">French</option>
+                    <option value="English">English</option>
+                    <option value="Hindi">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="Marathi">Marathi</option>
                 </select>
-                <select onChange={(e) => setTypeDesc(e.target.value)}>
+                <select onChange={(e) => setproductType(e.target.value)}>
                     <option value="">Type</option>
-                    <option value="book">Book</option>
-                    <option value="movie">Movie</option>
-                    <option value="game">Game</option>
+                    <option value="E-Books">E-Books</option>
+                    <option value="Audio Books">Audio Books</option>
+                    <option value="Videos">Videos</option>
                 </select>
                 <select onChange={(e) => setGenreDesc(e.target.value)}>
                     <option value="">Genre</option>
                     <option value="action">Action</option>
-                    <option value="comedy">Comedy</option>
-                    <option value="drama">Drama</option>
+                    <option value="Science Fiction">Science Fiction</option>
+                    <option value="Non-fiction">Non-fiction</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Fiction">Fiction</option>
+                    <option value="Fantasy">Fantasy</option>
                 </select>
             </div>
 
