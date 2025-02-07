@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Button, Drawer } from '@mui/material';
+import { FaUserCircle } from 'react-icons/fa'; // Import profile icon from react-icons
 import LoginComponent from '../Login/LoginComponent';
 import RegistrationComponent from '../Registration/RegistrationComponent';
 import './NavBar.css'; // Import CSS file
@@ -73,13 +74,23 @@ function NavBar() {
             {/* Conditional Button */}
             <Nav className="ms-auto">
               {isLoggedIn ? (
-                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
-                  Log Out
-                </Button>
+                <>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
+                    Log Out
+                  </Button>
+                  <Nav.Link as={Link} to="/profile">
+                    <FaUserCircle size={30} style={{ marginLeft: '10px' }} /> {/* Profile icon */}
+                  </Nav.Link>
+                </>
               ) : (
-                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
-                  Sign In
-                </Button>
+                <>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
+                    Sign In
+                  </Button>
+                  <Nav.Link as={Link} to="/profile">
+                    <FaUserCircle size={30} style={{ marginLeft: '10px' }} /> {/* Profile icon */}
+                  </Nav.Link>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>

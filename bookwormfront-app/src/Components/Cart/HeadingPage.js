@@ -1,8 +1,9 @@
 import React from 'react';
+import './HeadingPage.js';
 
 const HeadingPage = ({ title }) => {
     return (
-        <div>
+        <div className="heading-page">
             <h1>{title}</h1>
         </div>
     );

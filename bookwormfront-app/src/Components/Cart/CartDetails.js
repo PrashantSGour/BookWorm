@@ -1,35 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './CartDetails.css';
 
-const CartDetails = ({ cartItems }) => {
-    // Sample cart items if none are provided
-    const sampleCartItems = [
-        { name: 'Book 1', quantity: 2, price: 19.99, image: 'https://via.placeholder.com/150' },
-        { name: 'Book 2', quantity: 1, price: 9.99, image: 'https://via.placeholder.com/150' },
-        { name: 'Book 3', quantity: 3, price: 14.99, image: 'https://via.placeholder.com/150' }
-    ];
+const CartDetails = () => {
+    const [cartItems, setCartItems] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
 
-    const items = cartItems && cartItems.length > 0 ? cartItems : sampleCartItems;
+    useEffect(() => {
+        fetchCartDetails();
+    }, []);
+
+    const fetchCartDetails = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/cart-details/customer/${localStorage.getItem('customerId')}`);
+            const data = await response.json();
+            setCartItems(data);
+            const total = data.reduce((acc, item) => acc + item.product.productSpCost * item.quantity, 0);
+            setTotalPrice(total);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleDelete = async (cartdetailsId) => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/cart-details/${cartdetailsId}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                fetchCartDetails(); // Refresh cart details after deletion
+                console.log('Product removed from cart successfully');
+            } else {
+                console.error('Failed to remove product from cart');
+                const errorData = await response.text();
+                console.error('Delete Error details:', errorData);
+            }
+        } catch (error) {
+            console.error('Delete Request Error:', error);
+        }
+    };
 
     return (
         <div className="cart-details">
             <h2>Your Cart</h2>
-            {items.length === 0 ? (
+            {cartItems.length === 0 ? (
                 <p>Your cart is empty.</p>
             ) : (
                 <ul>
-                    {items.map((item, index) => (
-                        <li key={index}>
-                            <img src={item.image} alt={item.name} />
+                    {cartItems.map((item, index) => (
+                        <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <img src={item.product.productImage} alt={item.product.productEnglishName} style={{ width: '50px', height: '50px', marginRight: '10px' }} />
                             <div>
-                                <span>{item.name}</span>
-                                <span>Quantity: {item.quantity}</span>
-                                <span>Price: ${item.price.toFixed(2)}</span>
+                                <span>{item.product.productEnglishName}</span> - 
+                                <span> Quantity: {item.quantity}</span> - 
+                                <span> Price: ${item.product.productSpCost.toFixed(2)}</span>
+                                <button onClick={() => handleDelete(item.id)}>Remove</button>
                             </div>
                         </li>
                     ))}
                 </ul>
             )}
+            <div>
+                <h4>Total Price: ${totalPrice.toFixed(2)}</h4>
+            </div>
         </div>
     );
 };

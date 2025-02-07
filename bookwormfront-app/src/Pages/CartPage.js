@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import HeadingPage from '../Components/Cart/HeadingPage';
 import { Container, Row, Col, Alert, Button } from 'react-bootstrap';
-import CustomCard from '../Components/Cart/CustomCard';
+import CartDetails from '../Components/Cart/CartDetails';
 import { useNavigate } from "react-router-dom";
 
 function CartPage() {
@@ -69,22 +69,7 @@ function CartPage() {
             </div>
             <div>
                 <Container>
-                    {console.log(cartDetails)}
-                    <Row>
-                        {cartDetails.map((product, index) => (
-                            <Col md={6} key={index}>
-                                <CustomCard
-                                    title={product.product.productEnglishName}
-                                    content={product.product.productDescriptionShort}
-                                    imgSrc={product.product.productImage}
-                                    price={product.product.productSpCost}
-                                    cartdetailsid={product.id} // Pass cartdetailsid to CustomCard
-                                    onDelete={() => handleDelete(product.id)} // Pass handleDelete function
-                                    page="Cart Page"
-                                />
-                            </Col>
-                        ))}
-                    </Row>
+                    <CartDetails cartItems={cartDetails} />
                 </Container>
             </div>
             <div style={{ marginTop: "20px", marginLeft: "93px" }}>
