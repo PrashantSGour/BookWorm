@@ -59,8 +59,9 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
         setModalOpen(true);
 
         if (result.status === "success") {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('customerEmail', formData.email);
+          sessionStorage.setItem('token', result.token);
+          sessionStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('customerEmail', formData.email);
           setTimeout(() => {
             onLoginSuccess();
           }, 2000);

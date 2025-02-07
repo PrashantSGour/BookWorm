@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Card, CardContent, CardMedia } from '@mui/material';
-//import ReactCardCarousel from 'react-card-carousel'; // Import the carousel component
+import ReactCardCarousel from 'react-card-carousel'; // Import the carousel component
 
 import image1 from './Pictures/image1.jpg'; // Ensure your image is accessible
 
@@ -15,7 +15,7 @@ const BookCard = ({ book }) => {
         alt={book.productName}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
           {book.productName}
         </Typography>
         <Typography variant="body2" color="text.secondary">
@@ -33,19 +33,19 @@ const BookCard = ({ book }) => {
 const styles = {
   containerStyle: {
     position: 'relative',
-    height: '100vh',
+    height: '50vh', // Adjusted height to manage space efficiently
     width: '100%',
     display: 'flex',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'middle',
+    alignItems: 'center',
   },
   cardStyle: {
-    height: '400px', 
-    width: '345px',
+    height: '300px', // Adjusted height to manage space efficiently
+    width: '250px', // Adjusted width to manage space efficiently
     paddingTop: '20px', 
     textAlign: 'center',
-    background: '#52C0F5',
+    background: 'transparent', // Changed background to transparent
     color: '#FFF',
     fontFamily: 'sans-serif',
     fontSize: '12px',
@@ -87,11 +87,11 @@ const PopularBooks = () => {
       </Typography>
       {/* Carousel Component */}
       <div style={styles.containerStyle}>
-        {/* <ReactCardCarousel autoplay={true} autoplay_speed={2500}>
+        <ReactCardCarousel autoplay={true} autoplay_speed={2500}>
           {books.map((book, index) => (
             <BookCard key={book.id || index} book={book} />
           ))}
-        </ReactCardCarousel> */}
+        </ReactCardCarousel>
       </div>
     </Box>
   );

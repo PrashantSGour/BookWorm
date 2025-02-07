@@ -1,0 +1,61 @@
+.contact-container {
+  width: 50%;
+  margin: 50px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+input, textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+textarea {
+  height: 100px;
+  resize: none;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px;
+  background: #7d6df8;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #7d6df8;
+ 
+}
+.contactus-page {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.contact-container, .aboutus-container, .map-container {
+  flex: 1;
+  margin: 10px;
+}

@@ -78,7 +78,7 @@ public class CustomerController {
     }
 
     // Register customer and create cart
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<CustomerMaster> registerCustomer(@RequestBody CustomerMaster customer) {
         logger.info("Registering new customer: {}", customer.getCustomername());
         try {

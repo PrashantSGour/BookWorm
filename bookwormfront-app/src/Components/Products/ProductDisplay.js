@@ -2,17 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { FaFilter } from "react-icons/fa"; // Import filter icon
 import { BsCartPlus } from "react-icons/bs"; // Import cart icon
 
-const ProductDisplay = () => {
+const ProductDisplay = ({ searchQuery }) => {
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [error, setError] = useState(null);
     const [languageDesc, setLanguageDesc] = useState('');
     const [productType, setproductType] = useState('');
     const [genreDesc, setGenreDesc] = useState('');
 
     const fetchAllProducts = () => {
-        fetch('http://localhost:8080/api/products')
+        const token = sessionStorage.getItem('token');
+        fetch('http://localhost:8080/api/products', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.ok ? response.json() : Promise.reject('Network error'))
-            .then(data => setProducts(data))
+            .then(data => {
+                setProducts(data);
+                setFilteredProducts(data);
+            })
             .catch(error => setError(error));
     };
 
@@ -21,6 +30,7 @@ const ProductDisplay = () => {
     }, []);
 
     useEffect(() => {
+        const token = sessionStorage.getItem('token');
         if (languageDesc || productType || genreDesc) {
             const query = new URLSearchParams({
                 ...(languageDesc && { languageDesc }),
@@ -28,22 +38,41 @@ const ProductDisplay = () => {
                 ...(genreDesc && { genreDesc }),
             }).toString();
 
-            fetch(`http://localhost:8080/api/products/filter?${query}`)
+            fetch(`http://localhost:8080/api/products/filter?${query}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => response.ok ? response.json() : Promise.reject('Network error'))
-                .then(data => setProducts(data))
+                .then(data => setFilteredProducts(data))
                 .catch(error => setError(error));
         } else {
-            fetchAllProducts();
+            setFilteredProducts(products);
         }
-    }, [languageDesc, productType, genreDesc]);
+    }, [languageDesc, productType, genreDesc, products]);
+
+    useEffect(() => {
+        if (searchQuery) {
+            const filtered = products.filter(product =>
+                product.productName.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            setFilteredProducts(filtered);
+        } else {
+            setFilteredProducts(products);
+        }
+    }, [searchQuery, products]);
 
     if (error) return <div>Error: {error.message}</div>;
 
     const fetchCustomerIdByEmail = async () => {
         try {
-            const email = localStorage.getItem('customerEmail');
-            alert(email);
-            const response = await fetch(`http://localhost:8080/api/customers/email/${email}`);
+            const email = sessionStorage.getItem('customerEmail');
+            const token = sessionStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/api/customers/email/${email}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -57,7 +86,6 @@ const ProductDisplay = () => {
 
     const addToCart = async (product) => {
         const customerId = await fetchCustomerIdByEmail();
-        alert(typeof customerId);
         if (!customerId) {
             console.error('Failed to fetch customer ID');
             return;
@@ -66,11 +94,13 @@ const ProductDisplay = () => {
         const quantity = 1; // Replace with the desired quantity
         const rentNoOfDays = 7; // Replace with the desired rent number of days
         const transType = "purchase"; // Replace with the desired transaction type
+        const token = sessionStorage.getItem('token');
 
         fetch(`http://localhost:8080/api/cart-details/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 customerId,
@@ -126,7 +156,7 @@ const ProductDisplay = () => {
             </div>
 
             <div className="grid-container">
-                {products.map(product => (
+                {filteredProducts.map(product => (
                     <div key={product.id} className="product-card">
                         <img src="https://imgs.search.brave.com/fQFeRg-OtzjHLG6UXvP2pkejFD634-A3HiMYb94D9iQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjA4/MDc1NTE4L3Bob3Rv/L2hhbnVtYW4tcmFt/YXlhbmEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUNVb3BE/UUY5aWJ1MkNCX1hK/ZDY2bTNwTWJfMk9n/Q2xlYy1fLXdGSU0t/LUk9" alt={product.productName} />
                         <h2>{product.productName}</h2>

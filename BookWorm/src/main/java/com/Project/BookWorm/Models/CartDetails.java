@@ -14,7 +14,6 @@ import lombok.Data;
 
 @Entity
 @Data
-@CrossOrigin("*")
 public class CartDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

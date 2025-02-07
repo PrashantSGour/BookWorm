@@ -42,6 +42,11 @@ public class CartDetailsService {
         return cartDetailsRepository.findById(id);
     }
 
+    // Method to get cart details by cart ID
+    public List<CartDetails> getCartDetailsByCartId(int cartId) {
+        return cartDetailsRepository.findByCartId(cartId);
+    }
+
     public CartDetails addProductToCart(int customerId, int productId, int quantity, int rentNoOfDays, String transType, ProductMaster product) {
         // Logic to add product to cart
         // Fetch the active CartMaster by customerId

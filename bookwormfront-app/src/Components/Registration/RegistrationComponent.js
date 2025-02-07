@@ -143,7 +143,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
     dataToSend.age = age;
 
     try {
-      const registerResponse = await fetch('http://localhost:8080/api/customers', {
+      const registerResponse = await fetch('http://localhost:8080/api/customers/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -160,6 +160,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
       setModalMessage("User registered successfully");
       setModalOpen(true);
       setTimeout(() => {
+        setModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (error) {

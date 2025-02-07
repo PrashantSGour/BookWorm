@@ -33,7 +33,7 @@ public class SecurityConfig {
        http
            .csrf(csrf -> csrf.disable()) // Disable CSRF protection explicitly
            .authorizeHttpRequests(auth -> auth
-               .requestMatchers("/api/login").permitAll() // Allow login
+               .requestMatchers("/api/login", "/api/customers/register", "/api/send-otp","/api/verify-otp").permitAll() // Permit access to login and registration endpoints
                .anyRequest().permitAll() // Protect all other endpoints
            )
            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -46,17 +46,4 @@ public class SecurityConfig {
    public PasswordEncoder passwordEncoder() {
        return new BCryptPasswordEncoder();
    }
-	
-	//  @Bean
-	//     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	//         http
-	//             .csrf(csrf -> csrf.disable())  // Disable CSRF for API calls
-	//             .authorizeHttpRequests(auth -> auth
-	//                 .requestMatchers(new AntPathRequestMatcher("/api/products/**")).permitAll() // Allow public access to products API
-	//                 .requestMatchers(new AntPathRequestMatcher("/api/products/filters")).permitAll() // Allow public access to filters
-	//                 .anyRequest().authenticated()
-	//             );
-
-	//         return http.build();
-	//     }
 }
