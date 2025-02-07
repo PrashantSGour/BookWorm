@@ -3,8 +3,8 @@ package com.Project.BookWorm.Controller;
 import com.Project.BookWorm.Models.CartDetails;
 import com.Project.BookWorm.Models.CartDetailsRequest;
 import com.Project.BookWorm.Models.CartMaster;
-import com.Project.BookWorm.Models.ProductMaster;
 import com.Project.BookWorm.Service.CartDetailsService;
+import com.Project.BookWorm.Service.CartMasterService;
 import com.Project.BookWorm.Repository.CartMasterRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +31,12 @@ public class CartDetailsController {
     @Autowired
     private CartMasterRepository cartMasterRepository;
 
+    @Autowired
+    private CartMasterService cartMasterService;
+
     // Add product to a customer's cart
     @PostMapping("/add")
     public ResponseEntity<CartDetails> addProductToCart(@RequestBody CartDetailsRequest cartDetailsRequest) {
-        // Check if the customer has a cart_master
-//        Optional<CartMaster> cartMasterOptional = cartMasterRepository.findByCustomerIdAndIsActive(cartDetailsRequest.getCustomerId());
-//        logger.info("CartMaster found: " + cartMasterOptional.isPresent());
-//
-//        if (!cartMasterOptional.isPresent()) {
-//            // If no cart_master exists, return an error response
-//            logger.warn("No cart found for the customer");
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Or you can send a message like "No cart found for the customer"
-//        }
 
         // Add product to the cart if cart_master exists
         CartDetails cartDetails = cartDetailsService.addProductToCart(
@@ -54,6 +48,10 @@ public class CartDetailsController {
             cartDetailsRequest.getProduct()
         );
         logger.info("Product added to cart: " + cartDetails);
+
+        // Update the cart cost
+        cartMasterService.updateCartCost(cartMasterRepository.findByCustomerId(cartDetailsRequest.getCustomerId()).get());
+
         return new ResponseEntity<>(cartDetails, HttpStatus.CREATED);
     }
 
@@ -69,5 +67,16 @@ public class CartDetailsController {
         Optional<CartDetails> cartDetails = cartDetailsService.getCartDetailsById(id);
         return cartDetails.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Get cart details by customer ID
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<CartDetails>> getCartDetailsByCustomerId(@PathVariable int customerId) {
+        Optional<CartMaster> cartMasterOptional = cartMasterRepository.findByCustomerIdAndIsActive(customerId);
+        if (!cartMasterOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<CartDetails> cartDetails = cartDetailsService.getCartDetailsByCartId(cartMasterOptional.get().getCartId());
+        return new ResponseEntity<>(cartDetails, HttpStatus.OK);
     }
 }

@@ -7,17 +7,19 @@ import LoginComponent from '../Login/LoginComponent';
 import RegistrationComponent from '../Registration/RegistrationComponent';
 import './NavBar.css'; // Import CSS file
 
-function NavBar() {
+function NavBar({ onSearch }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const [loginOpen, setLoginOpen] = React.useState(false);
   const [signupOpen, setSignupOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleLogout = async () => {
     try {
-      localStorage.setItem('isLoggedIn', 'false');
-      localStorage.removeItem('customerEmail'); // Remove email from local storage
+      sessionStorage.setItem('isLoggedIn', 'false');
+      sessionStorage.removeItem('customerEmail'); // Remove email from session storage
+      sessionStorage.removeItem('token'); // Remove token from session storage
       navigate('/');
     } catch (error) {
       console.error('Error:', error);
@@ -51,12 +53,31 @@ function NavBar() {
     navigate("/products");
   };
 
+  const handleCartOpen = () => {
+    navigate("/cart");
+  };
+
+  const handleBrandClick = () => {
+    if (isLoggedIn) {
+      navigate("/products");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    if (onSearch) {
+      onSearch(e.target.value);
+    }
+  };
+
   return (
     <>
       <Navbar expand="lg" className="navbar-container" style={{ zIndex: 1200 }}>
         <Container>
           {/* Brand Name */}
-          <Navbar.Brand as={Link} to="/" className="navbar-brand" style={{ color: '#7d6df8' }}>
+          <Navbar.Brand onClick={handleBrandClick} className="navbar-brand" style={{ color: '#7d6df8', cursor: 'pointer' }}>
             BookWorm
           </Navbar.Brand>
 
@@ -64,18 +85,33 @@ function NavBar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
           <Navbar.Collapse id="basic-navbar-nav">
-            {/* Centered Search Bar */}
-            <div className="search-container mx-auto">
-              <input type="text" placeholder="Search..." className="search-input" />
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
+              <Nav.Link as={Link} to="/contactus">Contact Us</Nav.Link>
+              {/* Add other Nav links here */}
+            </Nav>
+            {/* <div className="search-container mx-auto">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="search-input"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
               <button type="button" className="search-button">Search</button>
-            </div>
+            </div> */}
 
-            {/* Conditional Button */}
+            {/* Conditional Buttons */}
             <Nav className="ms-auto">
               {isLoggedIn ? (
-                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
-                  Log Out
-                </Button>
+                <>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
+                    Cart
+                  </Button>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
+                    Log Out
+                  </Button>
+                </>
               ) : (
                 <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
                   Sign In
