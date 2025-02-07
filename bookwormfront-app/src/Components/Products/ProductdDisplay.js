@@ -1,262 +1,6 @@
-// // import React, { useEffect, useState } from 'react';
-
-// // const ProductDisplay = () => {
-// //     const [products, setProducts] = useState([]);
-// //     const [error, setError] = useState(null);
-// //     const [languageDesc, setLanguageDesc] = useState('');
-
-// //     useEffect(() => {
-// //         fetch('http://localhost:8080/api/products')
-// //             .then(response => {
-// //                 if (!response.ok) {
-// //                     throw new Error('Network response was not ok');
-// //                 }
-// //                 return response.json();
-// //             })
-// //             .then(data => {
-// //                 setProducts(data);
-// //             })
-// //             .catch(error => {
-// //                 setError(error);
-// //             });
-// //     }, []);
-
-// //     useEffect(() => {
-// //         const query = new URLSearchParams({ languageDesc }).toString();
-// //         fetch(`http://localhost:8080/api/products/filter?${query}`)
-// //             .then(response => { 
-// //                 if (!response.ok) {
-// //                     throw new Error('Network response was not ok');
-// //                 }
-// //                 return response.json();
-// //             })
-// //             .then(data => {
-// //                 setProducts(data);
-// //             })
-// //             .catch(error => { 
-// //                 setError(error);
-// //             }); 
-// //     }, [languageDesc]);
-
-// //     if (error) {
-// //         return <div>Error: {error.message}</div>;
-// //     }
-
-// //     const addToCart = (product) => {
-// //         // Add product to cart logic here
-// //         console.log(`Added ${product.productName} to cart`);
-// //     };
-
-// //     const handleLanguageChange = (e) => {
-// //         setLanguageDesc(e.target.value);
-// //     };
-
-// //     return (
-// //         <>
-// //             <div className="product-grid">
-// //                 <h1>Product List</h1>
-// //                 <div className="filters">
-// //                     <label>
-// //                         Language:
-// //                         <select name="languageDesc" onChange={handleLanguageChange}>
-// //                             <option value="">All</option>
-// //                             <option value="english">English</option>
-// //                             <option value="spanish">Spanish</option>
-// //                             <option value="french">French</option>
-// //                             {/* Add more languages as needed */}
-// //                         </select>
-// //                     </label>
-// //                 </div>
-// //                 <div className="grid-container">
-// //                     {products.map(product => (
-// //                         <div key={product.id} className="grid-item">
-// //                             <img src={"https://imgs.search.brave.com/eAfXcFrIxqcD6DtEuAg7-OWN0MrehR1ywb2VRiWFJgw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1QlpHUmxOREJs/WWpZdE1tUTNNeTAw/WVdOakxUZ3laalF0/TVdVellUY3pObVZs/TVRKbFhrRXlYa0Zx/Y0djQC5qcGc"} alt={product.productName} />
-// //                             <h2>{product.productName}</h2>
-// //                             <p>{product.productDescription}</p>
-// //                             <p>Author: {product.productAuthor}</p>
-// //                             <div className="price-cart">
-// //                                 <p>Price: ${product.productBasePrice}</p>
-// //                                 <button onClick={() => addToCart(product)}>Add to Cart</button>
-// //                             </div>
-// //                         </div>
-// //                     ))}
-// //                 </div>
-// //             </div>
-// //             <style jsx>{`
-// //                 .product-grid {
-// //                     display: flex;
-// //                     flex-direction: column;
-// //                     align-items: center;
-// //                 }
-// //                 .grid-container {
-// //                     display: grid;
-// //                     grid-template-columns: repeat(3, 1fr);
-// //                     gap: 20px;
-// //                     width: 100%;
-// //                     max-width: 1200px;
-// //                 }
-// //                 .grid-item {
-// //                     border: 1px solid #ccc;
-// //                     padding: 20px;
-// //                     text-align: center;
-// //                 }
-// //                 .grid-item img {
-// //                     max-width: 100%;
-// //                     height: auto;
-// //                 }
-// //                 .price-cart {
-// //                     display: flex;
-// //                     justify-content: space-between;
-// //                     align-items: center;
-// //                     margin-top: 10px;
-// //                 }
-// //             `}</style>
-// //         </>
-// //     );
-
-// // };
-
-// // export default ProductDisplay;
-// import React, { useEffect, useState } from 'react';
-
-// const ProductDisplay = () => {
-//     const [products, setProducts] = useState([]);
-//     const [error, setError] = useState(null);
-//     const [languageDesc, setLanguageDesc] = useState('');
-
-//     // Function to fetch all products from the API
-//     const fetchAllProducts = () => {
-//         fetch('http://localhost:8080/api/products')
-//             .then(response => {
-//                 if (!response.ok) {
-//                     throw new Error('Network response was not ok');
-//                 }
-//                 return response.json();
-//             })
-//             .then(data => {
-//                 setProducts(data);
-//             })
-//             .catch(error => {
-//                 setError(error);
-//             });
-//     };
-
-//     // Initially, fetch all products when the component mounts.
-//     useEffect(() => {
-//         fetchAllProducts();
-//     }, []);
-
-//     // When languageDesc changes, decide what to do:
-//     // - If a language is selected, call the filter endpoint.
-//     // - Otherwise, show all products.
-//     useEffect(() => {
-//         if (languageDesc) {
-//             // Create a query string with the languageDesc value.
-//             const query = new URLSearchParams({ languageDesc }).toString();
-//             fetch(`http://localhost:8080/api/products/filter?${query}`)
-//                 .then(response => { 
-//                     if (!response.ok) {
-//                         throw new Error('Network response was not ok');
-//                     }
-//                     return response.json();
-//                 })
-//                 .then(data => {
-//                     setProducts(data);
-//                 })
-//                 .catch(error => { 
-//                     setError(error);
-//                 });
-//         } else {
-//             // If no language filter is applied, show all products.
-//             fetchAllProducts();
-//         }
-//     }, [languageDesc]);
-
-//     // If there's an error, show it.
-//     if (error) {
-//         return <div>Error: {error.message}</div>;
-//     }
-
-//     // Dummy function to simulate adding a product to the cart.
-//     const addToCart = (product) => {
-//         // Add product to cart logic here.
-//         console.log(`Added ${product.productName} to cart`);
-//     };
-
-//     // When the user changes the dropdown, update languageDesc.
-//     const handleLanguageChange = (e) => {
-//         setLanguageDesc(e.target.value);
-//     };
-
-//     return (
-//         <>
-//             <div className="product-grid">
-//                 <h1>Product List</h1>
-//                 <div className="filters">
-//                     <label>
-//                         Language:
-//                         <select name="languageDesc" onChange={handleLanguageChange}>
-//                             <option value="">All</option>
-//                             <option value="english">English</option>
-//                             <option value="spanish">Spanish</option>
-//                             <option value="french">French</option>
-//                             {/* Add more languages as needed */}
-//                         </select>
-//                     </label>
-//                 </div>
-//                 <div className="grid-container">
-//                     {products.map(product => (
-//                         <div key={product.id} className="grid-item">
-//                             <img 
-//                                 src="https://imgs.search.brave.com/eAfXcFrIxqcD6DtEuAg7-OWN0MrehR1ywb2VRiWFJgw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1QlpHUmxOREJs/WWpZdE1tUTNNeTAw/WVdOakxUZ3laalF0/TVdVellUY3pObVZs/TVRKbFhrRXlYa0Zx/Y0djQC5qcGc" 
-//                                 alt={product.productName} 
-//                             />
-//                             <h2>{product.productName}</h2>
-//                             <p>{product.productDescription}</p>
-//                             <p>Author: {product.productAuthor}</p>
-//                             <div className="price-cart">
-//                                 <p>Price: ${product.productBasePrice}</p>
-//                                 <button onClick={() => addToCart(product)}>Add to Cart</button>
-//                             </div>
-//                         </div>
-//                     ))}
-//                 </div>
-//             </div>
-//             <style jsx>{`
-//                 .product-grid {
-//                     display: flex;
-//                     flex-direction: column;
-//                     align-items: center;
-//                 }
-//                 .grid-container {
-//                     display: grid;
-//                     grid-template-columns: repeat(3, 1fr);
-//                     gap: 20px;
-//                     width: 100%;
-//                     max-width: 1200px;
-//                 }
-//                 .grid-item {
-//                     border: 1px solid #ccc;
-//                     padding: 20px;
-//                     text-align: center;
-//                 }
-//                 .grid-item img {
-//                     max-width: 100%;
-//                     height: auto;
-//                 }
-//                 .price-cart {
-//                     display: flex;
-//                     justify-content: space-between;
-//                     align-items: center;
-//                     margin-top: 10px;
-//                 }
-//             `}</style>
-//         </>
-//     );
-// };
-
-// export default ProductDisplay;
 import React, { useEffect, useState } from 'react';
+import { FaFilter } from "react-icons/fa"; // Import filter icon
+import { BsCartPlus } from "react-icons/bs"; // Import cart icon
 
 const ProductDisplay = () => {
     const [products, setProducts] = useState([]);
@@ -265,33 +9,19 @@ const ProductDisplay = () => {
     const [typeDesc, setTypeDesc] = useState('');
     const [genreDesc, setGenreDesc] = useState('');
 
-    // Function to fetch all products from the API.
     const fetchAllProducts = () => {
         fetch('http://localhost:8080/api/products')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setProducts(data);
-            })
-            .catch(error => {
-                setError(error);
-            });
+            .then(response => response.ok ? response.json() : Promise.reject('Network error'))
+            .then(data => setProducts(data))
+            .catch(error => setError(error));
     };
 
-    // Initially, fetch all products when the component mounts.
     useEffect(() => {
         fetchAllProducts();
     }, []);
 
-    // When any filter changes, build the query string and fetch filtered products.
     useEffect(() => {
-        // Check if any filter has a value.
         if (languageDesc || typeDesc || genreDesc) {
-            // Build the query string based on the current filters.
             const query = new URLSearchParams({
                 ...(languageDesc && { languageDesc }),
                 ...(typeDesc && { typeDesc }),
@@ -299,140 +29,175 @@ const ProductDisplay = () => {
             }).toString();
 
             fetch(`http://localhost:8080/api/products/filter?${query}`)
-                .then(response => { 
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    setProducts(data);
-                })
-                .catch(error => { 
-                    setError(error);
-                });
+                .then(response => response.ok ? response.json() : Promise.reject('Network error'))
+                .then(data => setProducts(data))
+                .catch(error => setError(error));
         } else {
-            // If no filters are applied, fetch all products.
             fetchAllProducts();
         }
     }, [languageDesc, typeDesc, genreDesc]);
 
-    // If there's an error, display it.
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
+    if (error) return <div>Error: {error.message}</div>;
 
-    // Dummy function to simulate adding a product to the cart.
     const addToCart = (product) => {
         console.log(`Added ${product.productName} to cart`);
     };
 
-    // Event handlers for filter dropdown changes.
-    const handleLanguageChange = (e) => {
-        setLanguageDesc(e.target.value);
-    };
-
-    const handleTypeChange = (e) => {
-        setTypeDesc(e.target.value);
-    };
-
-    const handleGenreChange = (e) => {
-        setGenreDesc(e.target.value);
-    };
-
     return (
-        <>
-            <div className="product-grid">
-                <h1>Product List</h1>
-                <div className="filters">
-                    <label>
-                        Language:
-                        <select name="languageDesc" onChange={handleLanguageChange}>
-                            <option value="">All</option>
-                            <option value="english">English</option>
-                            <option value="spanish">Spanish</option>
-                            <option value="french">French</option>
-                            {/* Add more languages as needed */}
-                        </select>
-                    </label>
-                    <label>
-                        Type:
-                        <select name="typeDesc" onChange={handleTypeChange}>
-                            <option value="">All</option>
-                            <option value="book">Book</option>
-                            <option value="movie">Movie</option>
-                            <option value="game">Game</option>
-                            {/* Add more types as needed */}
-                        </select>
-                    </label>
-                    <label>
-                        Genre:
-                        <select name="genreDesc" onChange={handleGenreChange}>
-                            <option value="">All</option>
-                            <option value="action">Action</option>
-                            <option value="comedy">Comedy</option>
-                            <option value="drama">Drama</option>
-                            {/* Add more genres as needed */}
-                        </select>
-                    </label>
-                </div>
-                <div className="grid-container">
-                    {products.map(product => (
-                        <div key={product.id} className="grid-item">
-                            <img 
-                                src="https://imgs.search.brave.com/eAfXcFrIxqcD6DtEuAg7-OWN0MrehR1ywb2VRiWFJgw/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL00v/TVY1QlpHUmxOREJs/WWpZdE1tUTNNeTAw/WVdOakxUZ3laalF0/TVdVellUY3pObVZs/TVRKbFhrRXlYa0Zx/Y0djQC5qcGc" 
-                                alt={product.productName} 
-                            />
-                            <h2>{product.productName}</h2>
-                            <p>{product.productDescription}</p>
-                            <p>Author: {product.productAuthor}</p>
-                            <div className="price-cart">
-                                <p>Price: ${product.productBasePrice}</p>
-                                <button onClick={() => addToCart(product)}>Add to Cart</button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+        <div className="product-page">
+            <div className="filter-section">
+                {/* <h3><FaFilter /> Filters</h3> */}
+                <select onChange={(e) => setLanguageDesc(e.target.value)}>
+                    <option value="">Language</option>
+                    <option value="english">English</option>
+                    <option value="spanish">Spanish</option>
+                    <option value="french">French</option>
+                </select>
+                <select onChange={(e) => setTypeDesc(e.target.value)}>
+                    <option value="">Type</option>
+                    <option value="book">Book</option>
+                    <option value="movie">Movie</option>
+                    <option value="game">Game</option>
+                </select>
+                <select onChange={(e) => setGenreDesc(e.target.value)}>
+                    <option value="">Genre</option>
+                    <option value="action">Action</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="drama">Drama</option>
+                </select>
             </div>
+
+            <div className="grid-container">
+                {products.map(product => (
+                    <div key={product.id} className="product-card">
+                        <img src="https://imgs.search.brave.com/fQFeRg-OtzjHLG6UXvP2pkejFD634-A3HiMYb94D9iQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjA4/MDc1NTE4L3Bob3Rv/L2hhbnVtYW4tcmFt/YXlhbmEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUNVb3BE/UUY5aWJ1MkNCX1hK/ZDY2bTNwTWJfMk9n/Q2xlYy1fLXdGSU0t/LUk9" alt={product.productName} />
+                        <h2>{product.productName}</h2>
+                        <p className="description">{product.productDescriptionShort}</p>
+                        <p className="author">By {product.productAuthor}</p>
+                        <p className="price">Price: ${product.productBasePrice}</p>
+                        <button className="cart-button" onClick={() => addToCart(product)}>
+                            <BsCartPlus /> Add to Cart
+                        </button>
+                    </div>
+                ))}
+            </div>
+
             <style jsx>{`
-                .product-grid {
+                .product-page {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    padding: 20px;
+                    background-color: #f5f5f5;
                 }
-                .filters {
-                    margin-bottom: 20px;
+                
+                .filter-section {
                     display: flex;
-                    gap: 20px;
-                    flex-wrap: wrap;
+                    gap: 15px;
+                    padding: 10px 20px;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+                    position: sticky;
+                    top: 0;
+                    z-index: 10;
+                    width: 80%;
                     justify-content: center;
+                    margin-bottom: 20px;
                 }
+                
+                .filter-section select {
+                    padding: 8px;
+                    border-radius: 5px;
+                    border: 1px solid #ddd;
+                    cursor: pointer;
+                }
+                
                 .grid-container {
                     display: grid;
-                    grid-template-columns: repeat(3, 1fr);
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                     gap: 20px;
                     width: 100%;
                     max-width: 1200px;
                 }
-                .grid-item {
-                    border: 1px solid #ccc;
-                    padding: 20px;
+                
+                .product-card {
+                    background: white;
+                    padding: 15px;
+                    border-radius: 10px;
+                    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
                     text-align: center;
                 }
-                .grid-item img {
-                    max-width: 100%;
-                    height: auto;
+                
+                .product-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0px 6px 12px rgba(0,0,0,0.2);
                 }
-                .price-cart {
+                
+                .product-card img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                }
+                
+                .product-card h2 {
+                    font-size: 1.2rem;
+                    color: #333;
+                    margin: 10px 0;
+                }
+                
+                .description {
+                    font-size: 0.9rem;
+                    color: #666;
+                    margin-bottom: 10px;
+                }
+                
+                .author {
+                    font-size: 0.9rem;
+                    font-weight: bold;
+                    color: #444;
+                }
+                
+                .price {
+                    font-size: 1.1rem;
+                    font-weight: bold;
+                    color: #28a745;
+                    margin: 5px 0;
+                }
+                
+                .cart-button {
+                    background: #007bff;
+                    color: white;
+                    border: none;
+                    padding: 8px 12px;
+                    border-radius: 5px;
+                    cursor: pointer;
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    margin-top: 10px;
+                    justify-content: center;
+                    gap: 5px;
+                    font-size: 1rem;
+                    transition: background 0.3s ease;
+                }
+                
+                .cart-button:hover {
+                    background: #0056b3;
+                }
+
+                @media (max-width: 768px) {
+                    .filter-section {
+                        flex-direction: column;
+                        width: 100%;
+                        align-items: center;
+                    }
+                    .grid-container {
+                        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                    }
                 }
             `}</style>
-        </>
+        </div>
     );
 };
 
 export default ProductDisplay;
-
