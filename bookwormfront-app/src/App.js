@@ -1,8 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './Components/Header/NavBar';
-import SignUpPage from './Components/Registration/RegistrationForm';
+
+import ProductsPage from './Components/Products/ProductdDisplay';
+import RegistrationForm from './Components/Registration/RegistrationComponent';
+
 import SignInPage from './Components/Login/LoginComponent';
+import HomePage from './Components/Home/HomePage';
  // Similarly, import your SignUpPage
 import CartPage from './Pages/CartPage';
 
@@ -11,9 +15,10 @@ function App() {
     <Router>
       <NavBar />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<SignInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/cart" component={<CartPage />} />
+        <Route path="/signup" element={<RegistrationForm />} />
+        <Route path="/products" element={<ProductsPage/>} />
       </Routes>
     </Router>
   );

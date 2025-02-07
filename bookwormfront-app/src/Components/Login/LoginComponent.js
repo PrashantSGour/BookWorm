@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { TextField, Button, Box, Typography, Modal, Grid, Fade } from "@mui/material";
+import { TextField, Button, Box, Typography, Modal, Fade, Paper, Avatar, Grid, Link, Backdrop } from "@mui/material";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from "react-router-dom";
 
-const LoginComponent = () => {
+const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -58,8 +59,10 @@ const LoginComponent = () => {
         setModalOpen(true);
 
         if (result.status === "success") {
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('customerEmail', formData.email);
           setTimeout(() => {
-            navigate("/products");
+            onLoginSuccess();
           }, 2000);
         }
       } catch (error) {
@@ -71,44 +74,85 @@ const LoginComponent = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 600, mx: "auto", p: 3, bgcolor: "white", borderRadius: 2, boxShadow: 3, mt: 4 }}>
-      <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>Login</Typography>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              error={!!errors.email}
-              helperText={errors.email}
-              required
-              sx={{ mb: 2 }}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              fullWidth
-              type="password"
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              error={!!errors.password}
-              helperText={errors.password}
-              required
-              sx={{ mb: 2 }}
-            />
-          </Grid>
+    <Box sx={{ width: 500, p: 2 }}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <Grid item xs={12} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar sx={{ m: 1, bgcolor: '#7d6df8' }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5" sx={{ color: '#7d6df8' }}>
+              Sign in
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={formData.email}
+                onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={formData.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2, bgcolor: '#7d6df8' }}
+              >
+                Sign In
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2" sx={{ color: '#7d6df8' }}>
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="#" variant="body2" sx={{ color: '#7d6df8' }} onClick={onSignupOpen}>
+                    {"Don't have an account? Sign Up"}
+                  </Link>
+                </Grid>
+              </Grid>
+            </Box>
+          </Box>
         </Grid>
-        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>Login</Button>
-      </form>
+      </Grid>
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

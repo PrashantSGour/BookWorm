@@ -10,6 +10,9 @@ import java.util.Optional;
 
 public interface CartMasterRepository extends JpaRepository<CartMaster, Integer> {
 
-	@Query(value = "SELECT * FROM cart_master WHERE customer_id = :customerId", nativeQuery = true)
-	Optional<CartMaster> findByCustomerId(@Param("customerId") long customerId);
+    @Query(value = "SELECT * FROM cart_master WHERE customer_id = :customerId", nativeQuery = true)
+    Optional<CartMaster> findByCustomerId(int customerId);
+
+    @Query(value = "SELECT * FROM cart_master WHERE customer_id = :customerId AND is_active = true", nativeQuery = true)
+    Optional<CartMaster> findByCustomerIdAndIsActive(@Param("customerId") long customerId);
 }

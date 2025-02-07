@@ -3,6 +3,9 @@ package com.Project.BookWorm.Service;
 import com.Project.BookWorm.Models.ProductMaster;
 
 import com.Project.BookWorm.Repository.ProductMasterRepository;
+
+import io.jsonwebtoken.lang.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -79,8 +82,8 @@ public class ProductMasterService {
         return productMasterRepository.findAll();
     }
 
-    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc, String productAuthor) {
-        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc, productAuthor);
+    public List<ProductDTO> getFilteredProducts(String genreDesc, String languageDesc, String productType) {
+        List<ProductMaster> products = productMasterRepository.findProductsByFilters(genreDesc, languageDesc, productType);
 
 
         return products.stream()
@@ -89,8 +92,10 @@ public class ProductMasterService {
                         product.getProductBasePrice(),
                         product.getProductLang().getLanguageDesc(),
                         product.getProductGenre().getGenreDesc(),
-                        product.getProductAuthor()                
+                        product.getProductType().getTypeDesc()   ,
+                        product.getProductAuthor()             
                         ))
                 .collect(Collectors.toList());
+
     }
 }

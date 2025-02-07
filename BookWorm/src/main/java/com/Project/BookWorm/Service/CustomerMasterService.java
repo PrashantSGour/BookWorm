@@ -9,12 +9,16 @@ import java.util.Optional;
 import com.Project.BookWorm.Repository.CustomerMasterRepository;
 //import com.Project.BookWorm.Security.JwtUtil;
 import com.Project.BookWorm.Security.JwtUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class CustomerMasterService {
 
     @Autowired
     private CustomerMasterRepository customerMasterRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<CustomerMaster> getAllCustomers(){
         return customerMasterRepository.findAll();
@@ -59,15 +63,23 @@ public class CustomerMasterService {
     private JwtUtil jwtUtil;
 
     public Optional<String> authenticateUser(String email, String password) {
-        Optional<CustomerMaster> customer = customerMasterRepository.getCustomerByEmailAndPassword(email, password);
+        Optional<CustomerMaster> customer = customerMasterRepository.findByCustomeremail(email);
         
-        if (customer.isPresent()) {
+        if (customer.isPresent() && passwordEncoder.matches(password, customer.get().getCustomerpassword())) {
             // ✅ If user is valid, generate a JWT token
             String token = jwtUtil.generateToken(email);
             return Optional.of(token);
         }
         
         return Optional.empty();
+    }
+
+    public boolean userExists(String email) {
+        return customerMasterRepository.findByCustomeremail(email).isPresent();
+    }
+
+    public Optional<CustomerMaster> getCustomerByEmail(String email) {
+        return customerMasterRepository.findByCustomeremail(email);
     }
 
 }
