@@ -60,6 +60,7 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
 
         if (result.status === "success") {
           localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('customerEmail', formData.email);
           setTimeout(() => {
             onLoginSuccess();
           }, 2000);

@@ -3,57 +3,52 @@ package com.Project.BookWorm.Models;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
-
 @Entity
 @Data
 public class CartMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private int cartId;
+    private Integer cartId;
+    
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private CustomerMaster customerId;
 
-    @OneToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private CustomerMaster customer_id;
+    @Column(nullable = false)
+    private Boolean isActive = true;
 
-    // One-to-Many relationship with CartDetails (CartMaster is parent)
-    @OneToMany(mappedBy = "cartMaster", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CartDetails> cartDetails;
+    private Double cost; // Moved this line above the getters/setters to fix the syntax error
 
-    private double cost;
-
-    // Getters and Setters
-
-    public int getCartId() {
+    public Integer getCartId() {
         return cartId;
     }
 
-    public void setCartId(int cartId) {
+    public void setCartId(Integer cartId) {
         this.cartId = cartId;
     }
 
-    public CustomerMaster getCustomer_id() {
-        return customer_id;
+    public CustomerMaster getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(CustomerMaster customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(CustomerMaster customerId) {
+        this.customerId = customerId;
     }
 
-    public Set<CartDetails> getCartDetails() {
-        return cartDetails;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setCartDetails(Set<CartDetails> cartDetails) {
-        this.cartDetails = cartDetails;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public double getCost() {
-        return cost;
-    }
+	public Double getCost() {
+		return cost;
+	}
 
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
+	public void setCost(Double cost) {
+		this.cost = cost;
+	}
 }

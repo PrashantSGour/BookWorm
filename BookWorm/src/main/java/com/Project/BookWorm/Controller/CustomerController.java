@@ -20,6 +20,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
+@CrossOrigin("*")
 public class CustomerController {
 
     private static final Logger logger = LogManager.getLogger(CustomerController.class);
@@ -62,6 +63,20 @@ public class CustomerController {
         }
     }
 
+    // Get customer by email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<CustomerMaster> getCustomerByEmail(@PathVariable String email) {
+        logger.info("Fetching customer with email: {}", email);
+        Optional<CustomerMaster> customer = customerMasterService.getCustomerByEmail(email);
+        if (customer.isPresent()) {
+            logger.info("Customer found: {}", customer.get());
+            return new ResponseEntity<>(customer.get(), HttpStatus.OK);
+        } else {
+            logger.warn("Customer with email {} not found", email);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     // Register customer and create cart
     @PostMapping
     public ResponseEntity<CustomerMaster> registerCustomer(@RequestBody CustomerMaster customer) {
@@ -75,7 +90,7 @@ public class CustomerController {
 
             // Create a cart for the registered customer
             CartMaster cart = new CartMaster();
-            cart.setCustomer_id(savedCustomer);  // Link cart to customer
+            cart.setCustomerId(savedCustomer);  // Link cart to customer
             cart.setCost(0.0);  // Initialize cost to 0
             cartMasterRepository.save(cart);
             logger.info("Cart created for customer ID: {}", savedCustomer.getCustomerid());

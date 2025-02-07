@@ -39,8 +39,62 @@ const ProductDisplay = () => {
 
     if (error) return <div>Error: {error.message}</div>;
 
-    const addToCart = (product) => {
-        console.log(`Added ${product.productName} to cart`);
+    const fetchCustomerIdByEmail = async () => {
+        try {
+            const email = localStorage.getItem('customerEmail');
+            alert(email);
+            const response = await fetch(`http://localhost:8080/api/customers/email/${email}`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            return data.customerid;
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            return null;
+        }
+    };
+
+    const addToCart = async (product) => {
+        const customerId = await fetchCustomerIdByEmail();
+        alert(typeof customerId);
+        if (!customerId) {
+            console.error('Failed to fetch customer ID');
+            return;
+        }
+
+        const quantity = 1; // Replace with the desired quantity
+        const rentNoOfDays = 7; // Replace with the desired rent number of days
+        const transType = "purchase"; // Replace with the desired transaction type
+
+        fetch(`http://localhost:8080/api/cart-details/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                customerId,
+                productId: product.id, // Use the product ID of the clicked product
+                quantity,
+                rentNoOfDays,
+                transType,
+                product // Send the product data
+            }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            alert("Product added to cart");
+            return response.json();
+            
+        })
+        .then(data => {
+            console.log(`Added ${product.productName} to cart`, data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
     };
 
     return (
