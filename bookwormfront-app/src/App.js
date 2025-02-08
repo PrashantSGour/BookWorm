@@ -8,6 +8,7 @@ import HomePage from './Components/Home/HomePage';
 import CartPage from './Components/Cart/CartPage';
 import AboutUs from './Components/About/Aboutus';
 import ContactUs from './Components/ContactUs/ContactUs';
+import ShelfPage from './Components/Shelf/ShelfPage';
 
 const PrivateRoute = ({ element: Component, ...rest }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -29,6 +30,7 @@ function App() {
         <Route path="/cart" element={<PrivateRoute element={CartPage} />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/shelf" element={<PrivateRoute element={ShelfPage} />} />
       </Routes>
     </Router>
   );

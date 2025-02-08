@@ -6,6 +6,7 @@ public class CartDetailsRequest {
     private int quantity;
     private int rentNoOfDays;
     private String transType;
+    private double offerCost;
     private ProductMaster product;
 
     // Getters and setters
@@ -38,7 +39,7 @@ public class CartDetailsRequest {
     }
 
     public void setRentNoOfDays(int rentNoOfDays) {
-        this.rentNoOfDays = rentNoOfDays;
+        this.rentNoOfDays = Math.max(rentNoOfDays, 7); // Ensure it can't go less than 7
     }
 
     public String getTransType() {
@@ -47,6 +48,14 @@ public class CartDetailsRequest {
 
     public void setTransType(String transType) {
         this.transType = transType;
+    }
+
+    public double getOfferCost() {
+        return offerCost;
+    }
+
+    public void setOfferCost(double offerCost) {
+        this.offerCost = offerCost;
     }
 
     public ProductMaster getProduct() {

@@ -57,6 +57,10 @@ function NavBar({ onSearch }) {
     navigate("/cart");
   };
 
+  const handleShelfOpen = () => {
+    navigate("/shelf");
+  };
+
   const handleBrandClick = () => {
     if (isLoggedIn) {
       navigate("/products");
@@ -107,6 +111,9 @@ function NavBar({ onSearch }) {
                 <>
                   <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
                     Cart
+                  </Button>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleShelfOpen}>
+                    Shelf
                   </Button>
                   <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
                     Log Out

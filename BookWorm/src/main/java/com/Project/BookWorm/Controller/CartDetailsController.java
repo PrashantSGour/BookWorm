@@ -43,7 +43,6 @@ public class CartDetailsController {
             cartDetailsRequest.getCustomerId(),
             cartDetailsRequest.getProductId(),
             cartDetailsRequest.getQuantity(),
-            cartDetailsRequest.getRentNoOfDays(),
             cartDetailsRequest.getTransType(),
             cartDetailsRequest.getProduct()
         );
@@ -78,5 +77,32 @@ public class CartDetailsController {
         }
         List<CartDetails> cartDetails = cartDetailsService.getCartDetailsByCartId(cartMasterOptional.get().getCartId());
         return new ResponseEntity<>(cartDetails, HttpStatus.OK);
+    }
+
+    // Update cart details
+    @PatchMapping("/{id}")
+    public ResponseEntity<CartDetails> updateCartDetails(@RequestBody CartDetails updatedCartDetailsRequest) {
+        Optional<CartDetails> existingCartDetails = cartDetailsService.getCartDetailsById(updatedCartDetailsRequest.getCartDetailsId());
+        if (!existingCartDetails.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        CartDetails cartDetails = existingCartDetails.get();
+        cartDetails.setIsRented(updatedCartDetailsRequest.getIsRented());
+        cartDetails.setRentNoOfDays(updatedCartDetailsRequest.getRentNoOfDays());
+        cartDetails.setOfferCost(updatedCartDetailsRequest.getOfferCost());
+        cartDetailsService.saveCartDetails(cartDetails);
+        return new ResponseEntity<>(cartDetails, HttpStatus.OK);
+    }
+
+    // Delete cart details by ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCartDetails(@PathVariable int id) {
+        Optional<CartDetails> existingCartDetails = cartDetailsService.getCartDetailsById(id);
+        if (!existingCartDetails.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        cartDetailsService.deleteCartDetails(id);
+        logger.info("Deleted cart details for ID: {}", id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

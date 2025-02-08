@@ -28,7 +28,7 @@ public class MyShelfDetailsService {
     // Method to add a product to the shelf (MyShelfDetails)
     public MyShelfDetails addProductToShelf(Integer shelfId, Integer productId, Date expiryDate, String tranType) {
         // Convert java.util.Date to java.sql.Date
-        java.sql.Date sqlExpiryDate = new java.sql.Date(expiryDate.getTime());
+    	java.sql.Date sqlExpiryDate = (expiryDate != null) ? new java.sql.Date(expiryDate.getTime()) : null;
         
         // Fetch the MyShelf object using shelfId
         MyShelf myShelf = myShelfRepository.findById(shelfId)

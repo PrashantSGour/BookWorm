@@ -22,9 +22,6 @@ public class MyShelf {
     
     private int noOfBooks; // Number of books on the shelf
 
-    @OneToMany(mappedBy = "shelfId")
-    private List<MyShelfDetails> shelfDetails; // List of books on the shelf
-
 	public Integer getShelfId() {
 		return shelfId;
 	}
@@ -47,14 +44,6 @@ public class MyShelf {
 
 	public void setNoOfBooks(int noOfBooks) {
 		this.noOfBooks = noOfBooks;
-	}
-
-	public List<MyShelfDetails> getShelfDetails() {
-		return shelfDetails;
-	}
-
-	public void setShelfDetails(List<MyShelfDetails> shelfDetails) {
-		this.shelfDetails = shelfDetails;
 	}
 }
 

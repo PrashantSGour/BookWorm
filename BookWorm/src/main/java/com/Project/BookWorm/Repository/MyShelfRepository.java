@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MyShelfRepository extends JpaRepository<MyShelf, Integer> {
 
-	@Query("SELECT m FROM MyShelf m WHERE m.customer.id = :customerId")
+	@Query(value = "SELECT * FROM my_shelf WHERE customer_id = :customerId", nativeQuery = true)
 	public MyShelf findByCustomerId(@Param("customerId") Integer customerId);
 
 
