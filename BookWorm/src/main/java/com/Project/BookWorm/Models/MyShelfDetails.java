@@ -22,7 +22,7 @@ public class MyShelfDetails {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductMaster productId; // Each shelf detail links to one product (book)
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private java.util.Date expiryDate; // Expiry date for rental
 
     @Column(nullable = true)

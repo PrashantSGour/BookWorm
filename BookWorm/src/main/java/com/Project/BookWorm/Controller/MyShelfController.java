@@ -2,6 +2,7 @@ package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.MyShelf;
 import com.Project.BookWorm.Models.MyShelfDetails;
+import com.Project.BookWorm.Models.MyShelfRequest;
 import com.Project.BookWorm.Service.MyShelfService;
 import com.Project.BookWorm.Service.MyShelfDetailsService;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/myshelf")
+@CrossOrigin("*")
 public class MyShelfController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class MyShelfController {
 
     // Get MyShelf by customer ID (JWT token required)
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<MyShelf> getMyShelfByCustomerId(@PathVariable Integer customerId) {
+    public ResponseEntity<MyShelf> getMyShelfByCustomerId(@PathVariable int customerId) {
         MyShelf myShelf = myShelfService.getMyShelfByCustomer(customerId);
         return myShelf != null ? new ResponseEntity<>(myShelf, HttpStatus.OK)
                                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,13 +56,15 @@ public class MyShelfController {
     }
 
     // Add product to shelf (create a MyShelfDetails record)
-    @PostMapping("/{shelfId}/addProduct")
-    public ResponseEntity<MyShelfDetails> addProductToShelf(@PathVariable Integer shelfId,
-                                                             @RequestParam Integer productId,
-                                                             @RequestParam Date expiryDate,
-                                                             @RequestParam String tranType) {
-        MyShelfDetails createdShelfDetail = myShelfDetailsService.addProductToShelf(shelfId, productId, expiryDate, tranType);
-        return new ResponseEntity<>(createdShelfDetail, HttpStatus.CREATED);
+    @PostMapping("/add")
+    public ResponseEntity<MyShelfDetails> addProductToShelf(@RequestBody MyShelfRequest myShelfRequest) {
+        MyShelfDetails myShelfDetails = myShelfDetailsService.addProductToShelf(
+            myShelfRequest.getShelfId(),
+            myShelfRequest.getProductId(),
+            myShelfRequest.getExpiryDate(),
+            myShelfRequest.getTranType()
+        );
+        return new ResponseEntity<>(myShelfDetails, HttpStatus.CREATED);
     }
 
     // Get all products in a specific shelf

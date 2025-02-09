@@ -47,7 +47,7 @@ public class CartDetailsService {
         return cartDetailsRepository.findByCartId(cartId);
     }
 
-    public CartDetails addProductToCart(int customerId, int productId, int quantity, int rentNoOfDays, String transType, ProductMaster product) {
+    public CartDetails addProductToCart(int customerId, int productId, int rentNoOfDays, String transType, ProductMaster product) {
         // Logic to add product to cart
         // Fetch the active CartMaster by customerId
         Optional<CartMaster> cartMasterOptional = cartMasterRepository.findByCustomerIdAndIsActive(customerId);
@@ -62,10 +62,20 @@ public class CartDetailsService {
         cartDetails.setCartId(cartMaster);
         cartDetails.setProductId(product);
         cartDetails.setIsRented(transType.equalsIgnoreCase("rent"));
-        cartDetails.setRentNoOfDays(rentNoOfDays);
+        cartDetails.setRentNoOfDays(Math.max(rentNoOfDays, 7)); // Ensure it can't go less than 7
         cartDetails.setOfferCost(cartDetails.getIsRented() ? product.getRentPerDay() * rentNoOfDays : product.getProductBasePrice());
 
         // Save the CartDetails object
         return cartDetailsRepository.save(cartDetails);
+    }
+
+    // Method to save cart details
+    public CartDetails saveCartDetails(CartDetails cartDetails) {
+        return cartDetailsRepository.save(cartDetails);
+    }
+
+    // Method to delete cart details by ID
+    public void deleteCartDetails(int id) {
+        cartDetailsRepository.deleteById(id);
     }
 }

@@ -1,8 +1,5 @@
 package com.Project.BookWorm.Models;
 
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,57 +27,68 @@ public class CartDetails {
 
     @Column(nullable = false)
     private Boolean isRented;
+    
+    @Column(nullable = false)
+    private Boolean isUpdated=false;
 
     private Integer rentNoOfDays;
     
     private double offerCost;
 
-	public double getOfferCost() {
-		return offerCost;
+    public Boolean getIsUpdated() {
+		return isUpdated;
 	}
 
-	public void setOfferCost(double d) {
-		this.offerCost = d;
+	public void setIsUpdated(Boolean isUpdated) {
+		this.isUpdated = isUpdated;
 	}
 
-	public Integer getCartDetailsId() {
-		return cartDetailsId;
-	}
+	// Getters and setters
+    public Integer getCartDetailsId() {
+        return cartDetailsId;
+    }
 
-	public void setCartDetailsId(Integer cartDetailsId) {
-		this.cartDetailsId = cartDetailsId;
-	}
+    public void setCartDetailsId(Integer cartDetailsId) {
+        this.cartDetailsId = cartDetailsId;
+    }
 
-	public CartMaster getCartId() {
-		return cartId;
-	}
+    public CartMaster getCartId() {
+        return cartId;
+    }
 
-	public void setCartId(CartMaster cartId) {
-		this.cartId = cartId;
-	}
+    public void setCartId(CartMaster cartId) {
+        this.cartId = cartId;
+    }
 
-	public ProductMaster getProductId() {
-		return productId;
-	}
+    public ProductMaster getProductId() {
+        return productId;
+    }
 
-	public void setProductId(ProductMaster productId) {
-		this.productId = productId;
-	}
+    public void setProductId(ProductMaster productId) {
+        this.productId = productId;
+    }
 
-	public Boolean getIsRented() {
-		return isRented;
-	}
+    public Boolean getIsRented() {
+        return isRented;
+    }
 
-	public void setIsRented(Boolean isRented) {
-		this.isRented = isRented;
-	}
+    public void setIsRented(Boolean isRented) {
+        this.isRented = isRented;
+    }
 
-	public Integer getRentNoOfDays() {
-		return rentNoOfDays;
-	}
+    public Integer getRentNoOfDays() {
+        return rentNoOfDays;
+    }
 
-	public void setRentNoOfDays(Integer rentNoOfDays) {
-		this.rentNoOfDays = rentNoOfDays;
-	}
+    public void setRentNoOfDays(Integer rentNoOfDays) {
+        this.rentNoOfDays = rentNoOfDays;
+    }
 
+    public double getOfferCost() {
+        return offerCost;
+    }
+
+    public void setOfferCost(double offerCost) {
+        this.offerCost = offerCost;
+    }
 }
