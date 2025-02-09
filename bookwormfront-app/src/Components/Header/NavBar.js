@@ -2,10 +2,18 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Navbar, Nav, Container, Dropdown, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+<<<<<<< Updated upstream
 import { FaRegUser } from "react-icons/fa";
 import { IoLogInOutline } from "react-icons/io5"; // Login icon
 import { HiOutlineUserAdd } from "react-icons/hi"; // Signup icon
 import './NavBar.css'; // Import CSS file
+=======
+import { Button, Drawer } from '@mui/material';
+import LoginComponent from '../Login/LoginComponent';
+import RegistrationComponent from '../Registration/RegistrationComponent';
+import './NavBar.css';
+import Logo from './logo.png'; // Import the logo image
+>>>>>>> Stashed changes
 
 function NavBar() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,10 +29,19 @@ function NavBar() {
   };
 
   return (
+<<<<<<< Updated upstream
     <Navbar expand="lg" className="navbar-container">
       <Container className="navbar-content">
         {/* Brand Name */}
         <Navbar.Brand href="#home" className="navbar-brand">BookWorm</Navbar.Brand>
+=======
+    <>
+      <Navbar expand="lg" className="navbar-container">
+        <Container>
+          <Navbar.Brand onClick={handleBrandClick} className="navbar-brand">
+            <img src={Logo} alt="Logo" className="navbar-logo" /> BookWorm
+          </Navbar.Brand>
+>>>>>>> Stashed changes
 
         {/* Search Bar */}
         <div className="search-container">
@@ -32,6 +49,7 @@ function NavBar() {
           <button type="button" className="search-button">Search</button>
         </div>
 
+<<<<<<< Updated upstream
         {/* User Dropdown with Tooltip */}
         <Nav className="nav-options">
           <OverlayTrigger
@@ -60,6 +78,55 @@ function NavBar() {
         </Nav>
       </Container>
     </Navbar>
+=======
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
+              <Nav.Link as={Link} to="/contactus">Contact Us</Nav.Link>
+              {/* Add other Nav links here */}
+            </Nav>
+            {/* <div className="search-container">
+              <input
+                type="text"
+                placeholder="Search for books..."
+                className="search-input"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <button type="button" className="search-button">Search</button>
+            </div> */}
+            <Nav className="ms-auto">
+              {isLoggedIn ? (
+                <>
+                  <Button className="nav-btn" onClick={() => navigate('/cart')}>Cart</Button>
+                  <Button className="nav-btn" onClick={() => navigate('/shelf')}>Shelf</Button>
+                  <Button className="nav-btn logout-btn" onClick={handleLogout}>Log Out</Button>
+                 </>
+              ) : (
+                <>
+                  <Button className="nav-btn login-btn" onClick={() => setLoginOpen(true)}>Sign In</Button>
+                  <Button className="nav-btn signup-btn" onClick={() => setSignupOpen(true)}>Sign Up</Button>
+                </>
+             )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+      <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
+        <LoginComponent onClose={() => setLoginOpen(false)} onSignupOpen={() => setSignupOpen(true)} />
+       </Drawer>
+
+      {/* Signup Component Drawer */}
+      <Drawer
+        anchor="right"
+        open={signupOpen}
+        onClose={handleSignupClose}
+        PaperProps={{ sx: { width: 600, zIndex: 1100 } }} // Set the width and z-index of the drawer
+      >
+        <RegistrationComponent onClose={handleSignupClose} onLoginOpen={handleLoginFromSignup} />
+      </Drawer>
+    </>
+>>>>>>> Stashed changes
   );
 }
 
