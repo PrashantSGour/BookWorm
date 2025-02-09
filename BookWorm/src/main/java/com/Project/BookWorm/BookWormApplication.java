@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 @SpringBootApplication
@@ -40,5 +41,11 @@ public class BookWormApplication {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
+    
+    @Bean
+	public RestTemplate getRestTemplate()
+	{
+		return new RestTemplate();
+	}
 
 }
