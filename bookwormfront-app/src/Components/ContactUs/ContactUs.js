@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+
 import "./contactus.css";
+
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -18,6 +20,7 @@ const ContactUs = () => {
     <div className="contact-container">
       <h2>Contact Us</h2>
       <p>We'd love to hear from you! Reach out with any questions, feedback, or support requests.</p>
+
       <form onSubmit={handleSubmit} className="contact-form">
         <label>Name:</label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -29,10 +32,12 @@ const ContactUs = () => {
         <textarea name="message" value={formData.message} onChange={handleChange} required />
 
         <button type="submit" className="submit-btn">Send Message</button>
+
       </form>
     </div>
   );
 };
+
 
 const Map = () => {
   return (
@@ -43,6 +48,7 @@ const Map = () => {
         width="100%" 
         height="100%" 
         style={{ border: 0, borderRadius: "12px" }} 
+
         allowFullScreen="" 
         loading="lazy" 
         referrerPolicy="no-referrer-when-downgrade" 
@@ -59,8 +65,10 @@ const ContactUsPage = () => {
         <Map />
         <ContactUs />
       </div>
+
     </div>
   );
 };
 
 export default ContactUsPage;
+
