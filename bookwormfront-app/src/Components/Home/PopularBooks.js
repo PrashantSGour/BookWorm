@@ -1,100 +1,103 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Card, CardContent, CardMedia } from '@mui/material';
-//import ReactCardCarousel from 'react-card-carousel'; // Import the carousel component
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import styled from "styled-components";
 
-import image1 from './Pictures/image1.jpg'; // Ensure your image is accessible
+const CarouselContainer = styled.div`
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+`;
 
-// BookCard component to display individual book details
-const BookCard = ({ book }) => {
-  return (
-    <div style={styles.cardStyle}>
-      <CardMedia
-        component="img"
-        height="200"
-        image={image1}
-        alt={book.productName}
-      />
-      <CardContent>
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-          {book.productName}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {book.authorName}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {book.description}
-        </Typography>
-      </CardContent>
-    </div>
-  );
-};
+const CarouselWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+`;
 
-// Styles for the carousel and the card
-const styles = {
-  containerStyle: {
-    position: 'relative',
-    height: '50vh', // Adjusted height to manage space efficiently
-    width: '100%',
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  cardStyle: {
-    height: '300px', // Adjusted height to manage space efficiently
-    width: '250px', // Adjusted width to manage space efficiently
-    paddingTop: '20px', 
-    textAlign: 'center',
-    background: 'transparent', // Changed background to transparent
-    color: '#FFF',
-    fontFamily: 'sans-serif',
-    fontSize: '12px',
-    textTransform: 'uppercase',
-    borderRadius: '10px',
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-};
+const CarouselTrack = styled(motion.div)`
+  display: flex;
+  gap: 20px;
+  transition: transform 0.5s ease-in-out;
 
-const PopularBooks = () => {
-  const [books, setBooks] = useState([]);
+  @media (max-width: 480px) {
+    flex-direction: column; /* Stack items vertically on mobile */
+    align-items: center;
+    gap: 15px;
+  }
+`;
 
-  // Fetching books data from the API
+const Card = styled.div`
+  flex: 0 0 calc(33.33% - 20px);
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  @media (max-width: 480px) {
+    flex: 1 1 auto;
+    width: 90%;
+    max-width: 350px;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+`;
+
+const Description = styled.p`
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.4;
+`;
+
+const Carousel = () => {
+  const [products, setProducts] = useState([]);
+  const [index, setIndex] = useState(0);
+
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/api/products');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setBooks(data); // Store the books in the state
-      } catch (error) {
-        console.error('Error fetching books:', error);
-      }
-    };
-
-    fetchBooks();
+    fetch("http://localhost:8080/api/products")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched products:", data); // Debug API response
+        setProducts(data);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
+  useEffect(() => {
+    if (products.length > 2) {
+      const interval = setInterval(() => {
+        setIndex((prevIndex) => (prevIndex + 1) % products.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [products.length]);
+
   return (
-    <Box sx={{ mt: 5 }}>
-      <Typography variant="h4" sx={{ mb: 3, textAlign: 'center', color: '#7d6df8' }}>
-        Popular Books
-      </Typography>
-      {/* Carousel Component */}
-      <div style={styles.containerStyle}>
-        {/* <ReactCardCarousel autoplay={true} autoplay_speed={2500}>
-          {books.map((book, index) => (
-            <BookCard key={book.id || index} book={book} />
-          ))}
-        </ReactCardCarousel> */}
-      </div>
-    </Box>
+    <CarouselContainer>
+      <CarouselWrapper>
+      <CarouselTrack
+  animate={{ x: `-${index * 33.33}%` }}
+  transition={{ duration: 1, ease: "easeInOut" }}
+>
+{products.map((product, index) => (
+  <Card key={product.id || index}>  {/* Fallback to index if id is missing */}
+    <Title>{product.title}</Title>
+    <Description>{product.description}</Description>
+  </Card>
+))}
+</CarouselTrack>
+      </CarouselWrapper>
+    </CarouselContainer>
   );
 };
 
-export default PopularBooks;
+export default Carousel;
