@@ -1,6 +1,8 @@
-package com.Project.BookWorm.Models;
+package com.Project.BookWorm.dto;
 
-public class CartDetailsRequest {
+import com.Project.BookWorm.Models.ProductMaster;
+
+public class CartDetailsRequestDTO {
     private int customerId;
     private int productId;
     private int quantity;

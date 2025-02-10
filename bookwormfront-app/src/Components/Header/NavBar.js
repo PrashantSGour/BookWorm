@@ -2,20 +2,10 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
-import { FaRegUser } from "react-icons/fa";
-import { IoLogInOutline } from "react-icons/io5"; // Login icon
-import { HiOutlineUserAdd } from "react-icons/hi"; // Signup icon
-
 import { Button, Drawer } from '@mui/material';
 import LoginComponent from '../Login/LoginComponent';
 import RegistrationComponent from '../Registration/RegistrationComponent';
-
-import { Button, Drawer } from '@mui/material';
-import LoginComponent from '../Login/LoginComponent';
-import RegistrationComponent from '../Registration/RegistrationComponent';
-import './NavBar.css';
-import Logo from './logo.png'; // Import the logo image
+import './NavBar.css'; // Import CSS file
 
 function NavBar({ onSearch }) {
   const location = useLocation();
@@ -88,48 +78,6 @@ function NavBar({ onSearch }) {
 
   return (
     <>
-      <Navbar expand="lg" className="navbar-container">
-        <Container>
-          <Navbar.Brand onClick={handleBrandClick} className="navbar-brand">
-            <img src={Logo} alt="Logo" className="navbar-logo" /> BookWorm
-          </Navbar.Brand>
-
-        {/* Search Bar */}
-        <div className="search-container">
-          <input type="text" placeholder="Search..." className="search-input" />
-          <button type="button" className="search-button">Search</button>
-        </div>
-
-        {/* User Dropdown with Tooltip */}
-        <Nav className="nav-options">
-          <OverlayTrigger
-            placement="bottom"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip}
-          >
-            <Dropdown
-              show={showDropdown}
-              onToggle={(isOpen) => setShowDropdown(isOpen)}
-            >
-              <Dropdown.Toggle variant="link" id="user-dropdown" className="dropdown-toggle">
-                <FaRegUser size={22} className="user-icon" /> {/* User icon */}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu className="dropdown-menu-custom">
-                <Dropdown.Item as={Link} to="/login" className="dropdown-item-custom" onClick={handleSelect}>
-                  <IoLogInOutline size={18} className="dropdown-icon" /> Login
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/signup" className="dropdown-item-custom" onClick={handleSelect}>
-                  <HiOutlineUserAdd size={18} className="dropdown-icon" /> Signup
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </OverlayTrigger>
-        </Nav>
-      </Container>
-    </Navbar>
-
-    <>
       <Navbar expand="lg" className="navbar-container" style={{ zIndex: 1200 }}>
         <Container>
           {/* Brand Name */}
@@ -146,60 +94,50 @@ function NavBar({ onSearch }) {
               <Nav.Link as={Link} to="/contactus">Contact Us</Nav.Link>
               {/* Add other Nav links here */}
             </Nav>
+            {/* <div className="search-container mx-auto">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="search-input"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              <button type="button" className="search-button">Search</button>
+            </div> */}
+
+            {/* Conditional Buttons */}
             <Nav className="ms-auto">
               {isLoggedIn ? (
                 <>
-                  <Button className="nav-btn" onClick={() => navigate('/cart')}>Cart</Button>
-                  <Button className="nav-btn" onClick={() => navigate('/shelf')}>Shelf</Button>
-                  <Button className="nav-btn logout-btn" onClick={handleLogout}>Log Out</Button>
-                 </>
-              ) : (
-                <>
-                  <Button className="nav-btn login-btn" onClick={() => setLoginOpen(true)}>Sign In</Button>
-                  <Button className="nav-btn signup-btn" onClick={() => setSignupOpen(true)}>Sign Up</Button>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
+                    Cart
+                  </Button>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleShelfOpen}>
+                    Shelf
+                  </Button>
+                  <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
+                    Log Out
+                  </Button>
                 </>
-             )}
-// =======
-
-//             {/* Conditional Buttons */}
-//             <Nav className="ms-auto">
-//               {isLoggedIn ? (
-//                 <>
-//                   <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
-//                     Cart
-//                   </Button>
-//                   <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleShelfOpen}>
-//                     Shelf
-//                   </Button>
-//                   <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
-//                     Log Out
-//                   </Button>
-//                 </>
-//               ) : (
-//                 <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
-//                   Sign In
-//                 </Button>
-//               )}
-// >>>>>>> main
+              ) : (
+                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
+                  Sign In
+                </Button>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Drawer anchor="right" open={loginOpen} onClose={() => setLoginOpen(false)}>
-        <LoginComponent onClose={() => setLoginOpen(false)} onSignupOpen={() => setSignupOpen(true)} />
-       </Drawer>
-// =======
 
-//       {/* Login Component Drawer */}
-//       <Drawer
-//         anchor="right"
-//         open={loginOpen}
-//         onClose={handleLoginClose}
-//         PaperProps={{ sx: { width: 500, zIndex: 1100 } }} // Set the width and z-index of the drawer
-//       >
-//         <LoginComponent onClose={handleLoginClose} onSignupOpen={handleSignupOpen} onLoginSuccess={handleLoginSuccess} />
-//       </Drawer>
-// >>>>>>> main
+      {/* Login Component Drawer */}
+      <Drawer
+        anchor="right"
+        open={loginOpen}
+        onClose={handleLoginClose}
+        PaperProps={{ sx: { width: 500, zIndex: 1100 } }} // Set the width and z-index of the drawer
+      >
+        <LoginComponent onClose={handleLoginClose} onSignupOpen={handleSignupOpen} onLoginSuccess={handleLoginSuccess} />
+      </Drawer>
 
       {/* Signup Component Drawer */}
       <Drawer
