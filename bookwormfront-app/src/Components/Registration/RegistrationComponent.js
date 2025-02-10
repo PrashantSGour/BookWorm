@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { TextField, Button, Box, Typography, Modal, Grid, Fade, Paper, Avatar, Link, Backdrop } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RegistrationForm = ({ onClose, onLoginOpen }) => {
   const [formData, setFormData] = useState({
@@ -99,8 +101,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
         setOtpModalOpen(true);
       } catch (error) {
         console.error('Error:', error);
-        setModalMessage(`Error: ${error.message}`);
-        setModalOpen(true);
+        toast.error(`Error: ${error.message}`);
       }
     }
   };
@@ -127,13 +128,11 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
         handleFinalSubmit();
         setOtpModalOpen(false);
       } else {
-        setModalMessage(result.message);
-        setModalOpen(true);
+        toast.error(result.message);
       }
     } catch (error) {
       console.error('Error:', error);
-      setModalMessage(`Error: ${error.message}`);
-      setModalOpen(true);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
@@ -157,21 +156,19 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
 
       const registerResult = await registerResponse.json();
       console.log('Success:', registerResult);
-      setModalMessage("User registered successfully");
-      setModalOpen(true);
+      toast.success("User registered successfully");
       setTimeout(() => {
-        setModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (error) {
       console.error('Error:', error);
-      setModalMessage(`Error: ${error.message}`);
-      setModalOpen(true);
+      toast.error(`Error: ${error.message}`);
     }
   };
 
   return (
     <Box sx={{ width: 600, p: 2 }}>
+      <ToastContainer />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <Grid item xs={12} component={Paper} elevation={6} square>
           <Box

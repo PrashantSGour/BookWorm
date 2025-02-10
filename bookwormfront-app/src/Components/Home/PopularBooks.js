@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 
 const CarouselContainer = styled.div`
-  width: 100%;
+  width: fit-content;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -14,8 +14,9 @@ const CarouselContainer = styled.div`
 
 const CarouselWrapper = styled.div`
   display: flex;
-  width: 100%;
-  max-width: 1200px;
+  width: fit-content; // Adjust width to fit the content
+  max-width: fit-content;
+  height: auto; // Adjust height to match the image size
 `;
 
 const CarouselTrack = styled(motion.div)`
@@ -31,17 +32,17 @@ const CarouselTrack = styled(motion.div)`
 `;
 
 const Card = styled.div`
-  flex: 0 0 calc(33.33% - 20px);
   background: #fff;
   border-radius: 10px;
-  padding: 20px;
+  padding: fit-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  height: auto; // Adjust height to match the image size
 
   @media (max-width: 480px) {
     flex: 1 1 auto;
     width: 90%;
-    max-width: 350px;
+    max-width: fit-content;
   }
 `;
 
@@ -63,13 +64,15 @@ const Carousel = () => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched products:", data); // Debug API response
-        setProducts(data);
+      fetch('http://localhost:8080/api/products', {
+          headers: {
+          }
       })
-      .catch((error) => console.error("Error fetching products:", error));
+          .then(response => response.ok ? response.json() : Promise.reject('Network error'))
+          .then(data => {
+              setProducts(data);
+          })
+          .catch(error => alert(error));
   }, []);
 
   useEffect(() => {
@@ -84,17 +87,18 @@ const Carousel = () => {
   return (
     <CarouselContainer>
       <CarouselWrapper>
-      <CarouselTrack
-  animate={{ x: `-${index * 33.33}%` }}
-  transition={{ duration: 1, ease: "easeInOut" }}
->
-{products.map((product, index) => (
-  <Card key={product.id || index}>  {/* Fallback to index if id is missing */}
-    <Title>{product.title}</Title>
-    <Description>{product.description}</Description>
-  </Card>
-))}
-</CarouselTrack>
+        <CarouselTrack
+          animate={{ x: `-${index * 100 / products.length}%` }} // Adjust the width percentage
+          transition={{ duration: 1, ease: "easeInOut" }}
+        >
+          {products.map((product, index) => (
+            <Card key={product.productId || index}>  {/* Fallback to index if id is missing */}
+              <img src="https://imgs.search.brave.com/fQFeRg-OtzjHLG6UXvP2pkejFD634-A3HiMYb94D9iQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjA4/MDc1NTE4L3Bob3Rv/L2hhbnVtYW4tcmFt/YXlhbmEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUNVb3BE/UUY5aWJ1MkNCX1hK/ZDY2bTNwTWJfMk9n/Q2xlYy1fLXdGSU0t/LUk9" alt={product.productName} />
+              <Title>{product.productName}</Title>
+              <Description>{product.productDescriptionShort}</Description>
+            </Card>
+          ))}
+        </CarouselTrack>
       </CarouselWrapper>
     </CarouselContainer>
   );

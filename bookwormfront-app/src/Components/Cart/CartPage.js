@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Card, CardContent, CardActions, Button, TextField, Typography, Container, MenuItem, Select, FormControl, InputLabel, Box, Collapse } from '@mui/material';
 import { FaTrashAlt } from 'react-icons/fa';
 import { styled } from '@mui/system';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     transition: 'transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease',
@@ -66,6 +68,7 @@ const CartPage = () => {
             setProducts(productData);
         } catch (error) {
             setError(error);
+            toast.error('Failed to fetch cart details');
         }
     };
 
@@ -97,11 +100,8 @@ const CartPage = () => {
             }
             return response.json();
         })
-        .then(data => {
-            console.log('Updated successfully:', data);
-        })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            toast.error('Failed to update item');
         });
     };
 
@@ -120,9 +120,10 @@ const CartPage = () => {
                 throw new Error('Network response was not ok');
             }
             fetchCartDetails();
+            toast.success('Deleted successfully');
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            toast.error('Failed to delete item');
         });
     };
 
@@ -143,81 +144,100 @@ const CartPage = () => {
         };
     }, []);
 
+    const handleAdd = async (item, myShelfId, token) => {
+        try {
+            const expiryDate = item.transType === 'purchase' ? null : new Date();
+            if (expiryDate) expiryDate.setDate(expiryDate.getDate() + item.rentNoOfDays);
+    
+            const myShelfRequest = {
+                shelfId: myShelfId,
+                productId: item.productId.productId,
+                expiryDate: expiryDate,
+                tranType: item.transType
+            };
+    
+            const response = await fetch(`http://localhost:8080/api/myshelf/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(myShelfRequest),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to add product to shelf');
+            }
+    
+            toast.success(`Product ${item.productId.productName} added to shelf successfully`);
+        } catch (error) {
+            toast.error('Failed to add product to shelf');
+        }
+    };
+    
     const handleTransact = async () => {
         const token = sessionStorage.getItem('token');
         const email = sessionStorage.getItem('customerEmail');
+    
         try {
             const customerResponse = await fetch(`http://localhost:8080/api/customers/email/${email}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!customerResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
+    
+            if (!customerResponse.ok) throw new Error('Network response was not ok');
+    
             const customerData = await customerResponse.json();
             const customerId = customerData.customerid;
-
+    
             const shelfResponse = await fetch(`http://localhost:8080/api/myshelf/customer/${customerId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!shelfResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
+    
+            if (!shelfResponse.ok) throw new Error('Network response was not ok');
+    
             const shelfData = await shelfResponse.json();
             const myShelfId = shelfData.shelfId;
-
+    
             for (const item of cartDetails) {
                 if (!item.transType) {
-                    alert('Please select a transaction type for all items.');
+                    toast.warn('Please select a transaction type for all items.');
                     return;
                 }
-
-                await handleSave(item.cartDetailsId);
-
+    
                 const expiryDate = item.transType === 'purchase' ? null : new Date();
-                if (expiryDate) {
-                    expiryDate.setDate(expiryDate.getDate() + item.rentNoOfDays);
-                }
-
-                const myShelfRequest = {
-                    shelfId: myShelfId,
-                    productId: item.productId.productId,
-                    expiryDate: expiryDate,
-                    tranType: item.transType
-                };
-                fetch(`http://localhost:8080/api/myshelf/add`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(myShelfRequest),
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Product added to shelf successfully:', data);
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                if (expiryDate) expiryDate.setDate(expiryDate.getDate() + item.rentNoOfDays);
+    
+                // Check if the product is already in the shelf
+                const isProductInShelfResponse = await fetch(`http://localhost:8080/api/myshelf/${myShelfId}/product/${item.productId.productId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
+    
+                if (isProductInShelfResponse.status === 200) {  // If product is in shelf
+                    toast.error(`Product ${item.productId.productName} is already present in the shelf`);
+                } else if (isProductInShelfResponse.status === 404) {  // If product is NOT in shelf
+                    await handleAdd(item, myShelfId, token);
+                } else { // Unexpected response
+                    throw new Error('Unexpected response from the server');
+                }
             }
+    
+            // Checkout request
+            await fetch(`http://localhost:8080/api/cart-details/checkout/${customerId}`, {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+    
         } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
+            toast.error('There was a problem with the fetch operation');
         }
     };
+    
 
     if (error) return <div>Error: {error.message}</div>;
 
     return (
         <Container ref={containerRef}>
+            <ToastContainer />
             <Typography variant="h4" gutterBottom>
                 Your Cart
             </Typography>
@@ -263,6 +283,7 @@ const CartPage = () => {
                                             fullWidth
                                             margin="dense"
                                             onClick={(e) => e.stopPropagation()} // Prevent collapse on input change
+                                            inputProps={{ min: products[item.productId.productId].minRentDays, max: 365 }} // Add range
                                         />
                                         <TextField
                                             label="Rent Per Day"

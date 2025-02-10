@@ -3,8 +3,10 @@ package com.Project.BookWorm.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Project.BookWorm.Models.CartMaster;
+import com.Project.BookWorm.Models.CustomerMaster;
 import com.Project.BookWorm.Models.CartDetails;
 import com.Project.BookWorm.Repository.CartMasterRepository;
+import com.Project.BookWorm.Repository.CustomerMasterRepository;
 import com.Project.BookWorm.Repository.CartDetailsRepository;
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class CartMasterService {
 
     @Autowired
     private CartDetailsRepository cartDetailsRepository;
+
+    @Autowired
+    private CustomerMasterRepository customerRepository;
 
     // Get all carts
     public List<CartMaster> getAllCarts() {
@@ -47,5 +52,19 @@ public class CartMasterService {
         double totalCost = cartDetailsList.stream().mapToDouble(CartDetails::getOfferCost).sum();
         cartMaster.setCost(totalCost);
         cartMasterRepository.save(cartMaster); // Save the updated cost to the database
+    }
+
+    public void checkoutCart(int customerId) {
+        // Fetch the CartMaster object by cartId
+        CartMaster cartMaster = cartMasterRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        // Set the cart as inactive
+        cartMaster.setIsActive(false);
+        CartMaster updatedCartMaster = new CartMaster();
+        updatedCartMaster.setIsActive(true);
+        updatedCartMaster.setCost(0.0);
+        updatedCartMaster.setCustomerId(cartMaster.getCustomerId());
+        cartMasterRepository.save(updatedCartMaster);
     }
 }

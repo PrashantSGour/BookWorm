@@ -13,5 +13,8 @@ public interface MyShelfRepository extends JpaRepository<MyShelf, Integer> {
 	@Query(value = "SELECT * FROM my_shelf WHERE customer_id = :customerId", nativeQuery = true)
 	public MyShelf findByCustomerId(@Param("customerId") Integer customerId);
 
+	// @Query("SELECT COUNT(m) > 0 FROM MyShelf m WHERE m.shelfId = :shelfId AND m.productId.productId = :productId")
+	// public boolean existsByShelfIdAndProductId(@Param("shelfId") Long shelfId, @Param("productId") Long productId);
+
 
 }

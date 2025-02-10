@@ -32,6 +32,13 @@ public class MyShelfController {
         return myShelf != null ? new ResponseEntity<>(myShelf, HttpStatus.OK)
                                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    
+    @GetMapping("/{shelfId}/product/{productId}")
+    public ResponseEntity<?> checkProductInShelf(@PathVariable Integer shelfId, @PathVariable Integer productId) {
+        boolean exists = myShelfDetailsService.isProductInShelf(shelfId, productId);
+        return exists ? new ResponseEntity<>(HttpStatus.OK)
+                      : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     // Create a new MyShelf (automatically created when customer registers)
     @PostMapping

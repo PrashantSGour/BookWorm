@@ -5,6 +5,7 @@ import com.Project.BookWorm.Models.CustomerMaster;
 import com.Project.BookWorm.Models.MyShelf;
 import com.Project.BookWorm.Repository.CartMasterRepository;
 import com.Project.BookWorm.Repository.CustomerMasterRepository;
+import com.Project.BookWorm.Service.CartMasterService;
 import com.Project.BookWorm.Service.CustomerMasterService;
 import com.Project.BookWorm.Service.MyShelfService;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +25,9 @@ import java.util.Optional;
 public class CustomerController {
 
     private static final Logger logger = LogManager.getLogger(CustomerController.class);
+
+    @Autowired
+    private CartMasterService cartMasterService;
 
     @Autowired
     private CustomerMasterService customerMasterService;
@@ -89,11 +93,7 @@ public class CustomerController {
             logger.debug("Saved customer: {}", savedCustomer);
 
             // Create a cart for the registered customer
-            CartMaster cart = new CartMaster();
-            cart.setCustomerId(savedCustomer);  // Link cart to customer
-            cart.setCost(0.0);  // Initialize cost to 0
-            cartMasterRepository.save(cart);
-            logger.info("Cart created for customer ID: {}", savedCustomer.getCustomerid());
+            //cartMasterService.createNewCart(savedCustomer.getCustomerid());
 
             // Create a MyShelf for the registered customer
             MyShelf myShelf = new MyShelf();

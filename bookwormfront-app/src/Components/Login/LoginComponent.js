@@ -2,6 +2,8 @@ import { useState } from "react";
 import { TextField, Button, Box, Typography, Modal, Fade, Paper, Avatar, Grid, Link, Backdrop } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
@@ -55,8 +57,7 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
 
         const result = await response.json();
         console.log('Success:', result);
-        setModalMessage(result.message);
-        setModalOpen(true);
+        toast.success(result.message);
 
         if (result.status === "success") {
           sessionStorage.setItem('token', result.token);
@@ -68,14 +69,14 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
         }
       } catch (error) {
         console.error('Error:', error);
-        setModalMessage(`Error: ${error.message}`);
-        setModalOpen(true);
+        toast.error(`Error: ${error.message}`);
       }
     }
   };
 
   return (
     <Box sx={{ width: 500, p: 2 }}>
+      <ToastContainer />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <Grid item xs={12} component={Paper} elevation={6} square>
           <Box
@@ -146,25 +147,6 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
           </Box>
         </Grid>
       </Grid>
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Fade in={modalOpen}>
-          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 300, bgcolor: 'background.paper', border: 'none', boxShadow: 24, p: 4, borderRadius: 2 }}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              {modalMessage}
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal>
     </Box>
   );
 };
