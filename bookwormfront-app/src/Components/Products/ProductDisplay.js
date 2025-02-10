@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FaFilter } from "react-icons/fa"; // Import filter icon
 import { BsCartPlus } from "react-icons/bs"; // Import cart icon
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDisplay = ({ searchQuery }) => {
     const [products, setProducts] = useState([]);
@@ -22,7 +24,10 @@ const ProductDisplay = ({ searchQuery }) => {
                 setProducts(data);
                 setFilteredProducts(data);
             })
-            .catch(error => setError(error));
+            .catch(error => {
+                setError(error);
+                toast.error('Failed to fetch products');
+            });
     };
 
     useEffect(() => {
@@ -45,7 +50,10 @@ const ProductDisplay = ({ searchQuery }) => {
             })
                 .then(response => response.ok ? response.json() : Promise.reject('Network error'))
                 .then(data => setFilteredProducts(data))
-                .catch(error => setError(error));
+                .catch(error => {
+                    setError(error);
+                    toast.error('Failed to filter products');
+                });
         } else {
             setFilteredProducts(products);
         }
@@ -80,6 +88,7 @@ const ProductDisplay = ({ searchQuery }) => {
             return data.customerid;
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
+            toast.error('Failed to fetch customer ID');
             return null;
         }
     };
@@ -90,11 +99,22 @@ const ProductDisplay = ({ searchQuery }) => {
             console.error('Failed to fetch customer ID');
             return;
         }
+        const token = sessionStorage.getItem('token');
+
+        // Check if the product is already in the cart
+        const isProductInCartResponse = await fetch(`http://localhost:8080/api/cart-details/customer/${customerId}/product/${product.productId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (isProductInCartResponse.status === 200) {  // If product is in cart
+            toast.error(`Product ${product.productName} is already present in the cart`);
+            return;
+        }
 
         const quantity = 1; // Replace with the desired quantity
-        const rentNoOfDays = 7; // Replace with the desired rent number of days
-        const transType = "purchase"; // Replace with the desired transaction type
-        const token = sessionStorage.getItem('token');
+        const rentNoOfDays = 0; // Replace with the desired rent number of days
+        const transType = ""; // Replace with the desired transaction type
 
         fetch(`http://localhost:8080/api/cart-details/add`, {
             method: 'POST',
@@ -115,7 +135,7 @@ const ProductDisplay = ({ searchQuery }) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            alert("Product added to cart");
+            toast.success(`Product added to cart`);
             return response.json();
             
         })
@@ -124,11 +144,13 @@ const ProductDisplay = ({ searchQuery }) => {
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
+            toast.error('Failed to add product to cart');
         });
     };
 
     return (
         <div className="product-page">
+            <ToastContainer />
             <div className="filter-section">
                 {/* <h3><FaFilter /> Filters</h3> */}
                 <select onChange={(e) => setLanguageDesc(e.target.value)}>

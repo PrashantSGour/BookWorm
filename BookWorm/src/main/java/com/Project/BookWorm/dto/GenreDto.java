@@ -1,6 +1,6 @@
 package com.Project.BookWorm.dto;
 
-public record GenreDto (
+public record GenreDTO (
     String genreDesc,
 	Integer languageId
 ) {}    

@@ -1,13 +1,14 @@
 package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.CartDetails;
-import com.Project.BookWorm.Models.CartDetailsRequest;
 import com.Project.BookWorm.Models.CartMaster;
 import com.Project.BookWorm.Service.CartDetailsService;
 import com.Project.BookWorm.Service.CartMasterService;
+import com.Project.BookWorm.dto.CartDetailsRequestDTO;
 import com.Project.BookWorm.Repository.CartMasterRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class CartDetailsController {
 
     // Add product to a customer's cart
     @PostMapping("/add")
-    public ResponseEntity<CartDetails> addProductToCart(@RequestBody CartDetailsRequest cartDetailsRequest) {
+    public ResponseEntity<CartDetails> addProductToCart(@RequestBody CartDetailsRequestDTO cartDetailsRequest) {
 
         // Add product to the cart if cart_master exists
         CartDetails cartDetails = cartDetailsService.addProductToCart(
@@ -79,6 +81,18 @@ public class CartDetailsController {
         return new ResponseEntity<>(cartDetails, HttpStatus.OK);
     }
 
+    // Check if product is in cart
+    @GetMapping("/customer/{customerId}/product/{productId}")
+    public ResponseEntity<Void> isProductInCart(@PathVariable int customerId, @PathVariable int productId) {
+        Optional<CartMaster> cartMasterOptional = cartMasterRepository.findByCustomerIdAndIsActive(customerId);
+        if (!cartMasterOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<CartDetails> cartDetails = cartDetailsService.getCartDetailsByCartId(cartMasterOptional.get().getCartId());
+        boolean productInCart = cartDetails.stream().anyMatch(cd -> cd.getProductId().getProductId() == productId);
+        return productInCart ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     // Update cart details
     @PatchMapping("/{id}")
     public ResponseEntity<CartDetails> updateCartDetails(@RequestBody CartDetails updatedCartDetailsRequest) {
@@ -104,5 +118,11 @@ public class CartDetailsController {
         cartDetailsService.deleteCartDetails(id);
         logger.info("Deleted cart details for ID: {}", id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/checkout/{customerId}")
+    public ResponseEntity<Void> checkoutCart(@Param("customerId") int customerId) {
+        cartMasterService.checkoutCart(customerId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

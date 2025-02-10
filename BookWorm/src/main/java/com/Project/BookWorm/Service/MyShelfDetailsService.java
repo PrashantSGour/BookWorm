@@ -70,4 +70,9 @@ public class MyShelfDetailsService {
     public void deleteMyShelfDetails(Integer shelfDetailId) {
         myShelfDetailsRepository.deleteById(shelfDetailId);
     }
+
+    public boolean isProductInShelf(Integer shelfId, Integer productId) {
+        return myShelfDetailsRepository.existsByShelfIdShelfIdAndProductIdProductId(shelfId, productId);
+    }
+
 }

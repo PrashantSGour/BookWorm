@@ -78,4 +78,5 @@ public class CartDetailsService {
     public void deleteCartDetails(int id) {
         cartDetailsRepository.deleteById(id);
     }
+
 }

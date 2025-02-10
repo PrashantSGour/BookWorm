@@ -5,6 +5,8 @@ import com.Project.BookWorm.Models.MyShelf;
 import com.Project.BookWorm.Repository.MyShelfRepository;
 
 import com.Project.BookWorm.Repository.CustomerMasterRepository;
+import com.Project.BookWorm.Repository.MyShelfDetailsRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ public class MyShelfService {
 
     @Autowired
     private MyShelfRepository myShelfRepository;
+
+    @Autowired
+    private MyShelfDetailsRepository myShelfDetailsRepository;
 
     @Autowired
     private CustomerMasterRepository customerMasterRepository;
@@ -49,4 +54,7 @@ public class MyShelfService {
     public void deleteMyShelf(Integer shelfId) {
         myShelfRepository.deleteById(shelfId);
     }
+	public boolean isProductInShelf(Long shelfId, Long productId) {
+	    return myShelfDetailsRepository.existsByShelfIdShelfIdAndProductIdProductId(shelfId, productId);
+	}
 }

@@ -14,5 +14,5 @@ public interface CartMasterRepository extends JpaRepository<CartMaster, Integer>
     Optional<CartMaster> findByCustomerId(int customerId);
 
     @Query(value = "SELECT * FROM cart_master WHERE customer_id = :customerId AND is_active = true", nativeQuery = true)
-    Optional<CartMaster> findByCustomerIdAndIsActive(@Param("customerId") int customerId);
+    Optional<CartMaster> findByCustomerIdAndIsActive(@Param("customerId") Integer customerId);
 }
