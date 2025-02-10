@@ -1,10 +1,10 @@
 package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.CartDetails;
-import com.Project.BookWorm.Models.CartDetailsRequest;
 import com.Project.BookWorm.Models.CartMaster;
 import com.Project.BookWorm.Service.CartDetailsService;
 import com.Project.BookWorm.Service.CartMasterService;
+import com.Project.BookWorm.dto.CartDetailsRequestDTO;
 import com.Project.BookWorm.Repository.CartMasterRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class CartDetailsController {
 
     // Add product to a customer's cart
     @PostMapping("/add")
-    public ResponseEntity<CartDetails> addProductToCart(@RequestBody CartDetailsRequest cartDetailsRequest) {
+    public ResponseEntity<CartDetails> addProductToCart(@RequestBody CartDetailsRequestDTO cartDetailsRequest) {
 
         // Add product to the cart if cart_master exists
         CartDetails cartDetails = cartDetailsService.addProductToCart(

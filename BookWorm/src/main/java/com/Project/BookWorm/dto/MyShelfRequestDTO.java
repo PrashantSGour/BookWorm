@@ -1,8 +1,8 @@
-package com.Project.BookWorm.Models;
+package com.Project.BookWorm.dto;
 
 import java.util.Date;
 
-public class MyShelfRequest {
+public class MyShelfRequestDTO {
     private int shelfId;
     private int productId;
     private Date expiryDate;

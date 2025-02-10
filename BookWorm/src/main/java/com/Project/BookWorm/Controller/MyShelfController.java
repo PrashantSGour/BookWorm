@@ -2,8 +2,8 @@ package com.Project.BookWorm.Controller;
 
 import com.Project.BookWorm.Models.MyShelf;
 import com.Project.BookWorm.Models.MyShelfDetails;
-import com.Project.BookWorm.Models.MyShelfRequest;
 import com.Project.BookWorm.Service.MyShelfService;
+import com.Project.BookWorm.dto.MyShelfRequestDTO;
 import com.Project.BookWorm.Service.MyShelfDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class MyShelfController {
 
     // Add product to shelf (create a MyShelfDetails record)
     @PostMapping("/add")
-    public ResponseEntity<MyShelfDetails> addProductToShelf(@RequestBody MyShelfRequest myShelfRequest) {
+    public ResponseEntity<MyShelfDetails> addProductToShelf(@RequestBody MyShelfRequestDTO myShelfRequest) {
         MyShelfDetails myShelfDetails = myShelfDetailsService.addProductToShelf(
             myShelfRequest.getShelfId(),
             myShelfRequest.getProductId(),
