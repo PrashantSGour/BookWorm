@@ -6,10 +6,11 @@ import lombok.Data;
 @Entity
 @Data
 public class CartMaster {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private Integer cartId;
+    private int cartId;
     
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -20,20 +21,20 @@ public class CartMaster {
 
     private Double cost; // Moved this line above the getters/setters to fix the syntax error
 
-    public Integer getCartId() {
+    public int getCartId() {
         return cartId;
     }
 
-    public void setCartId(Integer cartId) {
+    public void setCartId(int cartId) {
         this.cartId = cartId;
     }
 
-    public CustomerMaster getCustomerId() {
+    public CustomerMaster getCustomer() {
         return customerId;
     }
 
-    public void setCustomerId(CustomerMaster customerId) {
-        this.customerId = customerId;
+    public void setCustomer(CustomerMaster customer) {
+        this.customerId = customer;
     }
 
     public Boolean getIsActive() {
@@ -51,4 +52,5 @@ public class CartMaster {
 	public void setCost(Double cost) {
 		this.cost = cost;
 	}
+
 }

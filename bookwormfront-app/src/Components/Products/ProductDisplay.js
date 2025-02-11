@@ -156,23 +156,22 @@ const ProductDisplay = ({ searchQuery }) => {
                 <select onChange={(e) => setLanguageDesc(e.target.value)}>
                     <option value="">Language</option>
                     <option value="English">English</option>
-                    <option value="Hindi">Spanish</option>
+                    <option value="Hindi">Hindi</option>
                     <option value="French">French</option>
                     <option value="Marathi">Marathi</option>
                 </select>
                 <select onChange={(e) => setproductType(e.target.value)}>
                     <option value="">Type</option>
-                    <option value="E-Books">E-Books</option>
-                    <option value="Audio Books">Audio Books</option>
+                    <option value="eBook">E-Books</option>
+                    <option value="eComic">E-Comics</option>
+                    <option value="AudioBook">Audio Books</option>
                     <option value="Videos">Videos</option>
                 </select>
                 <select onChange={(e) => setGenreDesc(e.target.value)}>
                     <option value="">Genre</option>
                     <option value="action">Action</option>
-                    <option value="Science Fiction">Science Fiction</option>
-                    <option value="Non-fiction">Non-fiction</option>
-                    <option value="Mystery">Mystery</option>
-                    <option value="Fiction">Fiction</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Comedy">Comedy</option>
                     <option value="Fantasy">Fantasy</option>
                 </select>
             </div>
@@ -180,7 +179,7 @@ const ProductDisplay = ({ searchQuery }) => {
             <div className="grid-container">
                 {filteredProducts.map(product => (
                     <div key={product.id} className="product-card">
-                        <img src="https://imgs.search.brave.com/fQFeRg-OtzjHLG6UXvP2pkejFD634-A3HiMYb94D9iQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjA4/MDc1NTE4L3Bob3Rv/L2hhbnVtYW4tcmFt/YXlhbmEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUNVb3BE/UUY5aWJ1MkNCX1hK/ZDY2bTNwTWJfMk9n/Q2xlYy1fLXdGSU0t/LUk9" alt={product.productName} />
+                        <img src={product.imgSrc} alt={product.productName} onError={(e) => e.target.src='default-image.jpg'} />
                         <h2>{product.productName}</h2>
                         <p className="description">{product.productDescriptionShort}</p>
                         <p className="author">By {product.productAuthor}</p>

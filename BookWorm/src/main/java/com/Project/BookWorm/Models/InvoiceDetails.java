@@ -45,12 +45,22 @@ public class InvoiceDetails {
 		this.quantity = quantity;
 	}
 
-	public Double getBasePrice() {
-		return basePrice;
+	public Double getSellPrice() {
+		return sellPrice;
 	}
 
-	public void setBasePrice(Double basePrice) {
-		this.basePrice = basePrice;
+	public void setSellPrice(Double basePrice) {
+		this.sellPrice = basePrice;
+	}
+	
+	
+
+	public Double getRoyaltyAmount() {
+		return royaltyAmount;
+	}
+
+	public void setRoyaltyAmount(Double royalityAmount) {
+		this.royaltyAmount = royalityAmount;
 	}
 
 	public String getTranType() {
@@ -82,7 +92,10 @@ public class InvoiceDetails {
     private int quantity;
 
     @Column(nullable = true)
-    private Double basePrice;
+    private Double sellPrice;
+    
+    @Column(nullable = true)
+    private Double royaltyAmount;
 
     @Column(nullable = true)
     private String tranType;

@@ -19,8 +19,19 @@ public class ProductMaster {
 
     @Column(nullable = true)
     private String productEnglishName;
+    
+    @Column(nullable = true)
+    private String imgSrc;
 
-    public int getProductId() {
+    public String getImgSrc() {
+		return imgSrc;
+	}
+
+	public void setImgSrc(String imgSrc) {
+		this.imgSrc = imgSrc;
+	}
+
+	public int getProductId() {
 		return productId;
 	}
 

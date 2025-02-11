@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { TextField, Button, Box, Typography, Modal, Grid, Fade, Paper, Avatar, Link, Backdrop } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const RegistrationForm = ({ onClose, onLoginOpen }) => {
   const [formData, setFormData] = useState({
@@ -21,6 +19,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
   const [modalMessage, setModalMessage] = useState("");
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [otp, setOtp] = useState("");
+  const [otpMessage, setOtpMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const { otpVerified, formData: locationFormData } = location.state || {};
@@ -98,10 +97,12 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
 
         const result = await response.json();
         console.log('OTP sent:', result);
+        setOtpMessage('OTP sent to your email. Please enter the OTP to complete registration.');
         setOtpModalOpen(true);
       } catch (error) {
         console.error('Error:', error);
-        toast.error(`Error: ${error.message}`);
+        setModalMessage(`Error: ${error.message}`);
+        setModalOpen(true);
       }
     }
   };
@@ -125,14 +126,17 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
       console.log('OTP verification:', result);
 
       if (result.message === "OTP verified successfully") {
-        handleFinalSubmit();
-        setOtpModalOpen(false);
+        setOtpMessage('OTP verified successfully. Registration complete.');
+        setTimeout(() => {
+          setOtpModalOpen(false);
+          handleFinalSubmit();
+        }, 2000);
       } else {
-        toast.error(result.message);
+        setOtpMessage('Invalid OTP. Please try again.');
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error(`Error: ${error.message}`);
+      setOtpMessage('OTP verification failed');
     }
   };
 
@@ -156,19 +160,21 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
 
       const registerResult = await registerResponse.json();
       console.log('Success:', registerResult);
-      toast.success("User registered successfully");
+      setModalMessage("User registered successfully");
+      setModalOpen(true);
       setTimeout(() => {
+        setModalOpen(false);
         navigate("/");
       }, 2000);
     } catch (error) {
       console.error('Error:', error);
-      toast.error(`Error: ${error.message}`);
+      setModalMessage(`Error: ${error.message}`);
+      setModalOpen(true);
     }
   };
 
   return (
     <Box sx={{ width: 600, p: 2 }}>
-      <ToastContainer />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <Grid item xs={12} component={Paper} elevation={6} square>
           <Box
@@ -313,7 +319,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
               OTP Verification
             </Typography>
             <Typography sx={{ mt: 2 }}>
-              An OTP was sent to your registered email. Please enter the OTP below to complete your registration.
+              {otpMessage}
             </Typography>
             <form onSubmit={handleOtpSubmit}>
               <TextField

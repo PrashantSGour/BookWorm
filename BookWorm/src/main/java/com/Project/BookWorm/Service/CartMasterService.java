@@ -54,17 +54,23 @@ public class CartMasterService {
         cartMasterRepository.save(cartMaster); // Save the updated cost to the database
     }
 
-    public void checkoutCart(int customerId) {
-        // Fetch the CartMaster object by cartId
-        CartMaster cartMaster = cartMasterRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+    public void checkoutCart(long customerId) {
+        // Fetch the active CartMaster object by customerId
+        CartMaster cartMaster = cartMasterRepository.findByCustomerIdAndIsActive(customerId)
+                .orElseThrow(() -> new RuntimeException("Active cart not found for customer"));
 
         // Set the cart as inactive
         cartMaster.setIsActive(false);
-        CartMaster updatedCartMaster = new CartMaster();
-        updatedCartMaster.setIsActive(true);
-        updatedCartMaster.setCost(0.0);
-        updatedCartMaster.setCustomerId(cartMaster.getCustomerId());
-        cartMasterRepository.save(updatedCartMaster);
+        cartMasterRepository.save(cartMaster);
+
+        // Create a new active cart for the customer
+        CartMaster newCartMaster = new CartMaster();
+        newCartMaster.setIsActive(true);
+        newCartMaster.setCost(0.0);
+        Optional<CustomerMaster> customertemp=customerRepository.findById(customerId);  
+        if(customertemp.isPresent())
+        	newCartMaster.setCustomer(customertemp.get());
+        cartMasterRepository.save(newCartMaster);
     }
+
 }
