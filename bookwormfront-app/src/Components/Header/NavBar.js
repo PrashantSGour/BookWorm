@@ -76,6 +76,13 @@ function NavBar({ onSearch }) {
     }
   };
 
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <Navbar expand="lg" className="navbar-container" style={{ zIndex: 1200 }}>
@@ -90,8 +97,8 @@ function NavBar({ onSearch }) {
 
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
-              <Nav.Link as={Link} to="/contactus">Contact Us</Nav.Link>
+              <Nav.Link onClick={() => scrollToSection('aboutus')}>About Us</Nav.Link>
+              <Nav.Link onClick={() => scrollToSection('contactus')}>Contact Us</Nav.Link>
               {/* Add other Nav links here */}
             </Nav>
             {/* <div className="search-container mx-auto">

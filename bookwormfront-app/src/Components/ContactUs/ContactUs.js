@@ -17,7 +17,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="contact-container">
+    <div className="contact-container" id="contactus">
       <h2>Contact Us</h2>
       <p>We'd love to hear from you! Reach out with any questions, feedback, or support requests.</p>
 

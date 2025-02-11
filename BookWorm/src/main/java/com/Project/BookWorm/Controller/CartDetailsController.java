@@ -51,7 +51,7 @@ public class CartDetailsController {
         logger.info("Product added to cart: " + cartDetails);
 
         // Update the cart cost
-        cartMasterService.updateCartCost(cartMasterRepository.findByCustomerId(cartDetailsRequest.getCustomerId()).get());
+        cartMasterService.updateCartCost(cartMasterRepository.findByCustomerIdAndIsActive(cartDetailsRequest.getCustomerId()).get());
 
         return new ResponseEntity<>(cartDetails, HttpStatus.CREATED);
     }
@@ -83,7 +83,7 @@ public class CartDetailsController {
 
     // Check if product is in cart
     @GetMapping("/customer/{customerId}/product/{productId}")
-    public ResponseEntity<Void> isProductInCart(@PathVariable int customerId, @PathVariable int productId) {
+    public ResponseEntity<Void> isProductInCart(@PathVariable Integer customerId, @PathVariable int productId) {
         Optional<CartMaster> cartMasterOptional = cartMasterRepository.findByCustomerIdAndIsActive(customerId);
         if (!cartMasterOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -120,8 +120,8 @@ public class CartDetailsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/checkout/{customerId}")
-    public ResponseEntity<Void> checkoutCart(@Param("customerId") int customerId) {
+    @PostMapping("/checkout")
+    public ResponseEntity<Void> checkoutCart(@RequestBody Long customerId) {
         cartMasterService.checkoutCart(customerId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

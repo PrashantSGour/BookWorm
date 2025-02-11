@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardActions, Button, TextField, Typography, Container, MenuItem, Select, FormControl, InputLabel, Box, Collapse } from '@mui/material';
 import { FaTrashAlt } from 'react-icons/fa';
 import { styled } from '@mui/system';
@@ -7,8 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const StyledCard = styled(Card)(({ theme }) => ({
     transition: 'transform 0.3s ease, box-shadow 0.3s ease, height 0.3s ease',
-    height: '200px', // Initial height to display name and description
-    width: '100%', // Ensure cards take full width in their container
+    height: 'fit-content', // Initial height to display name and description
+    width: 'fit-content', // Ensure cards take full width in their container
     maxWidth: '300px', // Set a max width for the cards
     margin: '10px', // Add margin between cards
     '&:hover': {
@@ -23,6 +24,17 @@ const CartPage = () => {
     const [expandedCard, setExpandedCard] = useState(null);
     const [error, setError] = useState(null);
     const containerRef = useRef(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            toast.warning('Please login to access this page');
+            navigate('/');
+        } else {
+            fetchCartDetails();
+        }
+    }, []);
 
     const fetchCartDetails = async () => {
         try {
@@ -72,10 +84,6 @@ const CartPage = () => {
         }
     };
 
-    useEffect(() => {
-        fetchCartDetails();
-    }, []);
-
     const handleUpdate = (id, field, value) => {
         setCartDetails(cartDetails.map(item => item.cartDetailsId === id ? { ...item, [field]: value } : item));
     };
@@ -84,6 +92,7 @@ const CartPage = () => {
         const updatedItem = cartDetails.find(item => item.cartDetailsId === id);
         updatedItem.transType === 'purchase' ? updatedItem.rentNoOfDays = 0 : updatedItem.rentNoOfDays = updatedItem.rentNoOfDays;
         updatedItem.isRented = updatedItem.transType === 'rent';
+        updatedItem.offerCost = updatedItem.transType === 'rent' ? updatedItem.rentNoOfDays * products[updatedItem.productId.productId].rentPerDay : updatedItem.offerCost;
         
         const token = sessionStorage.getItem('token');
         await fetch(`http://localhost:8080/api/cart-details/${id}`, {
@@ -188,7 +197,6 @@ const CartPage = () => {
     
             const customerData = await customerResponse.json();
             const customerId = customerData.customerid;
-    
             const shelfResponse = await fetch(`http://localhost:8080/api/myshelf/customer/${customerId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -197,6 +205,7 @@ const CartPage = () => {
     
             const shelfData = await shelfResponse.json();
             const myShelfId = shelfData.shelfId;
+            const currentCartId = cartDetails[0].cartId.cartId;
     
             for (const item of cartDetails) {
                 if (!item.transType) {
@@ -215,43 +224,81 @@ const CartPage = () => {
                 if (isProductInShelfResponse.status === 200) {  // If product is in shelf
                     toast.error(`Product ${item.productId.productName} is already present in the shelf`);
                 } else if (isProductInShelfResponse.status === 404) {  // If product is NOT in shelf
+                    handleSave(item.cartDetailsId);
                     await handleAdd(item, myShelfId, token);
                 } else { // Unexpected response
                     throw new Error('Unexpected response from the server');
                 }
             }
-    
-            // Checkout request
-            await fetch(`http://localhost:8080/api/cart-details/checkout/${customerId}`, {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-    
+
+            // Call the checkout function
+            await checkout(customerId, token, currentCartId);
+            
         } catch (error) {
             toast.error('There was a problem with the fetch operation');
         }
     };
-    
+
+    const checkout = async (customerId, token, cartId) => {
+        try {
+            // Checkout request
+            await fetch(`http://localhost:8080/api/cart-details/checkout`, {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerId)
+            });
+
+            // Create invoice request
+            await fetch(`http://localhost:8080/invoices`, {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ customerId, cartId })
+            });
+
+            toast.success('Checkout successful');
+            fetchCartDetails(); // Re-fetch cart details to re-render the page
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            toast.error('Failed to checkout');
+        }
+    };
 
     if (error) return <div>Error: {error.message}</div>;
 
     return (
         <Container ref={containerRef}>
             <ToastContainer />
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom align="center">
                 Your Cart
             </Typography>
             <Box display="flex" justifyContent="center" marginBottom="20px" >
-                <Button variant="contained" color="primary" onClick={handleTransact}>
-                    Transact
-                </Button>
+                {cartDetails.length > 0 ? (
+                    <Button variant="contained" color="primary" onClick={handleTransact}>
+                        Check Out
+                    </Button>
+                ) : (
+                    <Typography variant="h6" gutterBottom align="center">
+                        Your cart is empty
+                    </Typography>
+                )}
             </Box>
             <Box display="flex" flexWrap="wrap" justifyContent="center">
                 {cartDetails.map(item => (
                     <StyledCard key={item.cartDetailsId} onClick={() => handleExpandClick(item.cartDetailsId)} style={{ height: expandedCard === item.cartDetailsId ? 'auto' : '280px' }}>
                         <CardContent>
                             <Box display="flex" justifyContent="center">
-                                <img src="https://imgs.search.brave.com/fQFeRg-OtzjHLG6UXvP2pkejFD634-A3HiMYb94D9iQ/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvNjA4/MDc1NTE4L3Bob3Rv/L2hhbnVtYW4tcmFt/YXlhbmEuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPUNVb3BE/UUY5aWJ1MkNCX1hK/ZDY2bTNwTWJfMk9n/Q2xlYy1fLXdGSU0t/LUk9" alt={item.productId.productName || 'Loading...'} style={{ maxWidth: '100%', height: 'auto' }} />
+                            <img 
+                                src={products[item.productId.productId]?.imgSrc || 'default-image.jpg'} 
+                                alt={products[item.productId.productId]?.productName || 'Product Image'} 
+                                onError={(e) => e.target.src = 'default-image.jpg'} 
+                                style={{ maxWidth: '100%', height: 'auto' }} 
+                            />
                             </Box>
                             <Typography variant="h6" gutterBottom align="center" fontWeight="bold">
                                 {item.productId.productName || 'Loading...'}
@@ -301,7 +348,7 @@ const CartPage = () => {
                                 <TextField
                                     label="Total Price"
                                     type="number"
-                                    value={item.transType === 'rent' ? item.rentNoOfDays * products[item.productId.productId].rentPerDay : item.offerCost || 0}
+                                    value={item.transType === 'rent' ? item.rentNoOfDays * products[item.productId.productId].rentPerDay : item.transType === 'purchase' ? item.offerCost || 0 : 0.0}
                                     fullWidth
                                     margin="dense"
                                     InputProps={{
