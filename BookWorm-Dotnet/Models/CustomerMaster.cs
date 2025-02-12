@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using BookWorm_Dotnet.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-
-namespace BookWorm_Dotnet.Models;
+using System.ComponentModel.DataAnnotations;
 
 [Table("customer_master")]
-[Index("Customeremail", Name = "UK8g722plphbq8gh7lih8ua6ada", IsUnique = true)]
 public partial class CustomerMaster
 {
     [Key]
@@ -39,15 +34,16 @@ public partial class CustomerMaster
     [StringLength(255)]
     public string? Phonenumber { get; set; }
 
+    // ✅ Make these properties optional by setting `?`
     [InverseProperty("Customer")]
-    public virtual ICollection<CartMaster> CartMasters { get; set; } = new List<CartMaster>();
+    public virtual ICollection<CartMaster>? CartMasters { get; set; } = new List<CartMaster>();
 
     [InverseProperty("Customer")]
-    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public virtual ICollection<Invoice>? Invoices { get; set; } = new List<Invoice>();
 
     [InverseProperty("Customer")]
     public virtual MyShelf? MyShelf { get; set; }
 
     [InverseProperty("Customer")]
-    public virtual ICollection<RentDetail> RentDetails { get; set; } = new List<RentDetail>();
+    public virtual ICollection<RentDetail>? RentDetails { get; set; } = new List<RentDetail>();
 }

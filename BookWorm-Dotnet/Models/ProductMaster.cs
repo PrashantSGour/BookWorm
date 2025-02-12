@@ -79,33 +79,33 @@ public partial class ProductMaster
     public string? ImgSrc { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
+    public virtual ICollection<CartDetail>? CartDetails { get; set; } 
 
     [ForeignKey("GenreId")]
     [InverseProperty("ProductMasters")]
     public virtual GenreMaster? Genre { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; } = new List<InvoiceDetail>();
+    public virtual ICollection<InvoiceDetail>? InvoiceDetails { get; set; } 
 
     [ForeignKey("LanguageId")]
     [InverseProperty("ProductMasters")]
     public virtual LanguageMaster? Language { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<MyShelfDetail> MyShelfDetails { get; set; } = new List<MyShelfDetail>();
+    public virtual ICollection<MyShelfDetail>? MyShelfDetails { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<ProductArribute> ProductArributes { get; set; } = new List<ProductArribute>();
+    public virtual ICollection<ProductArribute>? ProductArributes { get; set; } 
 
     [InverseProperty("Product")]
-    public virtual ICollection<ProductBeneficiary> ProductBeneficiaries { get; set; } = new List<ProductBeneficiary>();
+    public virtual ICollection<ProductBeneficiary>? ProductBeneficiaries { get; set; } 
 
     [InverseProperty("Product")]
-    public virtual ICollection<RentDetail> RentDetails { get; set; } = new List<RentDetail>();
+    public virtual ICollection<RentDetail>? RentDetails { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<RoyaltyCalculation> RoyaltyCalculations { get; set; } = new List<RoyaltyCalculation>();
+    public virtual ICollection<RoyaltyCalculation>? RoyaltyCalculations { get; set; } 
 
     [ForeignKey("TypeId")]
     [InverseProperty("ProductMasters")]

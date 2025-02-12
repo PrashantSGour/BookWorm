@@ -2,6 +2,7 @@
 using BookWorm_Dotnet.Repository;
 using BookWorm_Dotnet.Services;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace BookWorm_Dotnet.ServicesImpl
 {
@@ -14,6 +15,8 @@ namespace BookWorm_Dotnet.ServicesImpl
         }
         public async Task<CustomerMaster> AddCustomerAsync(CustomerMaster customer)
         {
+            customer.Customerpassword = BCrypt.Net.BCrypt.HashPassword(customer.Customerpassword);
+
             _dbContext.CustomerMasters.Add(customer);
             await _dbContext.SaveChangesAsync();
             return customer;
@@ -47,9 +50,26 @@ namespace BookWorm_Dotnet.ServicesImpl
             return await _dbContext.CustomerMasters.FindAsync(customer.CustomerId);
         }
 
-        public async Task<CustomerMaster> GetCustomerByEmailAsync(string  email)
+        public async Task<CustomerMaster?> GetCustomerByEmailAsync(string  email)
         {
+            return await _dbContext.CustomerMasters.FirstOrDefaultAsync(c=>c.Customeremail == email);
+        }
 
+        public async Task<CustomerMaster?> GetCustomerByEmailAndPasswordAsync(string email, string password)
+        {
+            var customer = await _dbContext.CustomerMasters
+                    .FirstOrDefaultAsync(c => c.Customeremail == email);
+
+            if (customer == null || !VerifyPassword(password, customer.Customerpassword))
+            {
+                return null;
+            }
+
+            return customer;
+        }
+        private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(enteredPassword, storedHashedPassword);
         }
     }
 }

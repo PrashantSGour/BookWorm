@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BookWorm_Dotnet.DTOs;
 using BookWorm_Dotnet.Models;
 
 namespace BookWorm_Dotnet.Services
@@ -12,5 +13,9 @@ namespace BookWorm_Dotnet.Services
         Task<ProductMaster> AddProductAsync(ProductMaster product);
         Task<ProductMaster?> UpdateProductAsync(ProductMaster product);
         Task<bool> DeleteProductAsync(int productId);
+        public Task<IEnumerable<ProductMaster>> AddProductsInBulk(List<ProductMaster> products);
+        public Task<List<FilteredProductsDTO>> GetFilteredProducts(string? genreDesc, string? languageDesc, string? productType);
+
+
     }
 }

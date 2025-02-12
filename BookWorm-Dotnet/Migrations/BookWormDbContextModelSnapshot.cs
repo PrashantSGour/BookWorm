@@ -166,54 +166,6 @@ namespace BookWorm_Dotnet.Migrations
                     b.ToTable("cart_master");
                 });
 
-            modelBuilder.Entity("BookWorm_Dotnet.Models.CustomerMaster", b =>
-                {
-                    b.Property<long>("CustomerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("customer_id");
-
-                    b.Property<int?>("Age")
-                        .HasColumnType("int")
-                        .HasColumnName("age");
-
-                    b.Property<string>("Customeremail")
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("customeremail");
-
-                    b.Property<string>("Customername")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("customername");
-
-                    b.Property<string>("Customerpassword")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("customerpassword");
-
-                    b.Property<DateOnly?>("Dob")
-                        .HasColumnType("date")
-                        .HasColumnName("dob");
-
-                    b.Property<string>("Pan")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("pan");
-
-                    b.Property<string>("Phonenumber")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("phonenumber");
-
-                    b.HasKey("CustomerId")
-                        .HasName("PRIMARY");
-
-                    b.HasIndex(new[] { "Customeremail" }, "UK8g722plphbq8gh7lih8ua6ada")
-                        .IsUnique();
-
-                    b.ToTable("customer_master");
-                });
-
             modelBuilder.Entity("BookWorm_Dotnet.Models.GenreMaster", b =>
                 {
                     b.Property<int>("GenreId")
@@ -687,6 +639,73 @@ namespace BookWorm_Dotnet.Migrations
                     b.ToTable("royalty_calculation");
                 });
 
+            modelBuilder.Entity("CustomerMaster", b =>
+                {
+                    b.Property<long>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("customer_id");
+
+                    b.Property<int?>("Age")
+                        .HasColumnType("int")
+                        .HasColumnName("age");
+
+                    b.Property<string>("Customeremail")
+                        .HasColumnType("longtext")
+                        .HasColumnName("customeremail");
+
+                    b.Property<string>("Customername")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("customername");
+
+                    b.Property<string>("Customerpassword")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("customerpassword");
+
+                    b.Property<DateOnly?>("Dob")
+                        .HasColumnType("date")
+                        .HasColumnName("dob");
+
+                    b.Property<string>("Pan")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("pan");
+
+                    b.Property<string>("Phonenumber")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("phonenumber");
+
+                    b.HasKey("CustomerId")
+                        .HasName("PRIMARY");
+
+                    b.ToTable("customer_master");
+                });
+
+            modelBuilder.Entity("UserActivityLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserActivityLogs");
+                });
+
             modelBuilder.Entity("BookWorm_Dotnet.Models.CartDetail", b =>
                 {
                     b.HasOne("BookWorm_Dotnet.Models.CartMaster", "Cart")
@@ -706,7 +725,7 @@ namespace BookWorm_Dotnet.Migrations
 
             modelBuilder.Entity("BookWorm_Dotnet.Models.CartMaster", b =>
                 {
-                    b.HasOne("BookWorm_Dotnet.Models.CustomerMaster", "Customer")
+                    b.HasOne("CustomerMaster", "Customer")
                         .WithMany("CartMasters")
                         .HasForeignKey("CustomerId")
                         .HasConstraintName("FK44sbajofqx6cngygmmwui5igc");
@@ -721,7 +740,7 @@ namespace BookWorm_Dotnet.Migrations
                         .HasForeignKey("CartId")
                         .HasConstraintName("FK74rjp8604l111tb50mbg1ubbd");
 
-                    b.HasOne("BookWorm_Dotnet.Models.CustomerMaster", "Customer")
+                    b.HasOne("CustomerMaster", "Customer")
                         .WithMany("Invoices")
                         .HasForeignKey("CustomerId")
                         .HasConstraintName("FKk9j7m0iwl2u5ccibh3piocfj");
@@ -750,7 +769,7 @@ namespace BookWorm_Dotnet.Migrations
 
             modelBuilder.Entity("BookWorm_Dotnet.Models.MyShelf", b =>
                 {
-                    b.HasOne("BookWorm_Dotnet.Models.CustomerMaster", "Customer")
+                    b.HasOne("CustomerMaster", "Customer")
                         .WithOne("MyShelf")
                         .HasForeignKey("BookWorm_Dotnet.Models.MyShelf", "CustomerId")
                         .IsRequired()
@@ -845,7 +864,7 @@ namespace BookWorm_Dotnet.Migrations
 
             modelBuilder.Entity("BookWorm_Dotnet.Models.RentDetail", b =>
                 {
-                    b.HasOne("BookWorm_Dotnet.Models.CustomerMaster", "Customer")
+                    b.HasOne("CustomerMaster", "Customer")
                         .WithMany("RentDetails")
                         .HasForeignKey("CustomerId")
                         .IsRequired()
@@ -908,17 +927,6 @@ namespace BookWorm_Dotnet.Migrations
                     b.Navigation("Invoices");
                 });
 
-            modelBuilder.Entity("BookWorm_Dotnet.Models.CustomerMaster", b =>
-                {
-                    b.Navigation("CartMasters");
-
-                    b.Navigation("Invoices");
-
-                    b.Navigation("MyShelf");
-
-                    b.Navigation("RentDetails");
-                });
-
             modelBuilder.Entity("BookWorm_Dotnet.Models.GenreMaster", b =>
                 {
                     b.Navigation("ProductMasters");
@@ -966,6 +974,17 @@ namespace BookWorm_Dotnet.Migrations
             modelBuilder.Entity("BookWorm_Dotnet.Models.RentDetail", b =>
                 {
                     b.Navigation("MyShelfDetails");
+                });
+
+            modelBuilder.Entity("CustomerMaster", b =>
+                {
+                    b.Navigation("CartMasters");
+
+                    b.Navigation("Invoices");
+
+                    b.Navigation("MyShelf");
+
+                    b.Navigation("RentDetails");
                 });
 #pragma warning restore 612, 618
         }
