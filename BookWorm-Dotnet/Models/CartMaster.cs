@@ -24,12 +24,12 @@ public partial class CartMaster
     public long? CustomerId { get; set; }
 
     [InverseProperty("Cart")]
-    public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
+    public virtual ICollection<CartDetail> CartDetails { get; set; }
 
     [ForeignKey("CustomerId")]
     [InverseProperty("CartMasters")]
     public virtual CustomerMaster? Customer { get; set; }
 
     [InverseProperty("Cart")]
-    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+    public virtual ICollection<Invoice> Invoices { get; set; }
 }

@@ -14,6 +14,8 @@ public partial class BookWormDbContext : DbContext
     {
     }
 
+    public DbSet<UserActivityLog> UserActivityLogs { get; set; }
+
     public DbSet<LogEntry> LogEntries { get; set; }  // Log Table
 
     public virtual DbSet<AttributeMaster> AttributeMasters { get; set; }

@@ -10,7 +10,7 @@ namespace BookWorm_Dotnet.Services
         Task<bool> DeleteCustomerAsync(long id);
         Task<CustomerMaster> AddCustomerAsync(CustomerMaster customer);
         Task<CustomerMaster?> GetCustomerByEmailAsync(string email);
-        Task<CustomerMaster?> GetCustomerByPasswordAsync(string password);
+        Task<CustomerMaster?> GetCustomerByEmailAndPasswordAsync(string email,string password);
 
     }
 }

@@ -18,5 +18,5 @@ public partial class GenreMaster
     public string? GenreDesc { get; set; }
 
     [InverseProperty("Genre")]
-    public virtual ICollection<ProductMaster> ProductMasters { get; set; } = new List<ProductMaster>();
+    public virtual ICollection<ProductMaster>? ProductMasters { get; set; } 
 }

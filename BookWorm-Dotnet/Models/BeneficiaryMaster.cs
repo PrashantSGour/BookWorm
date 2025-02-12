@@ -50,8 +50,8 @@ public partial class BeneficiaryMaster
     public string? BenPhone { get; set; }
 
     [InverseProperty("Beneficiary")]
-    public virtual ICollection<ProductBeneficiary> ProductBeneficiaries { get; set; } = new List<ProductBeneficiary>();
+    public virtual ICollection<ProductBeneficiary> ProductBeneficiaries { get; set; } 
 
     [InverseProperty("Beneficiary")]
-    public virtual ICollection<RoyaltyCalculation> RoyaltyCalculations { get; set; } = new List<RoyaltyCalculation>();
+    public virtual ICollection<RoyaltyCalculation> RoyaltyCalculations { get; set; } 
 }

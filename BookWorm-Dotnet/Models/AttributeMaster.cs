@@ -18,5 +18,5 @@ public partial class AttributeMaster
     public string? AttributeName { get; set; }
 
     [InverseProperty("Attribute")]
-    public virtual ICollection<ProductArribute> ProductArributes { get; set; } = new List<ProductArribute>();
+    public virtual ICollection<ProductArribute> ProductArributes { get; set; } 
 }

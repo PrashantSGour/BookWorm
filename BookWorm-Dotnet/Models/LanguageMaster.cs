@@ -18,5 +18,5 @@ public partial class LanguageMaster
     public string? LanguageDesc { get; set; }
 
     [InverseProperty("Language")]
-    public virtual ICollection<ProductMaster> ProductMasters { get; set; } = new List<ProductMaster>();
+    public virtual ICollection<ProductMaster>? ProductMasters { get; set; }
 }
