@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -49,9 +50,11 @@ public partial class BeneficiaryMaster
     [StringLength(255)]
     public string? BenPhone { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Beneficiary")]
-    public virtual ICollection<ProductBeneficiary> ProductBeneficiaries { get; set; } 
+    public virtual ICollection<ProductBeneficiary> ProductBeneficiaries { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Beneficiary")]
     public virtual ICollection<RoyaltyCalculation> RoyaltyCalculations { get; set; } 
 }

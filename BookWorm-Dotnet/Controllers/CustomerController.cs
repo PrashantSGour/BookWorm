@@ -9,10 +9,14 @@ namespace BookWorm_Dotnet.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
+        private readonly IMyShelfService _myShelfService;
+        private readonly ICartService _cartService;
 
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, IMyShelfService myShelfService, ICartService cartMasterService)
         {
             _customerService = customerService;
+            _myShelfService = myShelfService;
+            _cartService = cartMasterService;
         }
 
         [HttpPost]
@@ -25,7 +29,18 @@ namespace BookWorm_Dotnet.Controllers
             }
             try
             {
-                var customer=await _customerService.AddCustomerAsync(customerMaster);
+                var existingcustomer = await _customerService.GetCustomerByEmailAsync(customerMaster.Customeremail);
+                if (existingcustomer != null) return BadRequest(new { Message = "User allready Exists" });
+                var customer = await _customerService.AddCustomerAsync(customerMaster);
+
+                // Create a new instance of MyShelf and associate it with the customer
+                var myShelf = new MyShelf { CustomerId = customer.CustomerId };
+                await _myShelfService.AddMyShelfAsync(myShelf);
+
+                // Create a new instance of CartMaster and associate it with the customer
+                var cartMaster = new CartMaster { CustomerId = customer.CustomerId, IsActive = true };
+                await _cartService.AddCartAsync(cartMaster);
+
                 return Ok(new { Object = customer, Message = "Customer Added Successfully" });
             }
             catch (Exception ex)
@@ -33,6 +48,13 @@ namespace BookWorm_Dotnet.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<CustomerMaster>> GetCustomerByEmailAsync(string email)
+        {
+            return await _customerService.GetCustomerByEmailAsync(email);
+        }
+
         [HttpGet]
         public async Task<ActionResult<CustomerMaster>> GetAllCustomers()
         {

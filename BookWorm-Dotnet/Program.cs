@@ -3,6 +3,8 @@ using BookWorm_Dotnet.Repository;
 using BookWorm_Dotnet.ServicesImpl;
 using BookWorm_Dotnet.Services;
 using Microsoft.EntityFrameworkCore;
+using BookWorm_Dotnet.Service;
+using System.Text.Json.Serialization;
 
 namespace BookWorm_Dotnet
 {
@@ -25,6 +27,10 @@ namespace BookWorm_Dotnet
             builder.Services.AddScoped<ILanguageMasterService, LanguageServiceImpl>();
             builder.Services.AddScoped<IGenreService, GenreServiceImpl>();
             builder.Services.AddScoped<IProductTypeService, ProductTypeServiceImpl>();
+            builder.Services.AddScoped<ICartService, CartServiceImpl>();
+            builder.Services.AddScoped<IMyShelfService, MyShelfServiceImpl>();
+            builder.Services.AddScoped<ICartDetailsService, CartDetailsServiceImpl>();
+
 
 
 
@@ -53,6 +59,15 @@ namespace BookWorm_Dotnet
                               .AllowAnyHeader();
                     });
             });
+
+            builder.Services.AddControllers()
+      .AddJsonOptions(options =>
+      {
+          options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+          options.JsonSerializerOptions.MaxDepth = 10;
+      });
+
+
 
             var app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using BookWorm_Dotnet.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 [Table("customer_master")]
 public partial class CustomerMaster
@@ -34,16 +35,17 @@ public partial class CustomerMaster
     [StringLength(255)]
     public string? Phonenumber { get; set; }
 
+    [JsonIgnore]
     // ✅ Make these properties optional by setting `?`
     [InverseProperty("Customer")]
     public virtual ICollection<CartMaster>? CartMasters { get; set; } = new List<CartMaster>();
-
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<Invoice>? Invoices { get; set; } = new List<Invoice>();
-
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual MyShelf? MyShelf { get; set; }
-
+    [JsonIgnore]
     [InverseProperty("Customer")]
     public virtual ICollection<RentDetail>? RentDetails { get; set; } = new List<RentDetail>();
 }

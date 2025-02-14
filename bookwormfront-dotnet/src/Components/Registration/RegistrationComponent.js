@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { TextField, Button, Box, Typography, Modal, Grid, Fade, Paper, Avatar, Link, Backdrop } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const RegistrationForm = ({ onClose, onLoginOpen }) => {
   const [formData, setFormData] = useState({
@@ -153,7 +156,6 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
         },
         body: JSON.stringify(dataToSend),
       });
-
       if (!registerResponse.ok) {
         throw new Error('Network response was not ok');
       }
@@ -175,6 +177,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
 
   return (
     <Box sx={{ width: 600, p: 2 }}>
+    <ToastContainer />
       <Grid container component="main" sx={{ height: '100vh' }}>
         <Grid item xs={12} component={Paper} elevation={6} square>
           <Box

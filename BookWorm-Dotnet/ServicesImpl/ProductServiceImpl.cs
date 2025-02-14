@@ -39,6 +39,11 @@ namespace BookWorm_Dotnet.ServicesImpl
             return product;
         }
 
+        public async Task<List<ProductMaster>> GetProductsByIdsAsync(List<int> productIds)
+        {
+            return await _context.ProductMasters.Where(p => productIds.Contains(p.ProductId)).ToListAsync();
+        }
+
         public async Task<IEnumerable<ProductMaster>> AddProductsInBulk(List<ProductMaster> products)
         {
             if (products == null || !products.Any())

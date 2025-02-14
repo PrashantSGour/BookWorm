@@ -109,13 +109,9 @@ namespace BookWorm_Dotnet.Migrations
                         .HasColumnType("int")
                         .HasColumnName("cart_id");
 
-                    b.Property<ulong>("IsRented")
-                        .HasColumnType("bit(1)")
+                    b.Property<bool>("IsRented")
+                        .HasColumnType("tinyint(1)")
                         .HasColumnName("is_rented");
-
-                    b.Property<ulong>("IsUpdated")
-                        .HasColumnType("bit(1)")
-                        .HasColumnName("is_updated");
 
                     b.Property<double>("OfferCost")
                         .HasColumnType("double")
@@ -154,8 +150,8 @@ namespace BookWorm_Dotnet.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("customer_id");
 
-                    b.Property<ulong>("IsActive")
-                        .HasColumnType("bit(1)")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)")
                         .HasColumnName("is_active");
 
                     b.HasKey("CartId")
@@ -450,8 +446,8 @@ namespace BookWorm_Dotnet.Migrations
                         .HasColumnType("varchar(255)")
                         .HasColumnName("img_src");
 
-                    b.Property<ulong?>("IsRentable")
-                        .HasColumnType("bit(1)")
+                    b.Property<bool>("IsRentable")
+                        .HasColumnType("tinyint(1)")
                         .HasColumnName("is_rentable");
 
                     b.Property<int?>("LanguageId")

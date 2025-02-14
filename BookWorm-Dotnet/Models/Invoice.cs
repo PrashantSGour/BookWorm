@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -25,20 +26,25 @@ public partial class Invoice
     [Column("cart_id")]
     public int? CartId { get; set; }
 
+
     [Column("customer_id")]
     public long? CustomerId { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("CartId")]
     [InverseProperty("Invoices")]
     public virtual CartMaster? Cart { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("CustomerId")]
     [InverseProperty("Invoices")]
     public virtual CustomerMaster? Customer { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Invoice")]
     public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Invoice")]
     public virtual ICollection<RoyaltyCalculation> RoyaltyCalculations { get; set; }
 }
