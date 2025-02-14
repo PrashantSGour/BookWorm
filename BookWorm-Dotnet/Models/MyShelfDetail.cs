@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -33,14 +34,17 @@ public partial class MyShelfDetail
     [Column("shelf_id")]
     public int ShelfId { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("ProductId")]
     [InverseProperty("MyShelfDetails")]
     public virtual ProductMaster Product { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("RentId")]
     [InverseProperty("MyShelfDetails")]
     public virtual RentDetail? Rent { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("ShelfId")]
     [InverseProperty("MyShelfDetails")]
     public virtual MyShelf Shelf { get; set; } = null!;

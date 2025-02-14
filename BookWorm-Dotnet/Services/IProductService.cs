@@ -15,6 +15,8 @@ namespace BookWorm_Dotnet.Services
         Task<bool> DeleteProductAsync(int productId);
         public Task<IEnumerable<ProductMaster>> AddProductsInBulk(List<ProductMaster> products);
         public Task<List<FilteredProductsDTO>> GetFilteredProducts(string? genreDesc, string? languageDesc, string? productType);
+        public Task<List<ProductMaster>> GetProductsByIdsAsync(List<int> productIds);
+
 
 
     }

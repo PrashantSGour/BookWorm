@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -25,10 +26,12 @@ public partial class ProductArribute
     [Column("product_id")]
     public int? ProductId { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("AttributeId")]
     [InverseProperty("ProductArributes")]
     public virtual AttributeMaster? Attribute { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("ProductId")]
     [InverseProperty("ProductArributes")]
     public virtual ProductMaster? Product { get; set; }

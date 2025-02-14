@@ -18,11 +18,18 @@ namespace BookWorm_Dotnet.Controllers
         }
 
         [HttpPost("addbulk")]
-        public async Task<ActionResult<IEnumerable<ProductMaster>>> AddProductsInBulk([FromBody] List<ProductMaster> products)
+        public async Task<ActionResult<List<ProductMaster>>> AddProductsInBulk([FromBody] List<ProductMaster> products)
         {
             if (products == null || products.Count == 0) return BadRequest(new { Message = "Empty List Recieved" });
             var addedproducts = await _productService.AddProductsInBulk(products);
             return Ok(new { Products = addedproducts,Message ="Products added successfully" });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductMaster>> GetProductByIdAsync(int id)
+        {
+            var product = await _productService.GetProductByIdAsync(id);
+            return Ok(product);
         }
 
         [HttpGet("all")]

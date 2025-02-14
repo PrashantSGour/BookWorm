@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -38,14 +39,17 @@ public partial class RoyaltyCalculation
     [Column("product_id")]
     public int ProductId { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("BeneficiaryId")]
     [InverseProperty("RoyaltyCalculations")]
     public virtual BeneficiaryMaster Beneficiary { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("InvoiceId")]
     [InverseProperty("RoyaltyCalculations")]
     public virtual Invoice Invoice { get; set; } = null!;
 
+    [JsonIgnore]
     [ForeignKey("ProductId")]
     [InverseProperty("RoyaltyCalculations")]
     public virtual ProductMaster Product { get; set; } = null!;

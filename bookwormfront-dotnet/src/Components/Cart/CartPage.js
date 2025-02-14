@@ -20,7 +20,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 
 const CartPage = () => {
     const [cartDetails, setCartDetails] = useState([]);
-    const [products, setProducts] = useState({});
+    const [products, setProducts] = useState([]);
     const [expandedCard, setExpandedCard] = useState(null);
     const [error, setError] = useState(null);
     const containerRef = useRef(null);
@@ -40,49 +40,31 @@ const CartPage = () => {
         try {
             const email = sessionStorage.getItem('customerEmail');
             const token = sessionStorage.getItem('token');
-            const customerResponse = await fetch(`http://localhost:8080/api/customers/email/${email}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+    
+            const response = await fetch(`http://localhost:5160/api/cart-details/customer/${email}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (!customerResponse.ok) {
-                throw new Error('Network response was not ok');
+    
+            if (!response.ok) {
+                return;
             }
-            const customerData = await customerResponse.json();
-            const customerId = customerData.customerid;
-
-            const cartDetailsResponse = await fetch(`http://localhost:8080/api/cart-details/customer/${customerId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (!cartDetailsResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const cartDetailsData = await cartDetailsResponse.json();
-            setCartDetails(cartDetailsData);
-
-            // Fetch product data for each unique product in cart details
-            const productData = {};
-            const uniqueProductIds = [...new Set(cartDetailsData.map(item => item.productId.productId))];
-            for (const productId of uniqueProductIds) {
-                const productResponse = await fetch(`http://localhost:8080/api/products/${productId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (!productResponse.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const product = await productResponse.json();
-                productData[productId] = product;
-            }
-            setProducts(productData);
+    
+            const data = await response.json();
+    
+            // Merge cart and product data into a single structure
+            const mergedCartDetails = data.cart.map(cartItem => ({
+                ...cartItem,
+                product: data.product.find(product => product.productId === cartItem.productId) || null
+            }));
+    
+            setCartDetails(mergedCartDetails);
         } catch (error) {
             setError(error);
             toast.error('Failed to fetch cart details');
         }
     };
+    
+    
 
     const handleUpdate = (id, field, value) => {
         setCartDetails(cartDetails.map(item => item.cartDetailsId === id ? { ...item, [field]: value } : item));
@@ -116,18 +98,17 @@ const CartPage = () => {
 
     const handleDelete = (id) => {
         const token = sessionStorage.getItem('token');
-        fetch(`http://localhost:8080/api/cart-details/${id}`, {
+        fetch(`http://localhost:5160/api/cart-details/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(cartDetails.find(item => item.cartDetailsId === id)),
-
+            }
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            setCartDetails(prevCartDetails => prevCartDetails.filter(item => item.cartDetailsId !== id));
             fetchCartDetails();
             toast.success('Deleted successfully');
         })
@@ -160,7 +141,7 @@ const CartPage = () => {
     
             const myShelfRequest = {
                 shelfId: myShelfId,
-                productId: item.productId.productId,
+                productId: item.product.productId,
                 expiryDate: expiryDate,
                 tranType: item.transType
             };
@@ -178,7 +159,7 @@ const CartPage = () => {
                 throw new Error('Failed to add product to shelf');
             }
     
-            toast.success(`Product ${item.productId.productName} added to shelf successfully`);
+            toast.success(`Product ${item.product.productName} added to shelf successfully`);
         } catch (error) {
             toast.error('Failed to add product to shelf');
         }
@@ -189,15 +170,7 @@ const CartPage = () => {
         const email = sessionStorage.getItem('customerEmail');
     
         try {
-            const customerResponse = await fetch(`http://localhost:8080/api/customers/email/${email}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-    
-            if (!customerResponse.ok) throw new Error('Network response was not ok');
-    
-            const customerData = await customerResponse.json();
-            const customerId = customerData.customerid;
-            const shelfResponse = await fetch(`http://localhost:8080/api/myshelf/customer/${customerId}`, {
+            const shelfResponse = await fetch(`http://localhost:5160/api/myshelf/customer/${email}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
     
@@ -232,7 +205,7 @@ const CartPage = () => {
             }
 
             // Call the checkout function
-            await checkout(customerId, token, currentCartId);
+            await checkout(email, token, currentCartId);
             
         } catch (error) {
             toast.error('There was a problem with the fetch operation');
@@ -270,7 +243,7 @@ const CartPage = () => {
     };
 
     if (error) return <div>Error: {error.message}</div>;
-
+    console.log(cartDetails);
     return (
         <Container ref={containerRef}>
             <ToastContainer />
@@ -290,21 +263,22 @@ const CartPage = () => {
             </Box>
             <Box display="flex" flexWrap="wrap" justifyContent="center">
                 {cartDetails.map(item => (
+                    console.log(item),
                     <StyledCard key={item.cartDetailsId} onClick={() => handleExpandClick(item.cartDetailsId)} style={{ height: expandedCard === item.cartDetailsId ? 'auto' : '280px' }}>
                         <CardContent>
                             <Box display="flex" justifyContent="center">
                             <img 
-                                src={products[item.productId.productId]?.imgSrc || 'default-image.jpg'} 
-                                alt={products[item.productId.productId]?.productName || 'Product Image'} 
-                                onError={(e) => e.target.src = 'default-image.jpg'} 
+                                src={(item.product)?.imgSrc || 'default-image.jpg'} 
+                                alt={(item.product )?.productName || 'Product Image'} 
                                 style={{ maxWidth: '100%', height: 'auto' }} 
                             />
                             </Box>
                             <Typography variant="h6" gutterBottom align="center" fontWeight="bold">
-                                {item.productId.productName || 'Loading...'}
+                                {(item.product)?.productName || 'Loading...'}
                             </Typography>
+
                             <Typography variant="body2" gutterBottom align="center">
-                                {item.productId.productDescriptionShort || 'Loading...'}
+                                {item.product.productDescriptionShort || 'Loading...'}
                             </Typography>
                             <Collapse in={expandedCard === item.cartDetailsId} timeout="auto" unmountOnExit>
                                 <FormControl fullWidth margin="dense">
@@ -326,16 +300,16 @@ const CartPage = () => {
                                             label="Rent No Of Days"
                                             type="number"
                                             value={item.rentNoOfDays}
-                                            onChange={(e) => handleUpdate(item.cartDetailsId, 'rentNoOfDays', Math.max(e.target.value, products[item.productId.productId].minRentDays))} // Ensure it can't go less than minRentDays
+                                            onChange={(e) => handleUpdate(item.cartDetailsId, 'rentNoOfDays', Math.max(e.target.value, item.product.minRentDays))} // Ensure it can't go less than minRentDays
                                             fullWidth
                                             margin="dense"
                                             onClick={(e) => e.stopPropagation()} // Prevent collapse on input change
-                                            inputProps={{ min: products[item.productId.productId].minRentDays, max: 365 }} // Add range
+                                            inputProps={{ min: item.product.minRentDays, max: 365 }} // Add range
                                         />
                                         <TextField
                                             label="Rent Per Day"
                                             type="number"
-                                            value={products[item.productId.productId].rentPerDay}
+                                            value={item.product.rentPerDay}
                                             fullWidth
                                             margin="dense"
                                             InputProps={{
@@ -348,7 +322,7 @@ const CartPage = () => {
                                 <TextField
                                     label="Total Price"
                                     type="number"
-                                    value={item.transType === 'rent' ? item.rentNoOfDays * products[item.productId.productId].rentPerDay : item.transType === 'purchase' ? item.offerCost || 0 : 0.0}
+                                    value={item.transType === 'rent' ? item.rentNoOfDays * item.product.rentPerDay : item.transType === 'purchase' ? item.product.productOfferPrice || 0 : 0.0}
                                     fullWidth
                                     margin="dense"
                                     InputProps={{

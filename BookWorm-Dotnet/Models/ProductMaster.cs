@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -16,8 +17,8 @@ public partial class ProductMaster
     [Column("product_id")]
     public int ProductId { get; set; }
 
-    [Column("is_rentable", TypeName = "bit(1)")]
-    public ulong? IsRentable { get; set; }
+    [Column("is_rentable")]
+    public bool IsRentable { get; set; }
 
     [Column("min_rent_days")]
     public int? MinRentDays { get; set; }
@@ -79,14 +80,14 @@ public partial class ProductMaster
     public string? ImgSrc { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<CartDetail>? CartDetails { get; set; } 
+    public virtual ICollection<CartDetail>? CartDetails { get; set; }
 
     [ForeignKey("GenreId")]
     [InverseProperty("ProductMasters")]
     public virtual GenreMaster? Genre { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<InvoiceDetail>? InvoiceDetails { get; set; } 
+    public virtual ICollection<InvoiceDetail>? InvoiceDetails { get; set; }
 
     [ForeignKey("LanguageId")]
     [InverseProperty("ProductMasters")]
@@ -96,16 +97,16 @@ public partial class ProductMaster
     public virtual ICollection<MyShelfDetail>? MyShelfDetails { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<ProductArribute>? ProductArributes { get; set; } 
+    public virtual ICollection<ProductArribute>? ProductArributes { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<ProductBeneficiary>? ProductBeneficiaries { get; set; } 
+    public virtual ICollection<ProductBeneficiary>? ProductBeneficiaries { get; set; }
 
     [InverseProperty("Product")]
     public virtual ICollection<RentDetail>? RentDetails { get; set; }
 
     [InverseProperty("Product")]
-    public virtual ICollection<RoyaltyCalculation>? RoyaltyCalculations { get; set; } 
+    public virtual ICollection<RoyaltyCalculation>? RoyaltyCalculations { get; set; }
 
     [ForeignKey("TypeId")]
     [InverseProperty("ProductMasters")]

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookWorm_Dotnet.Models;
@@ -17,19 +18,22 @@ public partial class CartMaster
     [Column("cost")]
     public double? Cost { get; set; }
 
-    [Column("is_active", TypeName = "bit(1)")]
-    public ulong IsActive { get; set; }
+    [Column("is_active")]
+    public bool IsActive { get; set; }
 
     [Column("customer_id")]
     public long? CustomerId { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Cart")]
     public virtual ICollection<CartDetail> CartDetails { get; set; }
 
+    [JsonIgnore]
     [ForeignKey("CustomerId")]
     [InverseProperty("CartMasters")]
     public virtual CustomerMaster? Customer { get; set; }
 
+    [JsonIgnore]
     [InverseProperty("Cart")]
     public virtual ICollection<Invoice> Invoices { get; set; }
 }
