@@ -30,6 +30,10 @@ namespace BookWorm_Dotnet
             builder.Services.AddScoped<ICartService, CartServiceImpl>();
             builder.Services.AddScoped<IMyShelfService, MyShelfServiceImpl>();
             builder.Services.AddScoped<ICartDetailsService, CartDetailsServiceImpl>();
+            builder.Services.AddScoped<IShelfDetailsService, ShelfDetailsServiceImpl>();
+            builder.Services.AddScoped<IInvoiceDetailsService, InvoiceDetailsServiceImpl>();
+            builder.Services.AddScoped<IInvoiceService, InvoiceServiceImpl>();
+            builder.Services.AddScoped<IRoyaltyCalculationService, RoyaltyCalculationServiceImpl>();
 
 
 
@@ -37,6 +41,10 @@ namespace BookWorm_Dotnet
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<BookWormDbContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+            //builder.Services.AddHttpClient<CheckOutService>();
+            //builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 
             // Register Database Logger
             builder.Services.AddSingleton<ILoggerProvider, DatabaseLoggerProvider>();
@@ -46,7 +54,8 @@ namespace BookWorm_Dotnet
             builder.Logging.ClearProviders();
             builder.Logging.AddConsole();
             builder.Logging.AddDebug();
-            builder.Logging.AddProvider(new DatabaseLoggerProvider(builder.Services.BuildServiceProvider().GetRequiredService<BookWormDbContext>()));
+            //builder.Services.AddSingleton<ILoggerProvider>(sp => new DatabaseLoggerProvider(sp.GetRequiredService<IServiceScopeFactory>()));
+            builder.Services.AddHttpClient();
 
             // Enable CORS
             builder.Services.AddCors(options =>

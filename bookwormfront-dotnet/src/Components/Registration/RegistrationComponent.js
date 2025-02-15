@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const RegistrationForm = ({ onClose, onLoginOpen }) => {
+const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
   const [formData, setFormData] = useState({
     customeremail: "",
     customername: "",
@@ -142,7 +142,7 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
   //     setOtpMessage('OTP verification failed');
   //   }
   // };
-
+  //const success = false;
   const handleFinalSubmit = async () => {
     const age = calculateAge(formData.dob);
     const { confirmPassword, ...dataToSend } = formData;
@@ -156,24 +156,31 @@ const RegistrationForm = ({ onClose, onLoginOpen }) => {
         },
         body: JSON.stringify(dataToSend),
       });
+      const registerResult = await registerResponse.json();
       if (!registerResponse.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error(registerResult.message);
       }
 
-      const registerResult = await registerResponse.json();
       console.log('Success:', registerResult);
       setModalMessage("User registered successfully");
-      setModalOpen(true);
-      setTimeout(() => {
-        setModalOpen(false);
-        navigate("/");
-      }, 2000);
-    } catch (error) {
-      console.error('Error:', error);
-      setModalMessage(`Error: ${error.message}`);
-      setModalOpen(true);
-    }
-  };
+      //success = true;
+    // Close the modal after 2 seconds and navigate to '/'
+    setTimeout(() => {
+      setModalOpen(false);
+      onSignupSuccess();
+    }, 2000);
+
+  } catch (error) {
+    console.error('Error:', error);
+    setModalMessage(`Error: ${error.message}`);
+    setModalOpen(true);
+
+    // Close the modal after 2 seconds (only for error messages)
+    setTimeout(() => {
+      setModalOpen(false);
+    }, 2000);
+  }
+};
 
   return (
     <Box sx={{ width: 600, p: 2 }}>

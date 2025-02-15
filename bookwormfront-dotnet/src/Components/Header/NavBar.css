@@ -22,6 +22,17 @@ body {
   width: 100%;
 }
 
+body.drawer-open .homepage {
+  transform: translateY(100px); /* Adjust the value as needed */
+  transition: transform 0.3s ease-in-out;
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+  body.drawer-open .homepage {
+    transform: translateY(150px); /* Adjust the value as needed */
+  }
+}
+
 /* Navbar Styles */
 .navbar-container {
     display: flex;
@@ -29,7 +40,7 @@ body {
     height: 60px; /* Ensuring navbar has a fixed height */
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
+    position: fixed;  /* Fixed at the top */
     top: 0;
     left: 0;
     z-index: 1000;
@@ -125,6 +136,22 @@ body {
 .about-us-section {
   width: 90%;
   margin: 40px auto;
+}
+
+.about-us-section .explore {
+  font-size: 18px;
+  background: #774dd3;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  transition: 0.4s;
+  display: inline-block;
+}
+
+.about-us-section .explore:hover {
+  background: #5a3cb5;
 }
 
 /* Responsive Design */

@@ -212,7 +212,7 @@ public partial class BookWormDbContext : DbContext
                 .HasConstraintName("FKas49u6dxu8mu28ylsq0cucx1b");
         });
 
-        modelBuilder.Entity<LogEntry>().ToTable("log_entries");
+        //modelBuilder.Entity<LogEntry>().ToTable("log_entries");
 
 
         OnModelCreatingPartial(modelBuilder);

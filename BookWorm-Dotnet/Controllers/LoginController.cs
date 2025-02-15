@@ -41,7 +41,7 @@ namespace BookWorm_Dotnet.Controllers
             // Log successful login
             await _userActivityService.LogActivity(existingUser.Customeremail, "Login");
 
-            return Ok(new { Object = existingUser, Message = "Login Successful Baby" });
+            return Ok(new { Object = existingUser, Message = "Login Successful" });
         }
 
         [HttpPost("logout")]

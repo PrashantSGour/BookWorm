@@ -9,6 +9,7 @@ namespace BookWorm_Dotnet.Services
     {
         private readonly BookWormDbContext _context;
 
+
         public MyShelfServiceImpl(BookWormDbContext context)
         {
             _context = context;
@@ -60,5 +61,12 @@ namespace BookWorm_Dotnet.Services
         {
             return await _context.MyShelfDetails.AnyAsync(s => s.ShelfDtlId == shelfId && s.Product.ProductId == productId);
         }
+
+        public async Task<MyShelf?> GetMyShelfByCustomerAsync(string email)
+        {
+            var customer = await _context.CustomerMasters.FirstOrDefaultAsync(s => s.Customeremail == email);
+            return await _context.MyShelves.FirstOrDefaultAsync(s => s.CustomerId == customer.CustomerId);
+        }
+
     }
 }

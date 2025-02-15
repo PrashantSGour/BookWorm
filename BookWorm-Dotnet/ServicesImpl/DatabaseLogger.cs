@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using BookWorm_Dotnet.Models;
@@ -8,12 +9,12 @@ namespace BookWorm_Dotnet.ServicesImpl
 {
     public class DatabaseLogger : ILogger
     {
-        private readonly BookWormDbContext _dbContext;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly string _categoryName;
 
-        public DatabaseLogger(BookWormDbContext dbContext, string categoryName)
+        public DatabaseLogger(IServiceScopeFactory scopeFactory, string categoryName)
         {
-            _dbContext = dbContext;
+            _scopeFactory = scopeFactory;
             _categoryName = categoryName;
         }
 
@@ -33,21 +34,37 @@ namespace BookWorm_Dotnet.ServicesImpl
                 Exception = exception?.ToString()
             };
 
-            _dbContext.LogEntries.Add(logEntry);
-            _dbContext.SaveChanges();
+            // Fire and forget with proper exception handling
+            _ = Task.Run(() => SaveLogAsync(logEntry)).ConfigureAwait(false);
+        }
+
+        private async Task SaveLogAsync(LogEntry logEntry)
+        {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookWormDbContext>();
+
+                dbContext.LogEntries.Add(logEntry);
+                await dbContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving log: {ex.Message}");
+            }
         }
     }
 
     public class DatabaseLoggerProvider : ILoggerProvider
     {
-        private readonly BookWormDbContext _dbContext;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public DatabaseLoggerProvider(BookWormDbContext dbContext)
+        public DatabaseLoggerProvider(IServiceScopeFactory scopeFactory)
         {
-            _dbContext = dbContext;
+            _scopeFactory = scopeFactory;
         }
 
-        public ILogger CreateLogger(string categoryName) => new DatabaseLogger(_dbContext, categoryName);
+        public ILogger CreateLogger(string categoryName) => new DatabaseLogger(_scopeFactory, categoryName);
 
         public void Dispose() { }
     }

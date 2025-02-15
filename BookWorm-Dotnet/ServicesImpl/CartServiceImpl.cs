@@ -67,30 +67,56 @@ public class CartServiceImpl : ICartService
     }
 
     // Checkout cart
-    public async Task CheckoutCart(long customerId)
+    public async Task<CartMaster> CheckoutCart(string email)
     {
-        var cartMaster = await _context.CartMasters
-            .FirstOrDefaultAsync(cm => cm.CustomerId == customerId && cm.IsActive);
-
-        if (cartMaster == null)
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            throw new Exception("Active cart not found for customer");
+            var customer = await _context.CustomerMasters.FirstOrDefaultAsync(c => c.Customeremail == email);
+            long customerId = customer.CustomerId;
+            var cartMaster = await _context.CartMasters
+                .FirstOrDefaultAsync(cm => cm.CustomerId == customerId && cm.IsActive);
+
+            if (cartMaster == null)
+            {
+                Console.WriteLine($"[DEBUG] No active cart found for customer ID: {customerId}");
+                throw new Exception("Active cart not found for customer");
+            }
+            await UpdateCartCost(cartMaster);
+
+            System.Diagnostics.Debug.WriteLine("------------------------------------"+$"[DEBUG] Found active cart ID: {cartMaster.CartId}");
+
+            cartMaster.IsActive = false;
+            _context.Entry(cartMaster).Property(x => x.IsActive).IsModified = true;
+            await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine("------------------------------------" + $"[DEBUG] Cart ID {cartMaster.CartId} deactivated.");
+
+            // Detach the old cart before adding a new one
+            _context.Entry(cartMaster).State = EntityState.Detached;
+
+            var newCartMaster = new CartMaster
+            {
+                CustomerId = customerId,
+                IsActive = true,
+                Cost = 0.0
+            };
+
+            _context.CartMasters.Add(newCartMaster);
+            await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine("------------------------------------" + $"[DEBUG] New cart created for customer {customerId} with ID {newCartMaster.CartId}");
+
+            await transaction.CommitAsync();
+            return await _context.CartMasters.FindAsync(newCartMaster.CartId);
         }
-
-        cartMaster.IsActive = false;
-        _context.CartMasters.Update(cartMaster);
-        await _context.SaveChangesAsync();
-
-        var newCartMaster = new CartMaster
+        catch (Exception ex)
         {
-            CustomerId = customerId,
-            IsActive = true,
-            Cost = 0.0
-        };
-
-        _context.CartMasters.Add(newCartMaster);
-        await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine("------------------------------------" + $"[ERROR] Transaction failed: {ex.Message}");
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
+
+
 
     // Add cart
     public async Task AddCartAsync(CartMaster cartMaster)

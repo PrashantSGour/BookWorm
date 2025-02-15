@@ -61,18 +61,8 @@ const ShelfPage = () => {
         try {
             const email = sessionStorage.getItem('customerEmail');
             const token = sessionStorage.getItem('token');
-            const customerResponse = await fetch(`http://localhost:8080/api/customers/email/${email}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            if (!customerResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const customerData = await customerResponse.json();
-            const customerId = customerData.customerid;
 
-            const shelfResponse = await fetch(`http://localhost:8080/api/myshelf/customer/${customerId}`, {
+            const shelfResponse = await fetch(`http://localhost:5160/api/myshelf/customer/${email}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -82,28 +72,28 @@ const ShelfPage = () => {
             }
             const shelfData = await shelfResponse.json();
             const shelfId = shelfData.shelfId;
-            const shelfDetailsResponse = await fetch(`http://localhost:8080/api/myshelf/${shelfId}/details`, {
+            const shelfDetailsResponse = await fetch(`http://localhost:5160/api/myshelf/${shelfId}/details`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             if (!shelfDetailsResponse.ok) {
-                throw new Error('Network response was not ok');
+                return;
             }
             const shelfDetailsData = await shelfDetailsResponse.json();
             setShelfDetails(shelfDetailsData);
 
             // Fetch book data for each unique book in shelf details
             const bookData = {};
-            const uniqueBookIds = [...new Set(shelfDetailsData.map(item => item.productId.productId))];
+            const uniqueBookIds = [...new Set(shelfDetailsData.map(item => item.productId))];
             for (const bookId of uniqueBookIds) {
-                const bookResponse = await fetch(`http://localhost:8080/api/products/${bookId}`, {
+                const bookResponse = await fetch(`http://localhost:5160/api/Product/${bookId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
                 if (!bookResponse.ok) {
-                    throw new Error('Network response was not ok');
+                    return;
                 }
                 const book = await bookResponse.json();
                 bookData[bookId] = book;
@@ -132,7 +122,7 @@ const ShelfPage = () => {
     return (
         <Container ref={containerRef}>
             <ToastContainer />
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom align="center">
                 Your Shelf
             </Typography>
             <Box display="flex" justifyContent="center" marginBottom="20px" >
@@ -146,17 +136,17 @@ const ShelfPage = () => {
                                 <CardContent>
                                     <Box display="flex" justifyContent="center">
                                     <img 
-                                        src={books[item.productId.productId]?.imgSrc || 'default-image.jpg'} 
-                                        alt={books[item.productId.productId]?.productName || 'Product Image'} 
+                                        src={books[item.productId]?.imgSrc || 'default-image.jpg'} 
+                                        alt={books[item.productId]?.productName || 'Product Image'} 
                                         onError={(e) => e.target.src = 'default-image.jpg'} 
                                         style={{ maxWidth: '100%', height: 'auto' }} 
                                     />
                                     </Box>
                                     <Typography variant="h6" gutterBottom align="center" fontWeight="bold">
-                                        {item.productId.productName || 'Loading...'}
+                                        {books[item.productId]?.productName || 'Loading...'}
                                     </Typography>
                                     <Typography variant="body2" gutterBottom align="center">
-                                        {item.productId.productDescriptionLong || 'Loading...'}
+                                        {books[item.productId]?.productDescriptionLong || 'Loading...'}
                                     </Typography>
                                     <ExpiryText variant="body2" align="center">
                                         {item.tranType === 'rent' ? `Expiry Date: ${new Date(item.expiryDate).toLocaleDateString()}` : 'Expiry Date: Lifetime'}

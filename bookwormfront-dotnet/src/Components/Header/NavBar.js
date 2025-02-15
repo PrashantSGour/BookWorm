@@ -45,10 +45,12 @@ function NavBar({ onSearch }) {
 
   const handleLoginOpen = () => {
     setLoginOpen(true);
+    document.body.classList.add('drawer-open');
   };
 
   const handleLoginClose = () => {
     setLoginOpen(false);
+    document.body.classList.remove('drawer-open');
   };
 
   const handleSignupOpen = () => {
@@ -58,6 +60,7 @@ function NavBar({ onSearch }) {
 
   const handleSignupClose = () => {
     setSignupOpen(false);
+    document.body.classList.remove('drawer-open');
   };
 
   const handleLoginFromSignup = () => {
@@ -68,6 +71,11 @@ function NavBar({ onSearch }) {
   const handleLoginSuccess = () => {
     setLoginOpen(false);
     navigate("/products");
+  };
+
+  const handleSignupSuccess = () => {
+    setSignupOpen(false);
+    navigate("/"); // Redirect if needed
   };
 
   const handleCartOpen = () => {
@@ -102,7 +110,7 @@ function NavBar({ onSearch }) {
 
   return (
     <>
-      <Navbar expand="lg" className="navbar-container" style={{ zIndex: 1200 }}>
+      <Navbar expand="lg" className="navbar-container sticky-top" style={{ zIndex: 1200 }}>
         <Container>
           {/* Brand Name */}
           <Navbar.Brand onClick={handleBrandClick} className="navbar-brand" style={{ color: '#7d6df8', cursor: 'pointer' }}>
@@ -133,18 +141,18 @@ function NavBar({ onSearch }) {
             <Nav className="ms-auto">
               {isLoggedIn ? (
                 <>
-                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
+                  <Button variant="contained" className="drawer-button" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleCartOpen}>
                     Cart
                   </Button>
-                  <Button variant="contained" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleShelfOpen}>
+                  <Button variant="contained" className="drawer-button" sx={{ bgcolor: '#7d6df8', marginRight: '10px' }} onClick={handleShelfOpen}>
                     Shelf
                   </Button>
-                  <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLogout}>
+                  <Button variant="contained" className="drawer-button" sx={{ bgcolor: '#7d6df8',marginRight: '10px' }} onClick={handleLogout}>
                     Log Out
                   </Button>
                 </>
               ) : (
-                <Button variant="contained" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
+                <Button variant="contained" className="drawer-button" sx={{ bgcolor: '#7d6df8' }} onClick={handleLoginOpen}>
                   Sign In
                 </Button>
               )}
@@ -170,7 +178,11 @@ function NavBar({ onSearch }) {
         onClose={handleSignupClose}
         PaperProps={{ sx: { width: 600, zIndex: 1100 } }} // Set the width and z-index of the drawer
       >
-        <RegistrationComponent onClose={handleSignupClose} onLoginOpen={handleLoginFromSignup} />
+        <RegistrationComponent 
+          onClose={handleSignupClose} 
+          onLoginOpen={handleLoginFromSignup} 
+          onSignupSuccess={handleSignupSuccess} 
+        />      
       </Drawer>
     </>
   );
