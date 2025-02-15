@@ -25,6 +25,7 @@ const CartPage = () => {
     const [error, setError] = useState(null);
     const containerRef = useRef(null);
     const navigate = useNavigate();
+    const [a, seta] = useState(1);
 
     useEffect(() => {
         const token = sessionStorage.getItem('token');
@@ -71,13 +72,20 @@ const CartPage = () => {
     };
 
     const handleSave = async (id) => {
-        const updatedItem = cartDetails.find(item => item.cartDetailsId === id);
+        const updatedItem = { ...cartDetails.find(item => item.cartDetailsId === id) };
+    
         updatedItem.transType === 'purchase' ? updatedItem.rentNoOfDays = 0 : updatedItem.rentNoOfDays = updatedItem.rentNoOfDays;
         updatedItem.isRented = updatedItem.transType === 'rent';
-        updatedItem.offerCost = updatedItem.transType === 'rent' ? updatedItem.rentNoOfDays * products[updatedItem.productId.productId].rentPerDay : updatedItem.offerCost;
-        
+        updatedItem.offerCost = updatedItem.transType === 'rent' 
+            ? updatedItem.rentNoOfDays * updatedItem.product.rentPerDay 
+            : updatedItem.product.productOfferPrice;
+    
+        // Remove the 'product' field before sending the request
+        delete updatedItem.product;
+    
         const token = sessionStorage.getItem('token');
-        await fetch(`http://localhost:8080/api/cart-details/${id}`, {
+        
+        await fetch(`http://localhost:5160/api/cart-details/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -95,6 +103,7 @@ const CartPage = () => {
             toast.error('Failed to update item');
         });
     };
+    
 
     const handleDelete = (id) => {
         const token = sessionStorage.getItem('token');
@@ -146,7 +155,7 @@ const CartPage = () => {
                 tranType: item.transType
             };
     
-            const response = await fetch(`http://localhost:8080/api/myshelf/add`, {
+            const response = await fetch(`http://localhost:5160/api/myshelf/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,8 +187,8 @@ const CartPage = () => {
     
             const shelfData = await shelfResponse.json();
             const myShelfId = shelfData.shelfId;
-            const currentCartId = cartDetails[0].cartId.cartId;
-    
+            const currentCartId = cartDetails[0].cartId;
+            
             for (const item of cartDetails) {
                 if (!item.transType) {
                     toast.warn('Please select a transaction type for all items.');
@@ -190,12 +199,12 @@ const CartPage = () => {
                 if (expiryDate) expiryDate.setDate(expiryDate.getDate() + item.rentNoOfDays);
     
                 // Check if the product is already in the shelf
-                const isProductInShelfResponse = await fetch(`http://localhost:8080/api/myshelf/${myShelfId}/product/${item.productId.productId}`, {
+                const isProductInShelfResponse = await fetch(`http://localhost:5160/api/myshelf/${myShelfId}/product/${item.productId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
     
                 if (isProductInShelfResponse.status === 200) {  // If product is in shelf
-                    toast.error(`Product ${item.productId.productName} is already present in the shelf`);
+                    toast.error(`Product ${item.product.productName} is already present in the shelf`);
                 } else if (isProductInShelfResponse.status === 404) {  // If product is NOT in shelf
                     handleSave(item.cartDetailsId);
                     await handleAdd(item, myShelfId, token);
@@ -206,36 +215,37 @@ const CartPage = () => {
 
             // Call the checkout function
             await checkout(email, token, currentCartId);
-            
+            setTimeout(() => {
+                navigate('/shelf');
+            }, 2000); // Re-fetch cart details to re-render the page
         } catch (error) {
             toast.error('There was a problem with the fetch operation');
         }
     };
 
-    const checkout = async (customerId, token, cartId) => {
+    const checkout = async (email, token, cartId) => {
         try {
             // Checkout request
-            await fetch(`http://localhost:8080/api/cart-details/checkout`, {
+            await fetch(`http://localhost:5160/api/cart-details/checkout`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(customerId)
+                body: JSON.stringify(email)
             });
 
             // Create invoice request
-            await fetch(`http://localhost:8080/invoices`, {
+            await fetch(`http://localhost:5160/api/invoices`, {
                 method: 'POST',
                 headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ customerId, cartId })
+                body: JSON.stringify({ email, cartId })
             });
-
-            toast.success('Checkout successful');
-            fetchCartDetails(); // Re-fetch cart details to re-render the page
+             // Re-fetch cart details to re-render the page
+            
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             toast.error('Failed to checkout');
@@ -304,7 +314,7 @@ const CartPage = () => {
                                             fullWidth
                                             margin="dense"
                                             onClick={(e) => e.stopPropagation()} // Prevent collapse on input change
-                                            inputProps={{ min: item.product.minRentDays, max: 365 }} // Add range
+                                            htmlInput={{ min: item.product.minRentDays, max: 365 }} // Add range
                                         />
                                         <TextField
                                             label="Rent Per Day"
@@ -322,7 +332,11 @@ const CartPage = () => {
                                 <TextField
                                     label="Total Price"
                                     type="number"
-                                    value={item.transType === 'rent' ? item.rentNoOfDays * item.product.rentPerDay : item.transType === 'purchase' ? item.product.productOfferPrice || 0 : 0.0}
+                                    value={
+                                        item.transType === 'rent'
+                                            ? (item.rentNoOfDays || item.product?.minRentDays) * (item.product?.rentPerDay || 0)
+                                            : item.transType === 'purchase' ? item.product?.productOfferPrice || 0 : 0
+                                    }
                                     fullWidth
                                     margin="dense"
                                     InputProps={{

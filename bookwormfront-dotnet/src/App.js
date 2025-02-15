@@ -9,11 +9,13 @@ import CartPage from './Components/Cart/CartPage';
 import AboutUs from './Components/About/Aboutus';
 import ContactUs from './Components/ContactUs/ContactUs';
 import ShelfPage from './Components/Shelf/ShelfPage';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PrivateRoute = ({ element: Component, ...rest }) => {
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   if (!isLoggedIn) {
-    alert('Please login to access this page.');
+    toast.error('Please login to access this page.');
   }
   return isLoggedIn ? <Component {...rest} /> : <Navigate to="/" />;
 };
@@ -22,6 +24,7 @@ function App() {
   return (
     <Router>
       <NavBar />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<SignInPage />} />

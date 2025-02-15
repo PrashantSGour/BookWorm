@@ -6,6 +6,7 @@ using BookWorm_Dotnet.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Project.BookWorm.DTOs;
+using BookWorm_Dotnet.ServicesImpl;
 
 namespace Project.BookWorm.Controllers
 {
@@ -18,6 +19,7 @@ namespace Project.BookWorm.Controllers
         private readonly ILogger<CartDetailsController> _logger;
         private readonly ICustomerService _customerService;
         private readonly IProductService _productService;
+        //private readonly CheckOutService _checkOutService;
 
         public CartDetailsController(
             ICartDetailsService cartDetailsService,
@@ -112,13 +114,38 @@ namespace Project.BookWorm.Controllers
         }
 
         // Update cart details
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateCartDetails(int id, [FromBody] CartDetail updatedCartDetails)
+         [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateCartDetails(int id, [FromBody] CartDetail updatedItem)
         {
-            await _cartDetailsService.UpdateCartDetailsAsync(updatedCartDetails);
+            if (updatedItem == null || id != updatedItem.CartDetailsId)
+            {
+                return BadRequest("Invalid request data");
+            }
 
-            return Ok(updatedCartDetails);
+            try
+            {
+                var existingItem = await _cartDetailsService.GetCartDetailsByIdAsync(id);
+                if (existingItem == null)
+                {
+                    return NotFound("Cart item not found");
+                }
+
+                // Update only necessary fields of the existing entity
+                existingItem.IsRented = updatedItem.IsRented;
+                existingItem.RentNoOfDays = updatedItem.RentNoOfDays;
+                existingItem.OfferCost = updatedItem.OfferCost;
+
+                // Save the updated existing entity, NOT updatedItem
+                var result = await _cartDetailsService.SaveCartDetailsAsync(existingItem);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error updating cart item: " + ex.Message);
+            }
         }
+
 
         // Delete cart details by ID
         [HttpDelete("{id}")]
@@ -128,12 +155,17 @@ namespace Project.BookWorm.Controllers
             return Ok() ;
         }
 
-        // Checkout cart
         [HttpPost("checkout")]
-        public async Task<IActionResult> CheckoutCart([FromBody] long customerId)
+        public async Task<IActionResult> CheckoutCart([FromBody] string email)
         {
-            await _cartMasterService.CheckoutCart(customerId);
-            return Ok();
+            if (email==null)
+            {
+                return BadRequest("Invalid customer ID");
+            }
+
+            CartMaster cart = await _cartMasterService.CheckoutCart(email);
+            return Ok(cart);
         }
+
     }
 }

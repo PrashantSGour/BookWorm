@@ -56,7 +56,7 @@ namespace BookWorm_Dotnet.Service
                 CartId = cartMaster.CartId,
                 ProductId = product.ProductId,
                 IsRented = transType.Equals("rent", StringComparison.OrdinalIgnoreCase),
-                RentNoOfDays = Math.Max(rentNoOfDays, 7),
+                RentNoOfDays = product.MinRentDays,
                 //OfferCost = (double)(transType.Equals("rent", StringComparison.OrdinalIgnoreCase)
                 //    ? product.RentPerDay * rentNoOfDays
                 //    : product.ProductBasePrice)
