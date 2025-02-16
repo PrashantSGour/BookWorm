@@ -20,9 +20,9 @@ const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
   const [errors, setErrors] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  // const [otpModalOpen, setOtpModalOpen] = useState(false);
-  // const [otp, setOtp] = useState("");
-  // const [otpMessage, setOtpMessage] = useState('');
+  const [otpModalOpen, setOtpModalOpen] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpMessage, setOtpMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const { otpVerified, formData: locationFormData } = location.state || {};
@@ -38,15 +38,28 @@ const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
 
   const validate = () => {
     let tempErrors = {};
+
     tempErrors.customeremail = formData.customeremail ? "" : "Email is required.";
     tempErrors.customeremail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.customeremail) ? "" : "Email is not valid.";
     tempErrors.customername = formData.customername ? "" : "Name is required.";
     tempErrors.customerpassword = formData.customerpassword.length >= 6 ? "" : "Password must be at least 6 characters.";
     tempErrors.confirmPassword = formData.confirmPassword === formData.customerpassword ? "Password matched" : "Passwords do not match.";
-    tempErrors.dob = formData.dob ? "" : "Date of Birth is required.";
+
+    if (!formData.dob) {
+      tempErrors.dob = "Date of Birth is required.";
+    } else {
+      const dobDate = new Date(formData.dob);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to compare only dates
+
+      tempErrors.dob = dobDate < today ? "" : "Date of Birth cannot be in the future.";
+    }
+
     tempErrors.pan = formData.pan ? "" : "PAN is required.";
     tempErrors.phonenumber = formData.phonenumber && /^[0-9]{10}$/.test(formData.phonenumber) ? "" : "Valid phone number is required.";
+
     setErrors(tempErrors);
+
     return Object.values(tempErrors).every(x => x === "" || x === "Password matched");
   };
 
@@ -83,66 +96,64 @@ const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form Data Submitted:", formData);
-      handleFinalSubmit();
-      // try {
-      //   const response = await fetch('http://localhost:5160/api/otp/send-otp', {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({ email: formData.customeremail }),
-      //   });
+      try {
+         const response = await fetch('http://localhost:5160/api/otp/send-otp', {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({ email: formData.customeremail }),
+         });
 
-      //   if (!response.ok) {
-      //     throw new Error('Network response was not ok');
-      //   }
+         if (!response.ok) {
+           throw new Error('Network response was not ok');
+         }
 
-      //   const result = await response.json();
-      //   console.log('OTP sent:', result);
-      //   setOtpMessage('OTP sent to your email. Please enter the OTP to complete registration.');
-      //   setOtpModalOpen(true);
-      // } catch (error) {
-      //   console.error('Error:', error);
-      //   setModalMessage(`Error: ${error.message}`);
-      //   setModalOpen(true);
-      // }
+         const result = await response.json();
+         console.log('OTP sent:', result);
+         setOtpMessage('OTP sent to your email. Please enter the OTP to complete registration.');
+         setOtpModalOpen(true);
+       } catch (error) {
+         console.error('Error:', error);
+         setModalMessage(`Error: ${error.message}`);
+         setModalOpen(true);
+       }
     }
   };
 
-  // const handleOtpSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch('http://localhost:5160/api/otp/verify-otp', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ email: formData.customeremail, otp }),
-  //     });
+   const handleOtpSubmit = async (e) => {
+     e.preventDefault();
+     try {
+       const response = await fetch('http://localhost:5160/api/otp/verify-otp', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ email: formData.customeremail, otp }),
+       });
 
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
+       if (!response.ok) {
+         throw new Error('Network response was not ok');
+       }
 
-  //     const result = await response.json();
-  //     console.log('OTP verification:', result);
+       const result = await response.json();
+       console.log('OTP verification:', result);
 
-  //     if (result.message === "OTP verified successfully") {
-  //       setOtpMessage('OTP verified successfully. Registration complete.');
-  //       setTimeout(() => {
-  //         setOtpModalOpen(false);
-  //         handleFinalSubmit();
-  //       }, 2000);
-  //     } else {
-  //       setOtpMessage('Invalid OTP. Please try again.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //     setOtpMessage('OTP verification failed');
-  //   }
-  // };
-  //const success = false;
+       if (result.message === "OTP verified successfully") {
+         setOtpMessage('OTP verified successfully. Registration complete.');
+         setTimeout(() => {
+           setOtpModalOpen(false);
+           handleFinalSubmit();
+         }, 2000);
+       } else {
+         setOtpMessage('Invalid OTP. Please try again.');
+       }
+     } catch (error) {
+       console.error('Error:', error);
+       setOtpMessage('OTP verification failed');
+     }
+   };
+  const success = false;
   const handleFinalSubmit = async () => {
     const age = calculateAge(formData.dob);
     const { confirmPassword, ...dataToSend } = formData;
@@ -312,7 +323,7 @@ const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
           </Box>
         </Grid>
       </Grid>
-      {/* <Modal
+      { <Modal
         open={otpModalOpen}
         onClose={() => setOtpModalOpen(false)}
         closeAfterTransition
@@ -345,7 +356,7 @@ const RegistrationForm = ({ onClose, onLoginOpen, onSignupSuccess }) => {
             </form>
           </Box>
         </Fade>
-      </Modal> */}
+      </Modal> }
 
       <Modal
         open={modalOpen}
