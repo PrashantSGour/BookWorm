@@ -14,6 +14,7 @@ const ProductDisplay = ({ searchQuery }) => {
 
     const fetchAllProducts = () => {
         const token = sessionStorage.getItem('token');
+        toast.success("Token : "+token);
         fetch('http://localhost:5160/api/Product/all', {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -52,12 +53,29 @@ const ProductDisplay = ({ searchQuery }) => {
                 .then(data => setFilteredProducts(data))
                 .catch(error => {
                     setError(error);
-                    toast.error('Failed to filter products');
+                    toast.error('No products found');
                 });
         } else {
             setFilteredProducts(products);
+            setProducts(products);
         }
     }, [languageDesc, productType, genreDesc, products]);
+
+    // useEffect(() => {
+    //     let filtered = products;
+        
+    //     if (languageDesc) {
+    //         filtered = filtered.filter(product => product.languageDesc === languageDesc);
+    //     }
+    //     if (productType) {
+    //         filtered = filtered.filter(product => product.productType === productType);
+    //     }
+    //     if (genreDesc) {
+    //         filtered = filtered.filter(product => product.genreDesc === genreDesc);
+    //     }
+        
+    //     setFilteredProducts(filtered);
+    // }, [languageDesc, productType, genreDesc, products]);
 
     useEffect(() => {
         if (searchQuery) {
@@ -70,7 +88,7 @@ const ProductDisplay = ({ searchQuery }) => {
         }
     }, [searchQuery, products]);
 
-    if (error) return <div>Error: {error.message}</div>;
+    //if (error) return <div>Error: {error.message}</div>;
 
     const fetchCustomerIdByEmail = async () => {
         try {
@@ -185,12 +203,12 @@ const ProductDisplay = ({ searchQuery }) => {
 
             <div className="grid-container">
                 {filteredProducts.map(product => (
-                    <div key={product.id} className="product-card">
+                    <div key={product.ProductId} className="product-card">
                         <img src={product.imgSrc} alt={product.productName} onError={(e) => e.target.src='default-image.jpg'} />
                         <h2>{product.productName}</h2>
                         <p className="description">{product.productDescriptionShort}</p>
                         <p className="author">By {product.productAuthor}</p>
-                        <p className="price">Price: ${product.productBasePrice}</p>
+                        <p className="price">Price: ${product.productOfferPrice}</p>
                         <button className="cart-button" onClick={() => addToCart(product)}>
                             <BsCartPlus /> Add to Cart
                         </button>

@@ -116,7 +116,10 @@ namespace BookWorm_Dotnet.ServicesImpl
                     GenreDesc = p.Genre != null ? p.Genre.GenreDesc : null,
                     LanguageDesc = p.Language != null ? p.Language.LanguageDesc : null,
                     ProductType = p.Type != null ? p.Type.TypeDesc : null,
-                    ImgSrc = p.ImgSrc
+                    ImgSrc = p.ImgSrc,
+                    ProductAuthor = p.ProductAuthor,
+                    ProductDescriptionShort = p.ProductDescriptionShort,
+                    ProductOfferPrice = p.ProductOfferPrice
                 })
                 .ToListAsync();
 

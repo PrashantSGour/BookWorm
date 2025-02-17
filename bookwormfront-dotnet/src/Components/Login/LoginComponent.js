@@ -43,39 +43,43 @@ const LoginComponent = ({ onClose, onSignupOpen, onLoginSuccess }) => {
       console.log("Form Data Submitted:", formData);
   
       try {
-        const response = await fetch('http://localhost:5160/api/Login', {
-          method: 'POST',
+        // Encode email:password in Base64 for Basic Authentication
+        const encodedCredentials = btoa(`${formData.email}:${formData.password}`);
+  
+        const response = await fetch("http://localhost:5160/api/Login", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+            "Authorization": `Basic ${encodedCredentials}`
+          }
         });
   
         const result = await response.json();
   
         if (!response.ok) {
-          console.log('Error:', result);
+          console.log("Error:", result);
           toast.error(result.message);
           return;
         }
   
-        console.log('Success:', result);
+        console.log("Success:", result);
         toast.success(result.message);
   
-        if (response.ok) {
-          sessionStorage.setItem('token', result.token);
-          sessionStorage.setItem('isLoggedIn', 'true');
-          sessionStorage.setItem('customerEmail', formData.email);
+        if (result.token) {
+          sessionStorage.setItem("token", result.token);
+          sessionStorage.setItem("isLoggedIn", "true");
+          sessionStorage.setItem("customerEmail", formData.email);
+  
           setTimeout(() => {
             onLoginSuccess();
           }, 2000);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
         toast.error(`Error: ${error.message || "Network Error"}`);
       }
     }
   };
+  
   
 
   return (

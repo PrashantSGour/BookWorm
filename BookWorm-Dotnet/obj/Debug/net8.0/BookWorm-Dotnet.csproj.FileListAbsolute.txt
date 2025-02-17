@@ -109,3 +109,11 @@ F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\MailKit
 F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\MimeKit.dll
 F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+F:\SM-VITA\Project\ProjectRepo\BookWorm\BookWorm-Dotnet\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

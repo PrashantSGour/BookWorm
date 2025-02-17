@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BookWorm-Dotnet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61493213a7af9aa4c99f7752600643bca5266457")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5eafa7b2fc915cb609f5d98e1c4d885657ee73fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("BookWorm-Dotnet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BookWorm-Dotnet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
